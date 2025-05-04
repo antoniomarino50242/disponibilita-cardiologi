@@ -250,7 +250,7 @@
       verificaMsg.style.color = '#666';
 
       try {
-        const response = await fetch('https://raw.githubusercontent.com/tuo-utente/tuo-repo/main/cardiologi.json'); // <-- Sostituisci questo URL
+        const response = await fetch('cardiologi.json'); // <-- Sostituisci questo URL
         const lista = await response.json();
 
         const trovato = lista.some(n => n.toLowerCase() === nome.toLowerCase());
