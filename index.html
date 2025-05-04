@@ -4,51 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Disponibilità Cardiologi</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="stile.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container" id="mainContainer">
-    <img src="logo.png" class="logo" alt="Logo aziendale">
-    <h1>Modulo disponibilità cardiologi</h1>
-
-    <form id="moduloDisponibilita">
-      <div id="nomeSection">
-        <label for="nome" style="display: block; text-align: center; margin-bottom: 0.5em;">
-          Inserire nome e cognome per procedere:
-        </label>
-        <div class="verifica-container">
-          <input type="text" id="nome" name="nome" required />
-          <button type="button" id="verificaBtn">Verifica nome</button>
-        </div>
-        <div id="verifica-msg"></div>
-      </div>
-
-      <div id="giorniContainer"></div>
-      <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
-    </form>
-    <!-- Aggiunto solo l'elemento placeholder nel form, il resto viene creato dinamicamente -->
-    <div id="giorniContainer"></div>
-    <div id="nessunTurnoContainer" style="display: none; margin-top: 1.5rem; text-align: center;">
-      <label>
-        <input type="checkbox" id="nessunTurno" />
-        Nessun turno disponibile per la prossima settimana
-      </label>
-    </div>
-
-    <div class="riepilogo" id="riepilogo">
-      <h2>Riepilogo disponibilità</h2>
-      <ul id="riepilogoLista"></ul>
-      <div class="center-buttons">
-        <button id="inviaBtn">Invia a Medea</button>
-        <button id="eliminaBtn" style="background-color: #e74c3c;">Elimina tutto</button>
-      </div>
-    </div>
+  <!-- Schermata Nome -->
+  <div id="schermataNome" class="centered">
+    <img src="logo.png" alt="Logo" class="logo"/>
+    <h1>Disponibilità Turni Cardiologi</h1>
+    <input type="text" id="nome" placeholder="Inserisci il tuo nome" />
+    <span id="nomeError" class="error-message"></span>
+    <button id="verificaNome">Avanti</button>
   </div>
 
-  <div id="grazieScreen">
-    <img src="logo.png" alt="Logo aziendale" />
-    <h2>Grazie per aver inviato le disponibilità.</h2>
+  <!-- Formulario Disponibilità -->
+  <div id="formulario" style="display: none">
+    <h2>Ciao <span id="nomeUtente"></span>!</h2>
+    <form id="moduloDisponibilità">
+      <div id="giorniContainer"></div>
+      <!-- Opzione aggiuntiva -->
+      <div id="nessunaDisponibilitàContainer" style="display: none; margin-top: 20px;">
+        <label>
+          <input type="checkbox" id="nessunaDisponibilità"/>
+          Non sarò disponibile per nessun turno la prossima settimana
+        </label>
+      </div>
+
+      <label for="note">Annotazioni (opzionali):</label>
+      <textarea id="note" rows="3" placeholder="Note aggiuntive..."></textarea>
+
+      <div class="button-group">
+        <button type="button" id="indietro">Indietro</button>
+        <button type="submit">Invia</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Ringraziamento -->
+  <div id="schermataFinale" style="display: none" class="centered">
+    <img src="logo.png" alt="Logo" class="logo-large"/>
+    <h2>Grazie per aver inviato la tua disponibilità!</h2>
   </div>
 
   <script src="script.js"></script>
