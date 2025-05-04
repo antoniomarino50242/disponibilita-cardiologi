@@ -71,7 +71,7 @@ verificaMsg.textContent = 'Verifica in corso...';
 verificaMsg.style.color = '#666';
 
 try {
-const response = await fetch('[https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9\_2o3WdefffjXEpzg/exec](https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9_2o3WdefffjXEpzg/exec)');
+const response = await fetch('https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9\_2o3WdefffjXEpzg/exec');
 const lista = await response.json();
 
 ```
