@@ -140,19 +140,22 @@ button:hover {
 }
 
 #grazieScreen {
-  display: none;
-  background-color: white;
-  padding: 3rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: white;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.5s ease-in;
-  max-width: 720px;
-  margin: 2rem auto;
+  margin: 1rem;
 }
 
 #grazieScreen img {
-  max-width: 160px;
-  margin-bottom: 1.5rem;
+  display: block;
+  max-width: 140px;
+  margin: 0 auto 1.2rem auto;
 }
 
 #grazieScreen h2 {
