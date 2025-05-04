@@ -7,164 +7,143 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #f1f8ff);
       margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-      align-items: center;
+      font-family: 'Poppins', sans-serif;
+      background-color: #f0f0f0;
+      color: #333;
     }
 
     .container {
-      width: 100%;
-      max-width: 720px;
+      max-width: 600px;
+      margin: 3em auto;
       background: white;
-      border-radius: 16px;
-      padding: 2.5rem;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 0.5s ease-in;
-      margin: 1rem;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    h1, h2 {
-      color: #2c3e50;
-      margin-bottom: 1rem;
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
 
     .logo {
-      display: block;
       max-width: 120px;
-      margin: 0 auto 1rem auto;
+      margin-bottom: 1em;
+    }
+
+    h1, h2 {
+      font-weight: 600;
     }
 
     input[type="text"], textarea {
       width: 100%;
-      padding: 0.75rem;
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      border: 1px solid #ccd;
-      border-radius: 10px;
-      background-color: #f9fcff;
-      transition: border-color 0.3s;
-    }
-
-    input[type="text"]:focus, textarea:focus {
-      outline: none;
-      border-color: #3498db;
+      padding: 0.6em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 1em;
+      font-size: 1em;
     }
 
     button {
-      padding: 0.7rem 1.2rem;
-      font-size: 1rem;
+      padding: 0.7em 1.4em;
       border: none;
-      border-radius: 12px;
-      background-color: #3498db;
+      border-radius: 8px;
+      background-color: #007BFF;
       color: white;
+      font-size: 1em;
       cursor: pointer;
-      transition: background 0.3s;
+      margin-top: 1em;
     }
 
     button:hover {
-      background-color: #2980b9;
+      background-color: #0056b3;
+    }
+
+    .verifica-container {
+      display: flex;
+      gap: 0.5em;
+    }
+
+    .verifica-container input {
+      flex: 1;
     }
 
     .giorno {
-      margin-top: 1.5rem;
+      margin-top: 1.5em;
       text-align: left;
-      background-color: #f5faff;
-      border-radius: 10px;
-      padding: 1rem;
-      border: 1px solid #e0eaf1;
     }
 
     .fascia-container {
-      display: flex;
-      align-items: center;
-      margin-top: 0.6rem;
-    }
-
-    .fascia-container label {
-      margin-left: 0.6rem;
-      font-weight: 500;
-      color: #2c3e50;
-    }
-
-    .annotazione {
-      margin-left: 2rem;
-      margin-top: 0.5rem;
-      width: 100%;
-      display: none;
+      margin-top: 0.5em;
     }
 
     .annotazione textarea {
-      border-radius: 8px;
-      background-color: #f9fcff;
+      margin-top: 0.5em;
+      display: block;
     }
 
     .riepilogo {
+      margin-top: 2em;
       display: none;
-      margin-top: 2.5rem;
       text-align: left;
     }
 
-    .riepilogo ul {
-      padding-left: 1.2rem;
+    .riepilogo h2 {
+      text-align: center;
     }
 
     .turno {
-      background-color: #eef6fb;
-      padding: 0.8rem 1rem;
-      border-radius: 10px;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.8em;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .turno button {
-      margin-left: 1rem;
+    .turno button.rimuovi {
       background-color: #e74c3c;
     }
 
     .center-buttons {
       display: flex;
-      gap: 1rem;
       justify-content: center;
-      margin-top: 1.5rem;
+      gap: 1em;
+      margin-top: 1.5em;
     }
 
+    #submitBtn, #inviaBtn, #eliminaBtn {
+      display: none;
+    }
+
+    /* Schermata finale */
     #grazieScreen {
       display: none;
-      text-align: center;
-      padding: 2rem;
-      animation: fadeIn 0.5s ease-in;
-    }
-
-    #grazieScreen img {
-      max-width: 100px;
-      margin-bottom: 1rem;
-    }
-
-    .verifica-container {
+      background-color: #f0f0f0;
+      height: 100vh;
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
       display: flex;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
       justify-content: center;
-      flex-wrap: wrap;
+      align-items: center;
+      padding: 1em;
     }
 
-    #verifica-msg {
-      margin-top: 0.8rem;
-      font-weight: 500;
+    #grazieScreen .thankyou-box {
+      background: #fff;
+      padding: 3em 2em;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
       text-align: center;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    #grazieScreen .thankyou-box img {
+      max-width: 200px;
+      width: 80%;
+      margin-bottom: 2em;
+    }
+
+    #grazieScreen .thankyou-box h2 {
+      font-size: 1.8em;
+      color: #333;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -175,9 +154,7 @@
 
     <form id="moduloDisponibilita">
       <div id="nomeSection">
-        <label for="nome" style="display: block; text-align: center; margin-bottom: 0.5em;">
-          Inserire nome e cognome per procedere:
-        </label>
+        <label for="nome">Inserire nome e cognome per procedere:</label>
         <div class="verifica-container">
           <input type="text" id="nome" name="nome" required />
           <button type="button" id="verificaBtn">Verifica nome</button>
@@ -186,7 +163,7 @@
       </div>
 
       <div id="giorniContainer"></div>
-      <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
+      <button type="submit" id="submitBtn">Aggiungi disponibilità</button>
     </form>
 
     <div class="riepilogo" id="riepilogo">
@@ -199,11 +176,12 @@
     </div>
   </div>
 
-  <div id="grazieScreen" style="display: none; background-color: white; height: 100vh; padding: 2em; text-align: center;">
-    <img src="logo.png" alt="Logo aziendale" style="max-width: 300px; width: 80%; margin-bottom: 2em;" />
-    <h2 style="font-size: 2em; font-weight: 600; color: #333;">Grazie per aver inviato le disponibilità.</h2>
+  <div id="grazieScreen">
+    <div class="thankyou-box">
+      <img src="logo.png" alt="Logo aziendale" />
+      <h2>Grazie per aver inviato le disponibilità.</h2>
+    </div>
   </div>
-
 
   <script>
     const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
@@ -363,7 +341,7 @@
 
     inviaBtn.addEventListener('click', () => {
       mainContainer.style.display = 'none';
-      grazieScreen.style.display = 'block';
+      grazieScreen.style.display = 'flex';
     });
 
     eliminaBtn.addEventListener('click', () => {
