@@ -141,14 +141,23 @@ button:hover {
 
 #grazieScreen {
   display: none;
-  text-align: center;
-  padding: 2rem;
+  background-color: white;
+  padding: 3rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.5s ease-in;
+  max-width: 720px;
+  margin: 2rem auto;
 }
 
 #grazieScreen img {
-  max-width: 100px;
-  margin-bottom: 1rem;
+  max-width: 160px;
+  margin-bottom: 1.5rem;
+}
+
+#grazieScreen h2 {
+  color: #2c3e50;
+  font-size: 1.6rem;
 }
 
 .verifica-container {
