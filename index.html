@@ -120,19 +120,16 @@
         const response = await fetch('https://raw.githubusercontent.com/antoniomarino50242/disponibilita-cardiologi/main/cardiologi.json');
         const lista = await response.json();
 
-        const inputLower = nomeInput.toLowerCase().replace(/\s+/g, ' ').trim();
-        const parti = inputLower.split(' ');
+        const normalizza = str =>
+        str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
-        const variantiInput = new Set();
-        variantiInput.add(inputLower);
-        if (parti.length >= 2) {
-          variantiInput.add(parti.reverse().join(' '));
-        }
+        const paroleInput = normalizza(nomeInput).split(' ').sort();
 
         const trovato = lista.some(nomeLista => {
-          const nomeListaLower = nomeLista.toLowerCase().replace(/\s+/g, ' ').trim();
-          return variantiInput.has(nomeListaLower);
-        });
+        const paroleLista = normalizza(nomeLista).split(' ').sort();
+        return JSON.stringify(paroleInput) === JSON.stringify(paroleLista);
+      });
+
 
         if (trovato) {
           verificaMsg.textContent = 'Nome verificato ✅';
