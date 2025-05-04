@@ -169,7 +169,7 @@ inviaBtn.addEventListener('click', async () => {
     });
   });
 
-  await fetch('https://script.google.com/macros/s/AKfycbyBw29A8PrghjaUB2zsFc3Hu1v0yXn05A4Sqa2UCuiCoEuAuvO3H9GxcZPH9PsHMyqieQ/exec', {
+  await fetch('URL_WEB_APP_GOOGLE_SCRIPT', {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: {
