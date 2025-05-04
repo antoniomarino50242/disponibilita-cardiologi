@@ -250,9 +250,75 @@
       verificaMsg.style.color = '#666';
 
       try {
-        const response = await fetch('https://raw.githubusercontent.com/antoniomarino50242/disponibilita-cardiologi/refs/heads/main/cardiologi.json'); // <-- Sostituisci questo URL
+        const response = await fetch('https://raw.githubusercontent.com/antoniomarino50242/disponibilita-cardiologi/main/cardiologi.json');
         const lista = await response.json();
 
         const trovato = lista.some(n => n.toLowerCase() === nome.toLowerCase());
         if (trovato) {
-          verificaMsg.textContent = 'Nome verificato
+          verificaMsg.textContent = 'Nome verificato ✅';
+          verificaMsg.style.color = 'green';
+          container.style.display = 'block';
+          submitBtn.style.display = 'inline-block';
+          if (!container.hasChildNodes()) creaFasce();
+        } else {
+          verificaMsg.textContent = 'Nome non trovato ❌';
+          verificaMsg.style.color = 'red';
+          container.style.display = 'none';
+          submitBtn.style.display = 'none';
+        }
+      } catch (err) {
+        verificaMsg.textContent = 'Errore durante la verifica';
+        verificaMsg.style.color = 'red';
+      }
+    });
+
+    modulo.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nome = document.getElementById('nome').value.trim();
+      const selezioni = document.querySelectorAll('input[type=checkbox]:checked');
+
+      selezioni.forEach(c => {
+        const chiave = `${nome.toLowerCase()}|${c.value}`;
+        if (disponibilita.has(chiave)) return;
+
+        disponibilita.add(chiave);
+
+        const notaTextarea = c.parentElement.querySelector('textarea');
+        const nota = notaTextarea?.value.trim() || '';
+
+        const li = document.createElement('li');
+        li.className = 'turno';
+
+        let testo = `${nome}: ${c.value}`;
+        if (nota) testo += ` – <em>${nota}</em>`;
+
+        li.innerHTML = `<span>${testo}</span>`;
+
+        const btn = document.createElement('button');
+        btn.textContent = 'Rimuovi';
+        btn.className = 'rimuovi';
+        btn.onclick = () => {
+          disponibilita.delete(chiave);
+          li.remove();
+          if (!riepilogoLista.hasChildNodes()) {
+            riepilogo.style.display = 'none';
+          }
+        };
+
+        li.appendChild(btn);
+        riepilogoLista.appendChild(li);
+      });
+
+      if (riepilogoLista.hasChildNodes()) {
+        riepilogo.style.display = 'block';
+      }
+
+      modulo.reset();
+      document.querySelectorAll('.annotazione').forEach(div => div.style.display = 'none');
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+      verificaMsg.textContent = '';
+    });
+  </script>
+</body>
+</html>
