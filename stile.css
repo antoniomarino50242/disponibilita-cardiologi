@@ -139,28 +139,25 @@ button:hover {
   margin-top: 1.5rem;
 }
 
+/* 🔽 SCHERMATA FINALE AGGIORNATA */
 #grazieScreen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  display: none;
+  text-align: center;
+  padding: 2.5rem;
+  animation: fadeIn 0.5s ease-in;
   background: white;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  animation: fadeIn 0.5s ease-in;
-  margin: 1rem;
+  max-width: 600px;
+  margin: auto;
 }
 
 #grazieScreen img {
-  display: block;
   max-width: 140px;
-  margin: 0 auto 1.2rem auto;
-}
-
-#grazieScreen h2 {
-  color: #2c3e50;
-  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .verifica-container {
