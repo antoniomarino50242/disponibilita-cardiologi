@@ -276,4 +276,36 @@
         li.innerHTML = `<span>${testo}</span>`;
 
         const btn = document.createElement('button');
-        btn.textContent = 'Rimu
+        btn.textContent = 'Rimuovi';
+        btn.className = 'rimuovi';
+        btn.onclick = () => {
+          disponibilita.delete(chiave);
+          li.remove();
+          if (!riepilogoLista.hasChildNodes()) {
+            riepilogo.style.display = 'none';
+            inviaBtn.style.display = 'none';
+          }
+        };
+
+        li.appendChild(btn);
+        riepilogoLista.appendChild(li);
+      });
+
+      if (riepilogoLista.hasChildNodes()) {
+        riepilogo.style.display = 'block';
+        inviaBtn.style.display = 'inline-block';
+      }
+
+      modulo.reset();
+      document.querySelectorAll('.annotazione').forEach(div => div.style.display = 'none');
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+      verificaMsg.textContent = '';
+    });
+
+    inviaBtn.addEventListener('click', () => {
+      alert('Disponibilità inviate con successo a Medea ✅');
+    });
+  </script>
+</body>
+</html>
