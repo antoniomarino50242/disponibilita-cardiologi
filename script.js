@@ -154,6 +154,10 @@ modulo.addEventListener('submit', function(e) {
 });
 
 inviaBtn.addEventListener('click', async () => {
+  // Disabilita il pulsante e mostra il messaggio
+  inviaBtn.disabled = true;
+  inviaBtn.textContent = 'Invio in corso... attendere!';
+
   const payload = [];
 
   document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
@@ -177,11 +181,10 @@ inviaBtn.addEventListener('click', async () => {
     }
   });
 
-
+  // Mostra la schermata di ringraziamento
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
 });
-
 
 eliminaBtn.addEventListener('click', () => {
   const conferma = confirm("Sei sicuro di voler eliminare tutte le disponibilità?");
