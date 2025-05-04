@@ -255,13 +255,13 @@
 
         const trovato = lista.some(n => n.toLowerCase() === nome.toLowerCase());
         if (trovato) {
-          verificaMsg.textContent = 'Nome verificato ✅';
+          verificaMsg.textContent = 'Cardiologo verificato ✅';
           verificaMsg.style.color = 'green';
           container.style.display = 'block';
           submitBtn.style.display = 'inline-block';
           if (!container.hasChildNodes()) creaFasce();
         } else {
-          verificaMsg.textContent = 'Nome non trovato ❌';
+          verificaMsg.textContent = 'Contattare l''assistenza medEA. Cardiologo non trovato ❌';
           verificaMsg.style.color = 'red';
           container.style.display = 'none';
           submitBtn.style.display = 'none';
