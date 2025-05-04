@@ -202,3 +202,4 @@ verificaMsg.textContent = '';
 document.getElementById('nome').value = '';
 nomeSection.style.display = 'block';
 });
+
