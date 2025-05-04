@@ -36,9 +36,7 @@
 
     label {
       font-weight: 600;
-      display: block;
       margin-top: 1em;
-      text-align: left;
     }
 
     input[type="text"] {
@@ -138,15 +136,39 @@
     #giorniContainer, #submitBtn {
       display: none;
     }
+
+    #inviaBtn {
+      display: none;
+      margin: 2em auto 0;
+      display: block;
+    }
+
+    #grazieScreen {
+      display: none;
+      text-align: center;
+      margin-top: 3em;
+    }
+
+    #grazieScreen h2 {
+      color: #0066cc;
+      font-size: 1.8em;
+    }
+
+    #grazieScreen img {
+      max-width: 250px;
+      margin-bottom: 1em;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="mainContainer">
     <img src="logo.png" class="logo" alt="Logo aziendale">
     <h1>Modulo disponibilità cardiologi</h1>
 
     <form id="moduloDisponibilita">
-      <label for="nome">Inserire nome e cognome per procedere:</label>
+      <label for="nome" style="display: block; text-align: center; margin-bottom: 0.5em;">
+        Inserire nome e cognome per procedere:
+      </label>
       <div class="verifica-container">
         <input type="text" id="nome" name="nome" required />
         <button type="button" id="verificaBtn">Verifica nome</button>
@@ -160,8 +182,13 @@
     <div class="riepilogo" id="riepilogo">
       <h2>Riepilogo disponibilità</h2>
       <ul id="riepilogoLista"></ul>
-      <button id="inviaBtn" style="display: none; margin-top: 1em;">Invia a Medea</button>
+      <button id="inviaBtn">Invia a Medea</button>
     </div>
+  </div>
+
+  <div id="grazieScreen">
+    <img src="logo.png" alt="Logo aziendale" />
+    <h2>Grazie per aver inviato le disponibilità.</h2>
   </div>
 
   <script>
@@ -175,6 +202,8 @@
     const verificaMsg = document.getElementById('verifica-msg');
     const submitBtn = document.getElementById('submitBtn');
     const inviaBtn = document.getElementById('inviaBtn');
+    const mainContainer = document.getElementById('mainContainer');
+    const grazieScreen = document.getElementById('grazieScreen');
 
     const disponibilita = new Set();
 
@@ -293,7 +322,7 @@
 
       if (riepilogoLista.hasChildNodes()) {
         riepilogo.style.display = 'block';
-        inviaBtn.style.display = 'inline-block';
+        inviaBtn.style.display = 'block';
       }
 
       modulo.reset();
@@ -304,7 +333,8 @@
     });
 
     inviaBtn.addEventListener('click', () => {
-      alert('Disponibilità inviate con successo a Medea ✅');
+      mainContainer.style.display = 'none';
+      grazieScreen.style.display = 'block';
     });
   </script>
 </body>
