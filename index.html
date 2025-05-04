@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Disponibilità Cardiologi</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary-color: #0066cc;
@@ -13,7 +14,7 @@
     }
 
     body {
-      font-family: "Segoe UI", sans-serif;
+      font-family: 'Poppins', sans-serif;
       background-color: var(--background);
       color: var(--text-color);
       margin: 0;
@@ -27,28 +28,43 @@
       border-radius: 12px;
       padding: 2em;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
     }
 
     .logo {
-      max-width: 160px;
+      max-width: 200px;
       margin-bottom: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    h1 {
+    h1, h2 {
       color: var(--primary-color);
+      margin-bottom: 0.6em;
     }
 
     label {
-      font-weight: bold;
-      margin-top: 15px;
+      font-weight: 600;
       display: block;
+      margin: 1em 0 0.5em;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
     }
 
     .giorno {
-      margin-bottom: 12px;
-      padding: 10px;
+      margin-bottom: 15px;
+      padding: 12px;
       background: #f0f4f8;
       border-radius: 8px;
+      text-align: left;
     }
 
     .fascia-container {
@@ -77,14 +93,6 @@
       font-family: inherit;
     }
 
-    input[type="text"] {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
     button {
       background-color: var(--primary-color);
       color: #fff;
@@ -93,6 +101,7 @@
       border-radius: 6px;
       cursor: pointer;
       margin-top: 1em;
+      font-weight: bold;
     }
 
     button:hover {
@@ -103,6 +112,7 @@
       margin-top: 2em;
       border-top: 1px solid #ddd;
       padding-top: 1em;
+      text-align: left;
     }
 
     .turno {
@@ -121,6 +131,7 @@
       border-radius: 4px;
       font-size: 0.9em;
       cursor: pointer;
+      color: #fff;
     }
 
     .rimuovi:hover {
@@ -131,7 +142,6 @@
 <body>
   <div class="container">
     <img src="logo.png" alt="Logo Aziendale" class="logo" />
-
     <h1>Modulo disponibilità cardiologi</h1>
 
     <form id="moduloDisponibilita">
@@ -188,7 +198,6 @@
         textarea.placeholder = 'Annotazioni per questo turno';
         notaCont.appendChild(textarea);
 
-        // Mostra/nasconde annotazione al click
         checkbox.addEventListener('change', () => {
           notaCont.style.display = checkbox.checked ? 'block' : 'none';
         });
