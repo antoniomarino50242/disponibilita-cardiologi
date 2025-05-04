@@ -1,0 +1,166 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to right, #e0f7fa, #f1f8ff);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 720px;
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in;
+  margin: 1rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+h1, h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.logo {
+  display: block;
+  max-width: 120px;
+  margin: 0 auto 1rem auto;
+}
+
+input[type="text"], textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccd;
+  border-radius: 10px;
+  background-color: #f9fcff;
+  transition: border-color 0.3s;
+}
+
+input[type="text"]:focus, textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+button {
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 12px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+.giorno {
+  margin-top: 1.5rem;
+  text-align: left;
+  background-color: #f5faff;
+  border-radius: 10px;
+  padding: 1rem;
+  border: 1px solid #e0eaf1;
+}
+
+.fascia-container {
+  display: flex;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+
+.fascia-container label {
+  margin-left: 0.6rem;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.annotazione {
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+  width: 100%;
+  display: none;
+}
+
+.annotazione textarea {
+  width: 80%;
+  max-width: 500px;
+  border-radius: 8px;
+  background-color: #f9fcff;
+}
+
+.riepilogo {
+  display: none;
+  margin-top: 2.5rem;
+  text-align: left;
+}
+
+.riepilogo ul {
+  padding-left: 1.2rem;
+}
+
+.turno {
+  background-color: #eef6fb;
+  padding: 0.8rem 1rem;
+  border-radius: 10px;
+  margin-bottom: 0.6rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.turno button {
+  margin-left: 1rem;
+  background-color: #e74c3c;
+}
+
+.center-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+#submitBtn {
+  margin-top: 1.5rem;
+}
+
+#grazieScreen {
+  display: none;
+  text-align: center;
+  padding: 2rem;
+  animation: fadeIn 0.5s ease-in;
+}
+
+#grazieScreen img {
+  max-width: 100px;
+  margin-bottom: 1rem;
+}
+
+.verifica-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#verifica-msg {
+  margin-top: 0.8rem;
+  font-weight: 500;
+  text-align: center;
+}
