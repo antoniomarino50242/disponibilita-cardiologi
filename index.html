@@ -6,13 +6,105 @@
   <title>Disponibilità Cardiologi</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    /* [--- Stili CSS ---] (rimangono invariati come nel messaggio precedente) */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      background-color: white;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      margin-top: 40px;
+    }
+    .logo {
+      max-width: 160px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      margin-top: 0;
+      font-weight: 600;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px 5px;
+      font-size: 16px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    .giorno {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .giorno strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .fascia-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+    .annotazione {
+      display: none;
+      margin-left: 30px;
+      width: 100%;
+    }
+    .annotazione textarea {
+      width: 90%;
+      padding: 6px;
+      font-size: 14px;
+    }
+    #riepilogo {
+      display: none;
+      margin-top: 30px;
+    }
+    #riepilogo ul {
+      list-style: none;
+      padding-left: 0;
+      text-align: left;
+    }
+    #riepilogo li {
+      margin-bottom: 8px;
+    }
+    .center-buttons {
+      text-align: center;
+    }
+    #grazieScreen {
+      display: none;
+      background-color: white;
+      min-height: 100vh;
+      padding-top: 60px;
+    }
+    #grazieScreen h2 {
+      margin-top: 20px;
+    }
+    #verifica-msg {
+      margin: 10px;
+    }
   </style>
 </head>
 <body>
   <div class="container" id="mainContainer">
     <img src="logo.png" alt="Logo" class="logo" />
-
     <div id="nomeSection">
       <h2>Inserire nome e cognome per procedere</h2>
       <input type="text" id="nome" placeholder="Nome e Cognome">
@@ -21,13 +113,11 @@
     </div>
 
     <form id="modulo">
-      <div id="giorniContainer">
-        <!-- Giorni e fasce vengono generati dinamicamente -->
-      </div>
-      <button type="submit" id="submitBtn">Conferma Selezioni</button>
+      <div id="giorniContainer" style="display:none;"></div>
+      <button type="submit" id="submitBtn" style="display:none;">Conferma Selezioni</button>
     </form>
 
-    <div class="riepilogo" id="riepilogo">
+    <div id="riepilogo">
       <h3>Riepilogo turni selezionati</h3>
       <ul id="riepilogoLista"></ul>
       <div class="center-buttons">
@@ -38,7 +128,7 @@
   </div>
 
   <div id="grazieScreen">
-    <img src="logo.png" alt="Logo finale" />
+    <img src="logo.png" alt="Logo" class="logo" />
     <h2>Grazie per aver inviato le disponibilità</h2>
   </div>
 
@@ -65,8 +155,6 @@
 
     function creaFasce() {
       giorniContainer.innerHTML = '';
-      giorniContainer.style.display = 'block';
-
       giorni.forEach(giorno => {
         const giornoDiv = document.createElement('div');
         giornoDiv.className = 'giorno';
@@ -89,7 +177,6 @@
 
           const notaCont = document.createElement('div');
           notaCont.className = 'annotazione';
-
           const notaBox = document.createElement('textarea');
           notaBox.placeholder = 'Annotazioni (opzionale)';
           notaCont.appendChild(notaBox);
@@ -101,7 +188,6 @@
           fasciaContainer.appendChild(checkbox);
           fasciaContainer.appendChild(label);
           fasciaContainer.appendChild(notaCont);
-
           giornoDiv.appendChild(fasciaContainer);
         });
 
@@ -112,26 +198,22 @@
     verificaBtn.addEventListener('click', async () => {
       nomeUtente = nomeInput.value.trim();
       if (!nomeUtente) return;
-
       verificaMsg.textContent = 'Verifica in corso...';
       verificaMsg.style.color = '#666';
-
       try {
         const response = await fetch('https://raw.githubusercontent.com/antoniomarino50242/disponibilita-cardiologi/main/cardiologi.json');
         const lista = await response.json();
-
         const trovato = lista.some(n => n.toLowerCase() === nomeUtente.toLowerCase());
         if (trovato) {
           verificaMsg.textContent = 'Nome verificato ✅';
           verificaMsg.style.color = 'green';
-          container.style.display = 'block';
+          nomeSection.style.display = 'none';
+          giorniContainer.style.display = 'block';
           submitBtn.style.display = 'inline-block';
           creaFasce();
         } else {
           verificaMsg.textContent = 'Cardiologo non trovato. Contattare l’assistenza tecnica ❌';
           verificaMsg.style.color = 'red';
-          giorniContainer.style.display = 'none';
-          submitBtn.style.display = 'none';
         }
       } catch (err) {
         verificaMsg.textContent = 'Errore durante la verifica';
@@ -151,16 +233,12 @@
         selezioniPrecedenti.push({ valore: c.value, nota });
 
         const li = document.createElement('li');
-        li.className = 'turno';
-        li.innerHTML = `<span>${nomeUtente}: ${c.value}${nota ? ' – <em>' + nota + '</em>' : ''}</span>`;
+        li.innerHTML = `<strong>${c.value}</strong>${nota ? ' – <em>' + nota + '</em>' : ''}`;
         riepilogoLista.appendChild(li);
       });
 
       if (selezioniPrecedenti.length > 0) {
         riepilogo.style.display = 'block';
-        inviaBtn.style.display = 'inline-block';
-        tornaBtn.style.display = 'inline-block';
-        nomeSection.style.display = 'none';
         giorniContainer.style.display = 'none';
         submitBtn.style.display = 'none';
       }
@@ -169,10 +247,9 @@
     tornaBtn.addEventListener('click', () => {
       nomeInput.value = nomeUtente;
       nomeSection.style.display = 'none';
+      riepilogo.style.display = 'none';
       giorniContainer.style.display = 'block';
       submitBtn.style.display = 'inline-block';
-      riepilogo.style.display = 'none';
-
       creaFasce();
       selezioniPrecedenti.forEach(sel => {
         const checkbox = document.querySelector(`input[value="${sel.valore}"]`);
@@ -188,8 +265,7 @@
     });
 
     inviaBtn.addEventListener('click', () => {
-      container.style.display = 'none';
-      riepilogo.style.display = 'none';
+      document.getElementById('mainContainer').style.display = 'none';
       grazieScreen.style.display = 'block';
     });
   </script>
