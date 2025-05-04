@@ -1,4 +1,4 @@
-cconst giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
 const fasce = ['Mattina', 'Pomeriggio'];
 const container = document.getElementById('giorniContainer');
 const riepilogoLista = document.getElementById('riepilogoLista');
