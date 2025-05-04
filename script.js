@@ -1,234 +1,178 @@
-const giorni = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
-const fasce = ["Mattina", "Pomeriggio", "Notte"];
-const container = document.getElementById("container");
-const submitBtn = document.getElementById("submitBtn");
-const riepilogo = document.getElementById("riepilogo");
-const riepilogoLista = document.getElementById("riepilogo-lista");
-const inviaBtn = document.getElementById("inviaBtn");
-const eliminaBtn = document.getElementById("eliminaBtn");
-const nomeSection = document.getElementById("nomeSection");
-const modulo = document.getElementById("modulo");
-const verificaMsg = document.getElementById("verificaMsg");
+document.addEventListener("DOMContentLoaded", () => {
+  const nomeInput = document.getElementById("nome");
+  const verificaBtn = document.getElementById("verifica-btn");
+  const schermataIniziale = document.getElementById("iniziale");
+  const schermataForm = document.getElementById("form-container");
+  const schermataFinale = document.getElementById("finale");
+  const giorniContainer = document.getElementById("giorni");
+  const riepilogoLista = document.getElementById("riepilogo-lista");
+  const inviaBtn = document.getElementById("invia-btn");
+  const aggiungiBtn = document.getElementById("aggiungi-btn");
+  const annotazioni = document.getElementById("annotazioni");
+  const nessunaDisponibilita = document.getElementById("nessuna-disponibilita");
 
-let disponibilita = new Set();
-let nessunaDisponibilitaCheckbox = null;
+  const giorni = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+  const fasce = ["Mattina", "Pomeriggio", "Notte"];
 
-function creaFasce() {
-  container.innerHTML = "";
+  let disponibilita = [];
+
+  verificaBtn.addEventListener("click", () => {
+    const nome = nomeInput.value.trim();
+    if (!nome) {
+      alert("Inserisci il tuo nome.");
+      return;
+    }
+
+    fetch("https://script.google.com/macros/s/AKfycbzle6UqPbTk9F3OHZxAbNzkRikxNqfgm0DPK3g-LDN9AoT7OJk7qStsSFGdMTZHZzJ_IA/exec")
+      .then(res => res.json())
+      .then(data => {
+        if (data.includes(nome)) {
+          schermataIniziale.style.display = "none";
+          schermataForm.style.display = "block";
+        } else {
+          alert("Nome non trovato. Assicurati di averlo scritto correttamente.");
+        }
+      });
+  });
+
   giorni.forEach(giorno => {
     const giornoDiv = document.createElement("div");
     giornoDiv.className = "giorno";
-    const titolo = document.createElement("h3");
-    titolo.textContent = giorno;
-    giornoDiv.appendChild(titolo);
+
+    const label = document.createElement("label");
+    label.textContent = giorno;
+    giornoDiv.appendChild(label);
 
     fasce.forEach(fascia => {
-      const label = document.createElement("label");
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.name = "fasce";
-      checkbox.value = `${giorno}-${fascia}`;
-
-      const nota = document.createElement("input");
-      nota.type = "text";
-      nota.placeholder = "Annotazioni";
-      nota.className = "annotazione";
-      nota.name = `nota-${giorno}-${fascia}`;
-
-      const notaCont = document.createElement("div");
-      notaCont.className = "nota-container";
-      notaCont.appendChild(nota);
-      notaCont.style.display = "none";
-
-      checkbox.addEventListener("change", () => {
-        notaCont.style.display = checkbox.checked ? "block" : "none";
-        aggiornaCheckboxNessuna();
+      const btn = document.createElement("button");
+      btn.textContent = fascia;
+      btn.className = "fascia";
+      btn.dataset.giorno = giorno;
+      btn.dataset.fascia = fascia;
+      btn.addEventListener("click", () => {
+        btn.classList.toggle("selezionato");
+        aggiornaStatoNessunaDisponibilita();
       });
-
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(` ${fascia}`));
-      giornoDiv.appendChild(label);
-      giornoDiv.appendChild(notaCont);
+      giornoDiv.appendChild(btn);
     });
 
-    container.appendChild(giornoDiv);
+    giorniContainer.appendChild(giornoDiv);
   });
 
-  // Slot "nessuna disponibilità"
-  const nessunaDiv = document.createElement('div');
-  nessunaDiv.className = 'giorno';
+  nessunaDisponibilita.addEventListener("click", () => {
+    if (nessunaDisponibilita.classList.contains("selezionato")) {
+      nessunaDisponibilita.classList.remove("selezionato");
+    } else {
+      const altriSelezionati = document.querySelectorAll(".fascia.selezionato");
+      if (altriSelezionati.length > 0) {
+        alert("Deseleziona prima tutte le fasce per indicare che non sarai disponibile.");
+        return;
+      }
+      nessunaDisponibilita.classList.add("selezionato");
+    }
+  });
 
-  nessunaDisponibilitaCheckbox = document.createElement('input');
-  nessunaDisponibilitaCheckbox.type = 'checkbox';
-  nessunaDisponibilitaCheckbox.id = 'nessunaDisponibilita';
-  nessunaDisponibilitaCheckbox.name = 'nessunaDisponibilita';
-
-  const nessunaLabel = document.createElement('label');
-  nessunaLabel.htmlFor = 'nessunaDisponibilita';
-  nessunaLabel.textContent = 'Non avrò turni questa settimana';
-
-  nessunaDiv.appendChild(nessunaDisponibilitaCheckbox);
-  nessunaDiv.appendChild(nessunaLabel);
-  container.appendChild(nessunaDiv);
-
-  // Nascondi all'inizio
-  nessunaDiv.style.display = 'none';
-}
-
-function aggiornaCheckboxNessuna() {
-  const selezionate = document.querySelectorAll('input[name="fasce"]:checked');
-  if (nessunaDisponibilitaCheckbox) {
-    nessunaDisponibilitaCheckbox.parentElement.style.display = selezionate.length === 0 ? 'block' : 'none';
-    if (selezionate.length > 0) {
-      nessunaDisponibilitaCheckbox.checked = false;
+  function aggiornaStatoNessunaDisponibilita() {
+    const altriSelezionati = document.querySelectorAll(".fascia.selezionato");
+    if (altriSelezionati.length > 0) {
+      nessunaDisponibilita.classList.remove("selezionato");
+      nessunaDisponibilita.style.display = "none";
+    } else {
+      nessunaDisponibilita.style.display = "block";
     }
   }
-}
 
-modulo.addEventListener("submit", function (e) {
-  e.preventDefault();
+  aggiungiBtn.addEventListener("click", () => {
+    const nome = nomeInput.value.trim();
+    const note = annotazioni.value.trim();
 
-  const nome = document.getElementById("nome").value.trim();
-  const selezioni = document.querySelectorAll("input[name='fasce']:checked");
+    const selezionati = document.querySelectorAll(".fascia.selezionato");
+    const nessuna = nessunaDisponibilita.classList.contains("selezionato");
 
-  // Se nessuna selezione è attiva e la checkbox "nessuna disponibilità" è spuntata
-  if (selezioni.length === 0 && nessunaDisponibilitaCheckbox?.checked) {
-    const chiave = `${nome.toLowerCase()}|NESSUNA DISPONIBILITA`;
+    if (selezionati.length === 0 && !nessuna) {
+      alert("Seleziona almeno una fascia o indica che non sarai disponibile.");
+      return;
+    }
 
-    if (!disponibilita.has(chiave)) {
-      disponibilita.add(chiave);
-
-      const li = document.createElement('li');
-      li.className = 'turno';
-      li.innerHTML = `<span>${nome}: <strong>NESSUNA DISPONIBILITÀ</strong></span>`;
-
-      const btn = document.createElement('button');
-      btn.textContent = 'Rimuovi';
-      btn.className = 'rimuovi';
-      btn.onclick = () => {
-        disponibilita.delete(chiave);
+    if (nessuna) {
+      disponibilita.push({ nome, giorno: null, fascia: null, note: "NESSUNA DISPONIBILITÀ" });
+      const li = document.createElement("li");
+      li.textContent = `${nome}: NESSUNA DISPONIBILITÀ `;
+      const btnRimuovi = document.createElement("button");
+      btnRimuovi.textContent = "Rimuovi";
+      btnRimuovi.addEventListener("click", () => {
+        disponibilita = disponibilita.filter(d => !(d.nome === nome && d.note === "NESSUNA DISPONIBILITÀ"));
         li.remove();
-        riepilogo.style.display = 'none';
-        inviaBtn.style.display = 'none';
-        eliminaBtn.style.display = 'none';
-        nomeSection.style.display = 'block';
-      };
-
-      li.appendChild(btn);
+        aggiornaStatoNessunaDisponibilita();
+      });
+      li.appendChild(btnRimuovi);
       riepilogoLista.appendChild(li);
+      nessunaDisponibilita.classList.remove("selezionato");
+      aggiornaStatoNessunaDisponibilita();
+      return;
     }
 
-    riepilogo.style.display = 'block';
-    inviaBtn.style.display = 'inline-block';
-    eliminaBtn.style.display = 'inline-block';
-    nomeSection.style.display = 'none';
-
-    modulo.reset();
-    container.style.display = 'none';
-    submitBtn.style.display = 'none';
-    verificaMsg.textContent = '';
-    return;
-  }
-
-  selezioni.forEach(sel => {
-    const giornoFascia = sel.value.split("-");
-    const giorno = giornoFascia[0];
-    const fascia = giornoFascia[1];
-    const nota = document.querySelector(`input[name='nota-${giorno}-${fascia}']`).value.trim();
-    const chiave = `${nome.toLowerCase()}|${giorno}-${fascia}`;
-
-    if (!disponibilita.has(chiave)) {
-      disponibilita.add(chiave);
+    selezionati.forEach(btn => {
+      const giorno = btn.dataset.giorno;
+      const fascia = btn.dataset.fascia;
+      disponibilita.push({ nome, giorno, fascia, note });
 
       const li = document.createElement("li");
-      li.className = "turno";
-      li.innerHTML = `<span>${nome}: ${giorno} ${fascia} ${nota ? "- " + nota : ""}</span>`;
-
-      const btn = document.createElement("button");
-      btn.textContent = "Rimuovi";
-      btn.className = "rimuovi";
-      btn.onclick = () => {
-        disponibilita.delete(chiave);
+      li.textContent = `${nome}: ${giorno} ${fascia} - ${note}`;
+      const btnRimuovi = document.createElement("button");
+      btnRimuovi.textContent = "Rimuovi";
+      btnRimuovi.addEventListener("click", () => {
+        disponibilita = disponibilita.filter(d => !(d.nome === nome && d.giorno === giorno && d.fascia === fascia && d.note === note));
         li.remove();
-        riepilogo.style.display = "none";
-        inviaBtn.style.display = "none";
-        eliminaBtn.style.display = "none";
-        nomeSection.style.display = "block";
-      };
-
-      li.appendChild(btn);
+        aggiornaStatoNessunaDisponibilita();
+      });
+      li.appendChild(btnRimuovi);
       riepilogoLista.appendChild(li);
-    }
+
+      btn.classList.remove("selezionato");
+    });
+
+    annotazioni.value = "";
+    aggiornaStatoNessunaDisponibilita();
   });
 
-  riepilogo.style.display = "block";
-  inviaBtn.style.display = "inline-block";
-  eliminaBtn.style.display = "inline-block";
-  nomeSection.style.display = "none";
+  inviaBtn.addEventListener("click", () => {
+    const dati = [];
+    riepilogoLista.querySelectorAll("li").forEach(li => {
+      const testo = li.textContent.replace("Rimuovi", "").trim();
+      const [nomeParte, turnoParte] = testo.split(":");
 
-  modulo.reset();
-  container.style.display = "none";
-  submitBtn.style.display = "none";
-  verificaMsg.textContent = "";
-});
+      const nome = nomeParte.trim();
+      const resto = turnoParte.trim();
 
-inviaBtn.addEventListener("click", () => {
-  const dati = [];
-  riepilogoLista.querySelectorAll("li").forEach(li => {
-    const testo = li.textContent.replace("Rimuovi", "").trim();
-    const nomeTurno = testo.split(":");
-    const nome = nomeTurno[0].trim();
-    const resto = nomeTurno[1].trim();
-    const [giorno, fascia, ...noteArr] = resto.split(" ");
-    const nota = noteArr.join(" ").replace("-", "").trim();
-    dati.push({
-      nome: nome,
-      turno: giorno === "NESSUNA" ? "NESSUNA DISPONIBILITA" : `${giorno}-${fascia}`,
-      annotazione: nota
-    });
-  });
-
-  fetch("https://script.google.com/macros/s/AKfycbzle6UqPbTk9F3OHZxAbNzkRikxNqfgm0DPK3g-LDN9AoT7OJk7qStsSFGdMTZHZzJ_IA/exec", {
-    method: "POST",
-    body: JSON.stringify(dati),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById("form-container").style.display = "none";
-      document.getElementById("finale").style.display = "block";
-    });
-});
-
-eliminaBtn.addEventListener("click", () => {
-  disponibilita.clear();
-  riepilogoLista.innerHTML = "";
-  riepilogo.style.display = "none";
-  inviaBtn.style.display = "none";
-  eliminaBtn.style.display = "none";
-  nomeSection.style.display = "block";
-});
-
-document.getElementById("verificaNome").addEventListener("click", () => {
-  const nome = document.getElementById("nome").value.trim();
-  if (nome === "") {
-    verificaMsg.textContent = "Inserisci il tuo nome.";
-    return;
-  }
-
-  fetch("https://script.google.com/macros/s/AKfycbzle6UqPbTk9F3OHZxAbNzkRikxNqfgm0DPK3g-LDN9AoT7OJk7qStsSFGdMTZHZzJ_IA/exec?nome=" + encodeURIComponent(nome))
-    .then(res => res.json())
-    .then(data => {
-      if (data.status === "ok") {
-        verificaMsg.textContent = "";
-        nomeSection.style.display = "none";
-        creaFasce();
-        container.style.display = "block";
-        submitBtn.style.display = "inline-block";
+      if (resto === "NESSUNA DISPONIBILITÀ") {
+        dati.push({
+          nome: nome,
+          turno: "NESSUNA DISPONIBILITÀ",
+          annotazione: ""
+        });
       } else {
-        verificaMsg.textContent = "Nome non trovato.";
+        const [giorno, fascia, ...noteArr] = resto.split(" ");
+        const nota = noteArr.join(" ").replace("-", "").trim();
+        dati.push({
+          nome: nome,
+          turno: `${giorno}-${fascia}`,
+          annotazione: nota
+        });
       }
     });
+
+    fetch("https://script.google.com/macros/s/AKfycbzle6UqPbTk9F3OHZxAbNzkRikxNqfgm0DPK3g-LDN9AoT7OJk7qStsSFGdMTZHZzJ_IA/exec", {
+      method: "POST",
+      body: JSON.stringify(dati),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.text())
+      .then(data => {
+        schermataForm.style.display = "none";
+        schermataFinale.style.display = "block";
+      });
+  });
 });
