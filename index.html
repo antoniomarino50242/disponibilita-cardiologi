@@ -5,117 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Disponibilità Cardiologi</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: #f9f9f9;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 2em auto;
-      background: white;
-      padding: 2em;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .logo {
-      max-width: 150px;
-      margin-bottom: 1em;
-    }
-
-    h1, h2 {
-      font-weight: 600;
-      margin-bottom: 1em;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 0.5em;
-      font-weight: 500;
-    }
-
-    input[type="text"] {
-      padding: 0.6em;
-      font-size: 1em;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      width: 70%;
-      max-width: 300px;
-    }
-
-    button {
-      background-color: #3498db;
-      color: white;
-      padding: 0.6em 1.2em;
-      border: none;
-      border-radius: 8px;
-      font-size: 1em;
-      cursor: pointer;
-      margin: 0.5em;
-      transition: background-color 0.2s ease-in-out;
-    }
-
-    button:hover {
-      background-color: #2980b9;
-    }
-
-    #submitBtn {
-      display: none;
-    }
-
-    .center-buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 1em;
-      margin-top: 1em;
-    }
-
-    #eliminaBtn {
-      background-color: #e74c3c;
-    }
-
-    #eliminaBtn:hover {
-      background-color: #c0392b;
-    }
-
-    #grazieScreen {
-      display: none;
-      height: 100vh;
-      width: 100%;
-      background-color: white;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 2em;
-    }
-
-    #grazieScreen img {
-      max-width: 180px;
-      margin-bottom: 1em;
-    }
-
-    @media (max-width: 600px) {
-      .container {
-        margin: 1em;
-        padding: 1em;
-      }
-
-      input[type="text"] {
-        width: 100%;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="stile.css">
 </head>
 <body>
   <div class="container" id="mainContainer">
@@ -124,17 +14,18 @@
 
     <form id="moduloDisponibilita">
       <div id="nomeSection">
-        <label for="nome">Inserire nome e cognome per procedere:</label>
-        <div class="verifica-container" style="margin-top: 1em;">
+        <label for="nome" style="display: block; text-align: center; margin-bottom: 0.5em;">
+          Inserire nome e cognome per procedere:
+        </label>
+        <div class="verifica-container">
           <input type="text" id="nome" name="nome" required />
           <button type="button" id="verificaBtn">Verifica nome</button>
         </div>
-        <div id="verifica-msg" style="margin-top: 1em;"></div>
+        <div id="verifica-msg"></div>
       </div>
 
       <div id="giorniContainer"></div>
-
-      <button type="submit" id="submitBtn">Aggiungi disponibilità</button>
+      <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
     </form>
 
     <div class="riepilogo" id="riepilogo">
@@ -142,7 +33,7 @@
       <ul id="riepilogoLista"></ul>
       <div class="center-buttons">
         <button id="inviaBtn">Invia a Medea</button>
-        <button id="eliminaBtn">Elimina tutto</button>
+        <button id="eliminaBtn" style="background-color: #e74c3c;">Elimina tutto</button>
       </div>
     </div>
   </div>
