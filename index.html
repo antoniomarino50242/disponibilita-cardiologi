@@ -165,7 +165,7 @@
     <h1>Modulo disponibilità cardiologi</h1>
 
     <form id="moduloDisponibilita">
-      <label for="nome">Nome:</label>
+      <label for="nome">Inserire nome e cognome per procedere:</label>
       <div class="verifica-container">
         <input type="text" id="nome" name="nome" required />
         <button type="button" id="verificaBtn">Verifica nome</button>
@@ -255,13 +255,13 @@
 
         const trovato = lista.some(n => n.toLowerCase() === nome.toLowerCase());
         if (trovato) {
-          verificaMsg.textContent = 'Cardiologo verificato ✅';
+          verificaMsg.textContent = 'Nome verificato ✅';
           verificaMsg.style.color = 'green';
           container.style.display = 'block';
           submitBtn.style.display = 'inline-block';
           if (!container.hasChildNodes()) creaFasce();
         } else {
-          verificaMsg.textContent = 'Contattare l''assistenza medEA. Cardiologo non trovato ❌';
+          verificaMsg.textContent = 'Cardiologo non trovato. Contattare l’assistenza tecnica ❌';
           verificaMsg.style.color = 'red';
           container.style.display = 'none';
           submitBtn.style.display = 'none';
