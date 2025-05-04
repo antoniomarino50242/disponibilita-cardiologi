@@ -137,16 +137,21 @@
       display: none;
     }
 
-    #inviaBtn {
+    #inviaBtn, #tornaBtn {
       display: none;
-      margin: 2em auto 0;
-      display: block;
+      margin: 1em 0.5em 0;
     }
 
     #grazieScreen {
       display: none;
       text-align: center;
       margin-top: 3em;
+      background-color: #fff;
+      padding: 2em;
+      border-radius: 12px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     #grazieScreen h2 {
@@ -158,6 +163,17 @@
       max-width: 250px;
       margin-bottom: 1em;
     }
+
+    #nomeSection {
+      display: block;
+    }
+
+    .center-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
   </style>
 </head>
 <body>
@@ -166,14 +182,16 @@
     <h1>Modulo disponibilità cardiologi</h1>
 
     <form id="moduloDisponibilita">
-      <label for="nome" style="display: block; text-align: center; margin-bottom: 0.5em;">
-        Inserire nome e cognome per procedere:
-      </label>
-      <div class="verifica-container">
-        <input type="text" id="nome" name="nome" required />
-        <button type="button" id="verificaBtn">Verifica nome</button>
+      <div id="nomeSection">
+        <label for="nome" style="display: block; text-align: center; margin-bottom: 0.5em;">
+          Inserire nome e cognome per procedere:
+        </label>
+        <div class="verifica-container">
+          <input type="text" id="nome" name="nome" required />
+          <button type="button" id="verificaBtn">Verifica nome</button>
+        </div>
+        <div id="verifica-msg"></div>
       </div>
-      <div id="verifica-msg"></div>
 
       <div id="giorniContainer"></div>
       <button type="submit" id="submitBtn">Aggiungi disponibilità</button>
@@ -182,7 +200,10 @@
     <div class="riepilogo" id="riepilogo">
       <h2>Riepilogo disponibilità</h2>
       <ul id="riepilogoLista"></ul>
-      <button id="inviaBtn">Invia a Medea</button>
+      <div class="center-buttons">
+        <button id="inviaBtn">Invia a Medea</button>
+        <button id="tornaBtn">Torna indietro</button>
+      </div>
     </div>
   </div>
 
@@ -202,8 +223,10 @@
     const verificaMsg = document.getElementById('verifica-msg');
     const submitBtn = document.getElementById('submitBtn');
     const inviaBtn = document.getElementById('inviaBtn');
+    const tornaBtn = document.getElementById('tornaBtn');
     const mainContainer = document.getElementById('mainContainer');
     const grazieScreen = document.getElementById('grazieScreen');
+    const nomeSection = document.getElementById('nomeSection');
 
     const disponibilita = new Set();
 
@@ -313,6 +336,8 @@
           if (!riepilogoLista.hasChildNodes()) {
             riepilogo.style.display = 'none';
             inviaBtn.style.display = 'none';
+            tornaBtn.style.display = 'none';
+            nomeSection.style.display = 'block';
           }
         };
 
@@ -322,7 +347,9 @@
 
       if (riepilogoLista.hasChildNodes()) {
         riepilogo.style.display = 'block';
-        inviaBtn.style.display = 'block';
+        inviaBtn.style.display = 'inline-block';
+        tornaBtn.style.display = 'inline-block';
+        nomeSection.style.display = 'none';
       }
 
       modulo.reset();
@@ -335,6 +362,13 @@
     inviaBtn.addEventListener('click', () => {
       mainContainer.style.display = 'none';
       grazieScreen.style.display = 'block';
+    });
+
+    tornaBtn.addEventListener('click', () => {
+      riepilogo.style.display = 'none';
+      container.style.display = 'block';
+      submitBtn.style.display = 'inline-block';
+      nomeSection.style.display = 'block';
     });
   </script>
 </body>
