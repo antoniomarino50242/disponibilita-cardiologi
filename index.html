@@ -1,40 +1,127 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Disponibilità Cardiologi</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2em; }
-    h1 { color: #2c3e50; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    .fascia { margin-left: 20px; }
-    .riepilogo { margin-top: 2em; border-top: 1px solid #ccc; padding-top: 1em; }
-    .turno { margin-bottom: 0.5em; }
-    button.rimuovi { margin-left: 10px; color: red; }
-    .logo { max-width: 200px; margin-bottom: 20px; }
+    :root {
+      --primary-color: #0066cc;
+      --background: #f4f6f8;
+      --card-bg: #fff;
+      --text-color: #333;
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: var(--background);
+      color: var(--text-color);
+      margin: 0;
+      padding: 2em;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 2em;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      max-width: 160px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: var(--primary-color);
+    }
+
+    label {
+      font-weight: bold;
+      margin-top: 15px;
+      display: block;
+    }
+
+    .fascia {
+      margin-left: 15px;
+    }
+
+    .giorno {
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      width: 100%;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: #fff;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 1em;
+    }
+
+    button:hover {
+      background-color: #004999;
+    }
+
+    .riepilogo {
+      margin-top: 2em;
+      border-top: 1px solid #ddd;
+      padding-top: 1em;
+    }
+
+    .turno {
+      background-color: #eaf0f5;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .rimuovi {
+      background-color: #e74c3c;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    .rimuovi:hover {
+      background-color: #c0392b;
+    }
   </style>
 </head>
 <body>
+  <div class="container">
+    <img src="logo.png" alt="Logo Aziendale" class="logo" />
 
-  <img src="logo.png" alt="Logo Aziendale" class="logo">
+    <h1>Modulo disponibilità cardiologi</h1>
 
-  <h1>Modulo disponibilità cardiologi</h1>
+    <form id="moduloDisponibilita">
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required />
 
-  <form id="moduloDisponibilita">
-    <label for="nome">Nome:</label>
-    <input type="text" id="nome" name="nome" required>
+      <label>Seleziona i giorni e le fasce orarie disponibili:</label>
+      <div id="giorniContainer"></div>
 
-    <label>Seleziona i giorni e le fasce orarie disponibili:</label>
-    <div id="giorniContainer"></div>
+      <button type="submit">Aggiungi disponibilità</button>
+    </form>
 
-    <button type="submit">Aggiungi disponibilità</button>
-  </form>
-
-  <div class="riepilogo">
-    <h2>Riepilogo disponibilità</h2>
-    <ul id="riepilogoLista"></ul>
+    <div class="riepilogo">
+      <h2>Riepilogo disponibilità</h2>
+      <ul id="riepilogoLista"></ul>
+    </div>
   </div>
 
   <script>
@@ -44,10 +131,15 @@
     const riepilogoLista = document.getElementById('riepilogoLista');
     const modulo = document.getElementById('moduloDisponibilita');
 
+    const disponibilita = new Set();
+
     giorni.forEach(giorno => {
+      const giornoDiv = document.createElement('div');
+      giornoDiv.className = 'giorno';
+
       const giornoLabel = document.createElement('label');
       giornoLabel.textContent = giorno;
-      container.appendChild(giornoLabel);
+      giornoDiv.appendChild(giornoLabel);
 
       fasce.forEach(fascia => {
         const checkbox = document.createElement('input');
@@ -59,30 +151,40 @@
         fasciaLabel.textContent = fascia;
         fasciaLabel.classList.add('fascia');
 
-        container.appendChild(checkbox);
-        container.appendChild(fasciaLabel);
-        container.appendChild(document.createElement('br'));
+        giornoDiv.appendChild(checkbox);
+        giornoDiv.appendChild(fasciaLabel);
       });
+
+      container.appendChild(giornoDiv);
     });
 
     modulo.addEventListener('submit', function(e) {
       e.preventDefault();
-      const nome = document.getElementById('nome').value;
+      const nome = document.getElementById('nome').value.trim();
       const selezionati = [...document.querySelectorAll('input[type=checkbox]:checked')];
+
       selezionati.forEach(c => {
+        const chiave = `${nome.toLowerCase()}|${c.value}`;
+        if (disponibilita.has(chiave)) return; // Salta se già esiste
+
+        disponibilita.add(chiave);
+
         const li = document.createElement('li');
         li.className = 'turno';
-        li.textContent = `${nome}: ${c.value}`;
+        li.innerHTML = `<span>${nome}: ${c.value}</span>`;
         const btn = document.createElement('button');
         btn.textContent = 'Rimuovi';
         btn.className = 'rimuovi';
-        btn.onclick = () => li.remove();
+        btn.onclick = () => {
+          disponibilita.delete(chiave);
+          li.remove();
+        };
         li.appendChild(btn);
         riepilogoLista.appendChild(li);
       });
+
       modulo.reset();
     });
   </script>
-
 </body>
 </html>
