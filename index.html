@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Disponibilità Cardiologi</title>
   <style>
     :root {
@@ -44,26 +44,45 @@
       display: block;
     }
 
-    .fascia {
-      margin-left: 15px;
-    }
-
     .giorno {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      padding: 10px;
+      background: #f0f4f8;
+      border-radius: 8px;
     }
 
-    input[type="text"], textarea {
-      padding: 8px;
-      width: 100%;
+    .fascia-container {
+      display: flex;
+      align-items: flex-start;
       margin-top: 5px;
+      gap: 10px;
+    }
+
+    .fascia-container input[type="checkbox"] {
+      margin-right: 5px;
+    }
+
+    .annotazione {
+      flex: 1;
+      display: none;
+    }
+
+    .annotazione textarea {
+      width: 100%;
+      min-height: 50px;
+      resize: vertical;
       border: 1px solid #ccc;
       border-radius: 6px;
+      padding: 6px;
       font-family: inherit;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 80px;
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
 
     button {
@@ -101,6 +120,7 @@
       padding: 5px 10px;
       border-radius: 4px;
       font-size: 0.9em;
+      cursor: pointer;
     }
 
     .rimuovi:hover {
@@ -117,9 +137,6 @@
     <form id="moduloDisponibilita">
       <label for="nome">Nome:</label>
       <input type="text" id="nome" name="nome" required />
-
-      <label>Annotazioni:</label>
-      <textarea id="note" name="note" placeholder="Inserisci eventuali commenti..."></textarea>
 
       <label>Seleziona i giorni e le fasce orarie disponibili:</label>
       <div id="giorniContainer"></div>
@@ -151,17 +168,35 @@
       giornoDiv.appendChild(giornoLabel);
 
       fasce.forEach(fascia => {
+        const fasciaCont = document.createElement('div');
+        fasciaCont.className = 'fascia-container';
+
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.name = `${giorno}-${fascia}`;
+        checkbox.id = `${giorno}-${fascia}`;
+        checkbox.name = 'fasce';
         checkbox.value = `${giorno} ${fascia}`;
 
-        const fasciaLabel = document.createElement('span');
-        fasciaLabel.textContent = fascia;
-        fasciaLabel.classList.add('fascia');
+        const label = document.createElement('label');
+        label.textContent = fascia;
+        label.htmlFor = checkbox.id;
 
-        giornoDiv.appendChild(checkbox);
-        giornoDiv.appendChild(fasciaLabel);
+        const notaCont = document.createElement('div');
+        notaCont.className = 'annotazione';
+
+        const textarea = document.createElement('textarea');
+        textarea.placeholder = 'Annotazioni per questo turno';
+        notaCont.appendChild(textarea);
+
+        // Mostra/nasconde annotazione al click
+        checkbox.addEventListener('change', () => {
+          notaCont.style.display = checkbox.checked ? 'block' : 'none';
+        });
+
+        fasciaCont.appendChild(checkbox);
+        fasciaCont.appendChild(label);
+        fasciaCont.appendChild(notaCont);
+        giornoDiv.appendChild(fasciaCont);
       });
 
       container.appendChild(giornoDiv);
@@ -170,23 +205,25 @@
     modulo.addEventListener('submit', function(e) {
       e.preventDefault();
       const nome = document.getElementById('nome').value.trim();
-      const nota = document.getElementById('note').value.trim();
-      const selezionati = [...document.querySelectorAll('input[type=checkbox]:checked')];
 
-      selezionati.forEach(c => {
+      const selezioni = document.querySelectorAll('input[type=checkbox]:checked');
+
+      selezioni.forEach(c => {
         const chiave = `${nome.toLowerCase()}|${c.value}`;
         if (disponibilita.has(chiave)) return;
 
         disponibilita.add(chiave);
 
+        const notaTextarea = c.parentElement.querySelector('textarea');
+        const nota = notaTextarea?.value.trim() || '';
+
         const li = document.createElement('li');
         li.className = 'turno';
 
-        let contenuto = `<span>${nome}: ${c.value}`;
-        if (nota) contenuto += ` – <em>${nota}</em>`;
-        contenuto += `</span>`;
+        let testo = `${nome}: ${c.value}`;
+        if (nota) testo += ` – <em>${nota}</em>`;
 
-        li.innerHTML = contenuto;
+        li.innerHTML = `<span>${testo}</span>`;
 
         const btn = document.createElement('button');
         btn.textContent = 'Rimuovi';
@@ -201,6 +238,7 @@
       });
 
       modulo.reset();
+      document.querySelectorAll('.annotazione').forEach(div => div.style.display = 'none');
     });
   </script>
 </body>
