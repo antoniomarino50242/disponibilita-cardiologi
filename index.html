@@ -2,72 +2,74 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Disponibilità Cardiologi</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary-color: #0066cc;
-      --background: #f4f6f8;
-      --card-bg: #fff;
-      --text-color: #333;
-    }
-
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: var(--background);
-      color: var(--text-color);
-      margin: 0;
+      background-color: #f4f6f8;
+      color: #333;
       padding: 2em;
+      margin: 0;
     }
 
     .container {
       max-width: 800px;
       margin: auto;
-      background-color: var(--card-bg);
+      background: #fff;
       border-radius: 12px;
       padding: 2em;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
 
     .logo {
       max-width: 250px;
-      margin-bottom: 20px;
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: 0 auto 20px;
     }
 
-    h1, h2 {
-      color: var(--primary-color);
-      margin-bottom: 0.6em;
+    h1 {
+      color: #0066cc;
     }
 
     label {
       font-weight: 600;
       display: block;
-      margin: 1em 0 0.5em;
+      margin-top: 1em;
+      text-align: left;
     }
 
     input[type="text"] {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
+      margin-top: 6px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-family: inherit;
+    }
+
+    button {
+      margin-top: 10px;
+      background-color: #0066cc;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #004999;
     }
 
     .verifica-container {
       display: flex;
       gap: 10px;
       align-items: center;
-    }
-
-    .verifica-container button {
-      padding: 10px 12px;
-      font-size: 0.9em;
+      margin-top: 10px;
     }
 
     #verifica-msg {
@@ -76,65 +78,48 @@
     }
 
     .giorno {
-      margin-bottom: 15px;
-      padding: 12px;
-      background: #f0f4f8;
-      border-radius: 8px;
       text-align: left;
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #f0f4f8;
+      border-radius: 8px;
     }
 
     .fascia-container {
       display: flex;
       align-items: center;
-      margin-top: 5px;
       gap: 10px;
+      margin-top: 8px;
     }
 
     .annotazione {
-      flex: 1;
       display: none;
+      flex: 1;
     }
 
     .annotazione textarea {
       width: 100%;
       min-height: 50px;
       resize: vertical;
-      border: 1px solid #ccc;
-      border-radius: 6px;
       padding: 6px;
-      font-family: inherit;
-    }
-
-    button {
-      background-color: var(--primary-color);
-      color: #fff;
-      padding: 10px 16px;
-      border: none;
       border-radius: 6px;
-      cursor: pointer;
-      margin-top: 1em;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background-color: #004999;
+      border: 1px solid #ccc;
     }
 
     .riepilogo {
+      display: none;
       margin-top: 2em;
-      border-top: 1px solid #ddd;
-      padding-top: 1em;
       text-align: left;
     }
 
     .turno {
-      background-color: #eaf0f5;
-      padding: 10px;
-      margin-bottom: 8px;
-      border-radius: 6px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background-color: #eaf0f5;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
     }
 
     .rimuovi {
@@ -150,18 +135,14 @@
       background-color: #c0392b;
     }
 
-    #giorniContainer {
-      display: none;
-    }
-
-    #riepilogo {
+    #giorniContainer, #submitBtn {
       display: none;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="logo.png" alt="Logo Aziendale" class="logo" />
+    <img src="logo.png" class="logo" alt="Logo aziendale">
     <h1>Modulo disponibilità cardiologi</h1>
 
     <form id="moduloDisponibilita">
@@ -172,11 +153,8 @@
       </div>
       <div id="verifica-msg"></div>
 
-      <div id="giorniContainer">
-        <label>Seleziona i giorni e le fasce orarie disponibili:</label>
-      </div>
-
-      <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
+      <div id="giorniContainer"></div>
+      <button type="submit" id="submitBtn">Aggiungi disponibilità</button>
     </form>
 
     <div class="riepilogo" id="riepilogo">
@@ -199,6 +177,7 @@
     const disponibilita = new Set();
 
     function creaFasce() {
+      container.innerHTML = '';
       giorni.forEach(giorno => {
         const giornoDiv = document.createElement('div');
         giornoDiv.className = 'giorno';
@@ -257,9 +236,9 @@
         if (trovato) {
           verificaMsg.textContent = 'Nome verificato ✅';
           verificaMsg.style.color = 'green';
+          creaFasce();
           container.style.display = 'block';
           submitBtn.style.display = 'inline-block';
-          if (!container.hasChildNodes()) creaFasce();
         } else {
           verificaMsg.textContent = 'Cardiologo non trovato. Contattare l’assistenza tecnica ❌';
           verificaMsg.style.color = 'red';
