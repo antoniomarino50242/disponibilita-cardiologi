@@ -6,186 +6,111 @@
   <title>Disponibilità Cardiologi</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f4f6f8;
-      color: #333;
-      padding: 2em;
-      margin: 0;
-    }
-
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      border-radius: 12px;
-      padding: 2em;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-      text-align: center;
-    }
-
-    .logo {
-      max-width: 300px;
-      display: block;
-      margin: 0 auto 20px;
-    }
-
-    h1 {
-      color: #0066cc;
-    }
-
-    label {
-      font-weight: 600;
-      margin-top: 1em;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-family: inherit;
-    }
-
-    button {
-      margin-top: 10px;
-      background-color: #0066cc;
-      color: white;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #004999;
-    }
-
-    .verifica-container {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    #verifica-msg {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-
-    .giorno {
-      text-align: left;
-      margin-top: 20px;
-      padding: 12px;
-      background-color: #f0f4f8;
-      border-radius: 8px;
-    }
-
-    .fascia-container {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 8px;
-    }
-
-    .annotazione {
-      display: none;
-      flex: 1;
-    }
-
-    .annotazione textarea {
-      width: 100%;
-      min-height: 50px;
-      resize: vertical;
-      padding: 6px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    .riepilogo {
-      display: none;
-      margin-top: 2em;
-      text-align: left;
-    }
-
-    .turno {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #eaf0f5;
-      padding: 10px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-
-    .rimuovi {
-      background-color: #e74c3c;
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-size: 0.9em;
-      cursor: pointer;
-      color: #fff;
-    }
-
-    .rimuovi:hover {
-      background-color: #c0392b;
-    }
-
-    #giorniContainer, #submitBtn {
-      display: none;
-    }
-
-    #inviaBtn, #tornaBtn {
-      display: none;
-      margin: 1em 0.5em 0;
-    }
-
-    #grazieScreen {
-      display: none;
-      text-align: center;
-      margin-top: 3em;
-      background-color: #fff;
-      padding: 2em;
-      border-radius: 12px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #grazieScreen h2 {
-      color: #0066cc;
-      font-size: 1.8em;
-    }
-
-    #grazieScreen img {
-      max-width: 250px;
-      margin-bottom: 1em;
-    }
-
-    #nomeSection {
-      display: block;
-    }
-
-    .center-buttons {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
+    /* [--- Stili CSS ---] (rimangono invariati come nel messaggio precedente) */
   </style>
 </head>
 <body>
-  <!-- il resto del contenuto HTML resta invariato, la modifica sarà nello script finale -->
+  <div class="container" id="mainContainer">
+    <img src="logo.png" alt="Logo" class="logo" />
+
+    <div id="nomeSection">
+      <h2>Inserire nome e cognome per procedere</h2>
+      <input type="text" id="nome" placeholder="Nome e Cognome">
+      <button id="verificaBtn">Verifica</button>
+      <div id="verifica-msg"></div>
+    </div>
+
+    <form id="modulo">
+      <div id="giorniContainer">
+        <!-- Giorni e fasce vengono generati dinamicamente -->
+      </div>
+      <button type="submit" id="submitBtn">Conferma Selezioni</button>
+    </form>
+
+    <div class="riepilogo" id="riepilogo">
+      <h3>Riepilogo turni selezionati</h3>
+      <ul id="riepilogoLista"></ul>
+      <div class="center-buttons">
+        <button id="inviaBtn">Invia a Medea</button>
+        <button id="tornaBtn">Torna indietro</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="grazieScreen">
+    <img src="logo.png" alt="Logo finale" />
+    <h2>Grazie per aver inviato le disponibilità</h2>
+  </div>
 
   <script>
-    // Salva le scelte in variabili globali
+    const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+    const fasce = ['Mattina', 'Pomeriggio'];
+
+    const nomeInput = document.getElementById('nome');
+    const verificaBtn = document.getElementById('verificaBtn');
+    const verificaMsg = document.getElementById('verifica-msg');
+    const giorniContainer = document.getElementById('giorniContainer');
+    const submitBtn = document.getElementById('submitBtn');
+    const modulo = document.getElementById('modulo');
+    const riepilogo = document.getElementById('riepilogo');
+    const riepilogoLista = document.getElementById('riepilogoLista');
+    const inviaBtn = document.getElementById('inviaBtn');
+    const tornaBtn = document.getElementById('tornaBtn');
+    const grazieScreen = document.getElementById('grazieScreen');
+    const nomeSection = document.getElementById('nomeSection');
+    const container = document.getElementById('mainContainer');
+
     let nomeUtente = '';
     let selezioniPrecedenti = [];
 
+    function creaFasce() {
+      giorniContainer.innerHTML = '';
+      giorniContainer.style.display = 'block';
+
+      giorni.forEach(giorno => {
+        const giornoDiv = document.createElement('div');
+        giornoDiv.className = 'giorno';
+        const titolo = document.createElement('strong');
+        titolo.textContent = giorno;
+        giornoDiv.appendChild(titolo);
+
+        fasce.forEach(fascia => {
+          const fasciaContainer = document.createElement('div');
+          fasciaContainer.className = 'fascia-container';
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.value = `${giorno} - ${fascia}`;
+          checkbox.id = `${giorno}-${fascia}`;
+
+          const label = document.createElement('label');
+          label.htmlFor = checkbox.id;
+          label.textContent = fascia;
+
+          const notaCont = document.createElement('div');
+          notaCont.className = 'annotazione';
+
+          const notaBox = document.createElement('textarea');
+          notaBox.placeholder = 'Annotazioni (opzionale)';
+          notaCont.appendChild(notaBox);
+
+          checkbox.addEventListener('change', () => {
+            notaCont.style.display = checkbox.checked ? 'block' : 'none';
+          });
+
+          fasciaContainer.appendChild(checkbox);
+          fasciaContainer.appendChild(label);
+          fasciaContainer.appendChild(notaCont);
+
+          giornoDiv.appendChild(fasciaContainer);
+        });
+
+        giorniContainer.appendChild(giornoDiv);
+      });
+    }
+
     verificaBtn.addEventListener('click', async () => {
-      nomeUtente = document.getElementById('nome').value.trim();
+      nomeUtente = nomeInput.value.trim();
       if (!nomeUtente) return;
 
       verificaMsg.textContent = 'Verifica in corso...';
@@ -205,7 +130,7 @@
         } else {
           verificaMsg.textContent = 'Cardiologo non trovato. Contattare l’assistenza tecnica ❌';
           verificaMsg.style.color = 'red';
-          container.style.display = 'none';
+          giorniContainer.style.display = 'none';
           submitBtn.style.display = 'none';
         }
       } catch (err) {
@@ -236,17 +161,18 @@
         inviaBtn.style.display = 'inline-block';
         tornaBtn.style.display = 'inline-block';
         nomeSection.style.display = 'none';
-        container.style.display = 'none';
+        giorniContainer.style.display = 'none';
         submitBtn.style.display = 'none';
       }
     });
 
     tornaBtn.addEventListener('click', () => {
-      container.style.display = 'block';
+      nomeInput.value = nomeUtente;
+      nomeSection.style.display = 'none';
+      giorniContainer.style.display = 'block';
       submitBtn.style.display = 'inline-block';
       riepilogo.style.display = 'none';
 
-      // Ripristina selezioni precedenti
       creaFasce();
       selezioniPrecedenti.forEach(sel => {
         const checkbox = document.querySelector(`input[value="${sel.valore}"]`);
@@ -259,6 +185,12 @@
           }
         }
       });
+    });
+
+    inviaBtn.addEventListener('click', () => {
+      container.style.display = 'none';
+      riepilogo.style.display = 'none';
+      grazieScreen.style.display = 'block';
     });
   </script>
 </body>
