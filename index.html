@@ -25,7 +25,7 @@
     }
 
     .logo {
-      max-width: 250px;
+      max-width: 300px;
       display: block;
       margin: 0 auto 20px;
     }
@@ -160,6 +160,7 @@
     <div class="riepilogo" id="riepilogo">
       <h2>Riepilogo disponibilità</h2>
       <ul id="riepilogoLista"></ul>
+      <button id="inviaBtn" style="display: none; margin-top: 1em;">Invia a Medea</button>
     </div>
   </div>
 
@@ -173,6 +174,7 @@
     const verificaBtn = document.getElementById('verificaBtn');
     const verificaMsg = document.getElementById('verifica-msg');
     const submitBtn = document.getElementById('submitBtn');
+    const inviaBtn = document.getElementById('inviaBtn');
 
     const disponibilita = new Set();
 
@@ -274,30 +276,4 @@
         li.innerHTML = `<span>${testo}</span>`;
 
         const btn = document.createElement('button');
-        btn.textContent = 'Rimuovi';
-        btn.className = 'rimuovi';
-        btn.onclick = () => {
-          disponibilita.delete(chiave);
-          li.remove();
-          if (!riepilogoLista.hasChildNodes()) {
-            riepilogo.style.display = 'none';
-          }
-        };
-
-        li.appendChild(btn);
-        riepilogoLista.appendChild(li);
-      });
-
-      if (riepilogoLista.hasChildNodes()) {
-        riepilogo.style.display = 'block';
-      }
-
-      modulo.reset();
-      document.querySelectorAll('.annotazione').forEach(div => div.style.display = 'none');
-      container.style.display = 'none';
-      submitBtn.style.display = 'none';
-      verificaMsg.textContent = '';
-    });
-  </script>
-</body>
-</html>
+        btn.textContent = 'Rimu
