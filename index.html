@@ -8,117 +8,197 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background-color: #f2f2f2;
+      background-color: #f4f6f8;
+      color: #333;
+      padding: 2em;
       margin: 0;
-      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 2em;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
-    .container {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 30px 20px;
-      background-color: white;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
-      border-radius: 10px;
-      margin-top: 40px;
-    }
+
     .logo {
-      max-width: 160px;
-      margin-bottom: 20px;
+      max-width: 300px;
+      display: block;
+      margin: 0 auto 20px;
     }
-    h2 {
-      margin-top: 0;
+
+    h1 {
+      color: #0066cc;
+    }
+
+    label {
       font-weight: 600;
+      margin-top: 1em;
     }
+
     input[type="text"] {
-      width: 80%;
+      width: 100%;
       padding: 10px;
-      font-size: 16px;
-      margin-bottom: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
     }
+
     button {
-      padding: 10px 20px;
-      margin: 10px 5px;
-      font-size: 16px;
-      background-color: #0077cc;
+      margin-top: 10px;
+      background-color: #0066cc;
       color: white;
+      padding: 10px 16px;
       border: none;
       border-radius: 6px;
+      font-weight: bold;
       cursor: pointer;
     }
+
     button:hover {
-      background-color: #005fa3;
+      background-color: #004999;
     }
+
+    .verifica-container {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    #verifica-msg {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
     .giorno {
-      margin-bottom: 20px;
       text-align: left;
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #f0f4f8;
+      border-radius: 8px;
     }
-    .giorno strong {
-      display: block;
-      margin-bottom: 5px;
-    }
+
     .fascia-container {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 5px;
+      margin-top: 8px;
     }
+
     .annotazione {
       display: none;
-      margin-left: 30px;
-      width: 100%;
+      flex: 1;
     }
+
     .annotazione textarea {
-      width: 90%;
+      width: 100%;
+      min-height: 50px;
+      resize: vertical;
       padding: 6px;
-      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
-    #riepilogo {
+
+    .riepilogo {
       display: none;
-      margin-top: 30px;
-    }
-    #riepilogo ul {
-      list-style: none;
-      padding-left: 0;
+      margin-top: 2em;
       text-align: left;
     }
-    #riepilogo li {
+
+    .turno {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #eaf0f5;
+      padding: 10px;
+      border-radius: 6px;
       margin-bottom: 8px;
     }
-    .center-buttons {
-      text-align: center;
+
+    .rimuovi {
+      background-color: #e74c3c;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 0.9em;
+      cursor: pointer;
+      color: #fff;
     }
+
+    .rimuovi:hover {
+      background-color: #c0392b;
+    }
+
+    #giorniContainer, #submitBtn {
+      display: none;
+    }
+
+    #inviaBtn, #tornaBtn {
+      display: none;
+      margin: 1em 0.5em 0;
+    }
+
     #grazieScreen {
       display: none;
-      background-color: white;
-      min-height: 100vh;
-      padding-top: 60px;
+      text-align: center;
+      margin-top: 3em;
+      background-color: #fff;
+      padding: 2em;
+      border-radius: 12px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
     }
+
     #grazieScreen h2 {
-      margin-top: 20px;
+      color: #0066cc;
+      font-size: 1.8em;
     }
-    #verifica-msg {
-      margin: 10px;
+
+    #grazieScreen img {
+      max-width: 250px;
+      margin-bottom: 1em;
+    }
+
+    #nomeSection {
+      display: block;
+    }
+
+    .center-buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
     }
   </style>
 </head>
 <body>
   <div class="container" id="mainContainer">
-    <img src="logo.png" alt="Logo" class="logo" />
-    <div id="nomeSection">
-      <h2>Inserire nome e cognome per procedere</h2>
-      <input type="text" id="nome" placeholder="Nome e Cognome">
-      <button id="verificaBtn">Verifica</button>
-      <div id="verifica-msg"></div>
-    </div>
+    <img src="logo.png" class="logo" alt="Logo aziendale">
+    <h1>Modulo disponibilità cardiologi</h1>
 
-    <form id="modulo">
-      <div id="giorniContainer" style="display:none;"></div>
-      <button type="submit" id="submitBtn" style="display:none;">Conferma Selezioni</button>
+    <form id="moduloDisponibilita">
+      <div id="nomeSection">
+        <label for="nome" style="display: block; text-align: center; margin-bottom: 0.5em;">
+          Inserire nome e cognome per procedere:
+        </label>
+        <div class="verifica-container">
+          <input type="text" id="nome" name="nome" required />
+          <button type="button" id="verificaBtn">Verifica nome</button>
+        </div>
+        <div id="verifica-msg"></div>
+      </div>
+
+      <div id="giorniContainer"></div>
+      <button type="submit" id="submitBtn">Aggiungi disponibilità</button>
     </form>
 
-    <div id="riepilogo">
-      <h3>Riepilogo turni selezionati</h3>
+    <div class="riepilogo" id="riepilogo">
+      <h2>Riepilogo disponibilità</h2>
       <ul id="riepilogoLista"></ul>
       <div class="center-buttons">
         <button id="inviaBtn">Invia a Medea</button>
@@ -128,92 +208,96 @@
   </div>
 
   <div id="grazieScreen">
-    <img src="logo.png" alt="Logo" class="logo" />
-    <h2>Grazie per aver inviato le disponibilità</h2>
+    <img src="logo.png" alt="Logo aziendale" />
+    <h2>Grazie per aver inviato le disponibilità.</h2>
   </div>
 
   <script>
     const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
     const fasce = ['Mattina', 'Pomeriggio'];
-
-    const nomeInput = document.getElementById('nome');
+    const container = document.getElementById('giorniContainer');
+    const riepilogoLista = document.getElementById('riepilogoLista');
+    const riepilogo = document.getElementById('riepilogo');
+    const modulo = document.getElementById('moduloDisponibilita');
     const verificaBtn = document.getElementById('verificaBtn');
     const verificaMsg = document.getElementById('verifica-msg');
-    const giorniContainer = document.getElementById('giorniContainer');
     const submitBtn = document.getElementById('submitBtn');
-    const modulo = document.getElementById('modulo');
-    const riepilogo = document.getElementById('riepilogo');
-    const riepilogoLista = document.getElementById('riepilogoLista');
     const inviaBtn = document.getElementById('inviaBtn');
     const tornaBtn = document.getElementById('tornaBtn');
+    const mainContainer = document.getElementById('mainContainer');
     const grazieScreen = document.getElementById('grazieScreen');
     const nomeSection = document.getElementById('nomeSection');
-    const container = document.getElementById('mainContainer');
 
-    let nomeUtente = '';
-    let selezioniPrecedenti = [];
+    const disponibilita = new Set();
 
     function creaFasce() {
-      giorniContainer.innerHTML = '';
+      container.innerHTML = '';
       giorni.forEach(giorno => {
         const giornoDiv = document.createElement('div');
         giornoDiv.className = 'giorno';
-        const titolo = document.createElement('strong');
-        titolo.textContent = giorno;
-        giornoDiv.appendChild(titolo);
+
+        const giornoLabel = document.createElement('label');
+        giornoLabel.textContent = giorno;
+        giornoDiv.appendChild(giornoLabel);
 
         fasce.forEach(fascia => {
-          const fasciaContainer = document.createElement('div');
-          fasciaContainer.className = 'fascia-container';
+          const fasciaCont = document.createElement('div');
+          fasciaCont.className = 'fascia-container';
 
           const checkbox = document.createElement('input');
           checkbox.type = 'checkbox';
-          checkbox.value = `${giorno} - ${fascia}`;
           checkbox.id = `${giorno}-${fascia}`;
+          checkbox.name = 'fasce';
+          checkbox.value = `${giorno} ${fascia}`;
 
           const label = document.createElement('label');
-          label.htmlFor = checkbox.id;
           label.textContent = fascia;
+          label.htmlFor = checkbox.id;
 
           const notaCont = document.createElement('div');
           notaCont.className = 'annotazione';
-          const notaBox = document.createElement('textarea');
-          notaBox.placeholder = 'Annotazioni (opzionale)';
-          notaCont.appendChild(notaBox);
+
+          const textarea = document.createElement('textarea');
+          textarea.placeholder = 'Annotazioni per questo turno';
+          notaCont.appendChild(textarea);
 
           checkbox.addEventListener('change', () => {
             notaCont.style.display = checkbox.checked ? 'block' : 'none';
           });
 
-          fasciaContainer.appendChild(checkbox);
-          fasciaContainer.appendChild(label);
-          fasciaContainer.appendChild(notaCont);
-          giornoDiv.appendChild(fasciaContainer);
+          fasciaCont.appendChild(checkbox);
+          fasciaCont.appendChild(label);
+          fasciaCont.appendChild(notaCont);
+          giornoDiv.appendChild(fasciaCont);
         });
 
-        giorniContainer.appendChild(giornoDiv);
+        container.appendChild(giornoDiv);
       });
     }
 
     verificaBtn.addEventListener('click', async () => {
-      nomeUtente = nomeInput.value.trim();
-      if (!nomeUtente) return;
+      const nome = document.getElementById('nome').value.trim();
+      if (!nome) return;
+
       verificaMsg.textContent = 'Verifica in corso...';
       verificaMsg.style.color = '#666';
+
       try {
         const response = await fetch('https://raw.githubusercontent.com/antoniomarino50242/disponibilita-cardiologi/main/cardiologi.json');
         const lista = await response.json();
-        const trovato = lista.some(n => n.toLowerCase() === nomeUtente.toLowerCase());
+
+        const trovato = lista.some(n => n.toLowerCase() === nome.toLowerCase());
         if (trovato) {
           verificaMsg.textContent = 'Nome verificato ✅';
           verificaMsg.style.color = 'green';
-          nomeSection.style.display = 'none';
-          giorniContainer.style.display = 'block';
-          submitBtn.style.display = 'inline-block';
           creaFasce();
+          container.style.display = 'block';
+          submitBtn.style.display = 'inline-block';
         } else {
           verificaMsg.textContent = 'Cardiologo non trovato. Contattare l’assistenza tecnica ❌';
           verificaMsg.style.color = 'red';
+          container.style.display = 'none';
+          submitBtn.style.display = 'none';
         }
       } catch (err) {
         verificaMsg.textContent = 'Errore durante la verifica';
@@ -223,50 +307,68 @@
 
     modulo.addEventListener('submit', function(e) {
       e.preventDefault();
+      const nome = document.getElementById('nome').value.trim();
       const selezioni = document.querySelectorAll('input[type=checkbox]:checked');
-      riepilogoLista.innerHTML = '';
-      selezioniPrecedenti = [];
 
       selezioni.forEach(c => {
+        const chiave = `${nome.toLowerCase()}|${c.value}`;
+        if (disponibilita.has(chiave)) return;
+
+        disponibilita.add(chiave);
+
         const notaTextarea = c.parentElement.querySelector('textarea');
         const nota = notaTextarea?.value.trim() || '';
-        selezioniPrecedenti.push({ valore: c.value, nota });
 
         const li = document.createElement('li');
-        li.innerHTML = `<strong>${c.value}</strong>${nota ? ' – <em>' + nota + '</em>' : ''}`;
+        li.className = 'turno';
+
+        let testo = `${nome}: ${c.value}`;
+        if (nota) testo += ` – <em>${nota}</em>`;
+
+        li.innerHTML = `<span>${testo}</span>`;
+
+        const btn = document.createElement('button');
+        btn.textContent = 'Rimuovi';
+        btn.className = 'rimuovi';
+        btn.onclick = () => {
+          disponibilita.delete(chiave);
+          li.remove();
+          if (!riepilogoLista.hasChildNodes()) {
+            riepilogo.style.display = 'none';
+            inviaBtn.style.display = 'none';
+            tornaBtn.style.display = 'none';
+            nomeSection.style.display = 'block';
+          }
+        };
+
+        li.appendChild(btn);
         riepilogoLista.appendChild(li);
       });
 
-      if (selezioniPrecedenti.length > 0) {
+      if (riepilogoLista.hasChildNodes()) {
         riepilogo.style.display = 'block';
-        giorniContainer.style.display = 'none';
-        submitBtn.style.display = 'none';
+        inviaBtn.style.display = 'inline-block';
+        tornaBtn.style.display = 'inline-block';
+        nomeSection.style.display = 'none';
       }
-    });
 
-    tornaBtn.addEventListener('click', () => {
-      nomeInput.value = nomeUtente;
-      nomeSection.style.display = 'none';
-      riepilogo.style.display = 'none';
-      giorniContainer.style.display = 'block';
-      submitBtn.style.display = 'inline-block';
-      creaFasce();
-      selezioniPrecedenti.forEach(sel => {
-        const checkbox = document.querySelector(`input[value="${sel.valore}"]`);
-        if (checkbox) {
-          checkbox.checked = true;
-          const notaCont = checkbox.parentElement.querySelector('.annotazione');
-          if (notaCont) {
-            notaCont.style.display = 'block';
-            notaCont.querySelector('textarea').value = sel.nota;
-          }
-        }
-      });
+      modulo.reset();
+      document.querySelectorAll('.annotazione').forEach(div => div.style.display = 'none');
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+      verificaMsg.textContent = '';
     });
 
     inviaBtn.addEventListener('click', () => {
-      document.getElementById('mainContainer').style.display = 'none';
+      mainContainer.style.display = 'none';
       grazieScreen.style.display = 'block';
+    });
+
+    tornaBtn.addEventListener('click', () => {
+      riepilogo.style.display = 'none';
+      container.style.display = 'block';
+      submitBtn.style.display = 'inline-block';
+      nomeSection.style.display = 'block';
     });
   </script>
 </body>
