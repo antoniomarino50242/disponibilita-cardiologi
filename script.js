@@ -169,13 +169,14 @@ inviaBtn.addEventListener('click', async () => {
     });
   });
 
-  await fetch('URL_WEB_APP_GOOGLE_SCRIPT', {
+  await fetch('https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9_2o3WdefffjXEpzg/exec', {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: {
       'Content-Type': 'application/json'
     }
   });
+
 
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
