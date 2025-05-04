@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disponibilità Cardiologi</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    h1 { color: #2c3e50; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    .fascia { margin-left: 20px; }
+    .riepilogo { margin-top: 2em; border-top: 1px solid #ccc; padding-top: 1em; }
+    .turno { margin-bottom: 0.5em; }
+    button.rimuovi { margin-left: 10px; color: red; }
+    .logo { max-width: 200px; margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+
+  <img src="logo.png" alt="Logo Aziendale" class="logo">
+
+  <h1>Modulo disponibilità cardiologi</h1>
+
+  <form id="moduloDisponibilita">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required>
+
+    <label>Seleziona i giorni e le fasce orarie disponibili:</label>
+    <div id="giorniContainer"></div>
+
+    <button type="submit">Aggiungi disponibilità</button>
+  </form>
+
+  <div class="riepilogo">
+    <h2>Riepilogo disponibilità</h2>
+    <ul id="riepilogoLista"></ul>
+  </div>
+
+  <script>
+    const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+    const fasce = ['Mattina', 'Pomeriggio'];
+    const container = document.getElementById('giorniContainer');
+    const riepilogoLista = document.getElementById('riepilogoLista');
+    const modulo = document.getElementById('moduloDisponibilita');
+
+    giorni.forEach(giorno => {
+      const giornoLabel = document.createElement('label');
+      giornoLabel.textContent = giorno;
+      container.appendChild(giornoLabel);
+
+      fasce.forEach(fascia => {
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = `${giorno}-${fascia}`;
+        checkbox.value = `${giorno} ${fascia}`;
+
+        const fasciaLabel = document.createElement('span');
+        fasciaLabel.textContent = fascia;
+        fasciaLabel.classList.add('fascia');
+
+        container.appendChild(checkbox);
+        container.appendChild(fasciaLabel);
+        container.appendChild(document.createElement('br'));
+      });
+    });
+
+    modulo.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const nome = document.getElementById('nome').value;
+      const selezionati = [...document.querySelectorAll('input[type=checkbox]:checked')];
+      selezionati.forEach(c => {
+        const li = document.createElement('li');
+        li.className = 'turno';
+        li.textContent = `${nome}: ${c.value}`;
+        const btn = document.createElement('button');
+        btn.textContent = 'Rimuovi';
+        btn.className = 'rimuovi';
+        btn.onclick = () => li.remove();
+        li.appendChild(btn);
+        riepilogoLista.appendChild(li);
+      });
+      modulo.reset();
+    });
+  </script>
+
+</body>
+</html>
