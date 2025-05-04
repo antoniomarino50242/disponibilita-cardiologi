@@ -21,7 +21,6 @@ giorni.forEach(giorno => {
 const giornoDiv = document.createElement('div');
 giornoDiv.className = 'giorno';
 
-```
 const giornoLabel = document.createElement('label');
 giornoLabel.textContent = giorno;
 giornoDiv.appendChild(giornoLabel);
@@ -58,7 +57,6 @@ fasce.forEach(fascia => {
 });
 
 container.appendChild(giornoDiv);
-```
 
 });
 }
@@ -74,7 +72,6 @@ try {
 const response = await fetch('https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9\_2o3WdefffjXEpzg/exec');
 const lista = await response.json();
 
-```
 const normalizza = str =>
   str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
@@ -97,7 +94,6 @@ if (trovato) {
   container.style.display = 'none';
   submitBtn.style.display = 'none';
 }
-```
 
 } catch (err) {
 verificaMsg.textContent = 'Errore durante la verifica';
@@ -114,7 +110,6 @@ selezioni.forEach(c => {
 const chiave = `${nome.toLowerCase()}|${c.value}`;
 if (disponibilita.has(chiave)) return;
 
-```
 disponibilita.add(chiave);
 
 const notaTextarea = c.parentElement.querySelector('textarea');
@@ -144,7 +139,6 @@ btn.onclick = () => {
 
 li.appendChild(btn);
 riepilogoLista.appendChild(li);
-```
 
 });
 
