@@ -153,10 +153,34 @@ modulo.addEventListener('submit', function(e) {
   verificaMsg.textContent = '';
 });
 
-inviaBtn.addEventListener('click', () => {
+inviaBtn.addEventListener('click', async () => {
+  const payload = [];
+
+  document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
+    const testo = li.querySelector('span').innerHTML;
+    const [nome, resto] = testo.split(':');
+    const [turno, notaHtml] = resto.split(' – ');
+    const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
+
+    payload.push({
+      nome: nome.trim(),
+      turno: turno.trim(),
+      annotazione: annotazione
+    });
+  });
+
+  await fetch('URL_WEB_APP_GOOGLE_SCRIPT', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
 });
+
 
 eliminaBtn.addEventListener('click', () => {
   const conferma = confirm("Sei sicuro di voler eliminare tutte le disponibilità?");
