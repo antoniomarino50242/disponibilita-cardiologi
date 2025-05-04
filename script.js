@@ -1,157 +1,135 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const giorni = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
-  const fasce = ["Mattina", "Pomeriggio", "Notte"];
-  const giorniContainer = document.getElementById("giorniContainer");
-  const riepilogoContainer = document.getElementById("riepilogo");
-  const inviaButton = document.getElementById("inviaButton");
-  const formContainer = document.getElementById("formContainer");
-  const thankYouScreen = document.getElementById("thankYouScreen");
+const giorniSettimana = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+const fasceOrarie = ["Mattina", "Pomeriggio"];
+
+document.addEventListener("DOMContentLoaded", () => {
+  const schermataNome = document.getElementById("schermataNome");
+  const formulario = document.getElementById("formulario");
+  const schermataFinale = document.getElementById("schermataFinale");
   const nomeInput = document.getElementById("nome");
-  const verificaButton = document.getElementById("verificaNome");
+  const verificaBtn = document.getElementById("verificaNome");
+  const nomeUtente = document.getElementById("nomeUtente");
+  const giorniContainer = document.getElementById("giorniContainer");
+  const modulo = document.getElementById("moduloDisponibilità");
   const nomeError = document.getElementById("nomeError");
-  const noteInput = document.getElementById("note");
-  const nessunTurnoContainer = document.getElementById("nessunTurnoContainer");
-  const nessunTurnoCheckbox = document.getElementById("nessunTurno");
+  const indietroBtn = document.getElementById("indietro");
+  const nessunaDispCheckbox = document.getElementById("nessunaDisponibilità");
+  const nessunaDispContainer = document.getElementById("nessunaDisponibilitàContainer");
 
-  let selections = {};
-  let nome = "";
+  // Verifica nome
+  verificaBtn.addEventListener("click", () => {
+    const nome = nomeInput.value.trim();
+    nomeError.textContent = "";
 
-  function creaCheckbox(giorno, fascia) {
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.name = `${giorno}-${fascia}`;
-    checkbox.dataset.giorno = giorno;
-    checkbox.dataset.fascia = fascia;
-
-    checkbox.addEventListener("change", () => {
-      aggiornaSelezioni();
-      aggiornaRiepilogo();
-      aggiornaNessunTurno();
-    });
-
-    const label = document.createElement("label");
-    label.className = "checkbox-label";
-    label.appendChild(checkbox);
-    label.appendChild(document.createTextNode(fascia));
-
-    return label;
-  }
-
-  function aggiornaSelezioni() {
-    selections = {};
-    const checkboxes = document.querySelectorAll("input[type=checkbox][data-giorno]");
-    checkboxes.forEach((cb) => {
-      if (cb.checked) {
-        const giorno = cb.dataset.giorno;
-        const fascia = cb.dataset.fascia;
-        if (!selections[giorno]) {
-          selections[giorno] = [];
-        }
-        selections[giorno].push(fascia);
-      }
-    });
-  }
-
-  function aggiornaRiepilogo() {
-    riepilogoContainer.innerHTML = "";
-    const ul = document.createElement("ul");
-
-    if (nessunTurnoCheckbox.checked) {
-      const li = document.createElement("li");
-      li.textContent = "Nessun turno disponibile per la prossima settimana.";
-      ul.appendChild(li);
-    } else {
-      Object.entries(selections).forEach(([giorno, fasce]) => {
-        const li = document.createElement("li");
-        li.textContent = `${giorno}: ${fasce.join(", ")}`;
-        ul.appendChild(li);
-      });
-    }
-
-    riepilogoContainer.appendChild(ul);
-  }
-
-  function aggiornaNessunTurno() {
-    const selezioniPresenti = Object.keys(selections).length > 0;
-    if (!selezioniPresenti) {
-      nessunTurnoContainer.style.display = "block";
-    } else {
-      nessunTurnoContainer.style.display = "none";
-      nessunTurnoCheckbox.checked = false;
-    }
-  }
-
-  function creaFormGiorni() {
-    giorni.forEach((giorno) => {
-      const divGiorno = document.createElement("div");
-      divGiorno.className = "giorno";
-      const titolo = document.createElement("h3");
-      titolo.textContent = giorno;
-      divGiorno.appendChild(titolo);
-
-      fasce.forEach((fascia) => {
-        const checkbox = creaCheckbox(giorno, fascia);
-        divGiorno.appendChild(checkbox);
-      });
-
-      giorniContainer.appendChild(divGiorno);
-    });
-  }
-
-  verificaButton.addEventListener("click", function () {
-    nome = nomeInput.value.trim();
     if (!nome) {
-      nomeError.style.display = "block";
+      nomeError.textContent = "Inserisci un nome.";
       return;
     }
 
-    // Verifica nome via Google Apps Script (opzionale)
-    fetch("https://script.google.com/macros/s/...", {
-      method: "POST",
-      body: new URLSearchParams({ nome }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          nomeError.style.display = "none";
-          document.getElementById("schermataNome").style.display = "none";
-          document.getElementById("formulario").style.display = "block";
-          creaFormGiorni();
+    fetch("https://script.google.com/macros/s/AKfycbxYxxYOtUAz5CkW1oEQu0ZztdOwA2gZSnH0LZDEoU39qa7FA3jLDeOau_sF0JuVXyEy/exec?nome=" + encodeURIComponent(nome))
+      .then(response => response.json())
+      .then(data => {
+        if (data.trovato) {
+          schermataNome.style.display = "none";
+          formulario.style.display = "block";
+          nomeUtente.textContent = nome;
+          generaCheckbox();
         } else {
-          nomeError.style.display = "block";
+          nomeError.textContent = "Nome non trovato. Contatta il coordinatore.";
         }
       })
-      .catch(() => {
-        nomeError.style.display = "block";
+      .catch(error => {
+        nomeError.textContent = "Errore di rete. Riprova.";
+        console.error("Errore:", error);
       });
   });
 
-  inviaButton.addEventListener("click", function () {
-    aggiornaSelezioni();
-    aggiornaRiepilogo();
-    aggiornaNessunTurno();
+  function generaCheckbox() {
+    giorniContainer.innerHTML = "";
+
+    giorniSettimana.forEach(giorno => {
+      const giornoDiv = document.createElement("div");
+      giornoDiv.classList.add("giorno");
+
+      const giornoLabel = document.createElement("label");
+      giornoLabel.textContent = giorno;
+      giornoDiv.appendChild(giornoLabel);
+
+      fasceOrarie.forEach(fascia => {
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = giorno;
+        checkbox.value = fascia;
+        checkbox.classList.add("fascia-checkbox");
+
+        checkbox.addEventListener("change", aggiornaStatoDisponibilità);
+
+        const label = document.createElement("label");
+        label.appendChild(checkbox);
+        label.append(" " + fascia);
+
+        giornoDiv.appendChild(label);
+      });
+
+      giorniContainer.appendChild(giornoDiv);
+    });
+
+    aggiornaStatoDisponibilità(); // Verifica iniziale
+  }
+
+  function aggiornaStatoDisponibilità() {
+    const tutteFasce = document.querySelectorAll(".fascia-checkbox");
+    const almenoUnaSelezionata = Array.from(tutteFasce).some(cb => cb.checked);
+    nessunaDispContainer.style.display = almenoUnaSelezionata ? "none" : "block";
+    if (almenoUnaSelezionata) {
+      nessunaDispCheckbox.checked = false;
+    }
+  }
+
+  modulo.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const nome = nomeUtente.textContent;
+    const note = document.getElementById("note").value.trim();
+    const selezioni = {};
+
+    const tutteFasce = document.querySelectorAll(".fascia-checkbox");
+
+    tutteFasce.forEach(cb => {
+      if (cb.checked) {
+        if (!selezioni[cb.name]) selezioni[cb.name] = [];
+        selezioni[cb.name].push(cb.value);
+      }
+    });
+
+    const nessunaDisponibilità = nessunaDispCheckbox.checked;
 
     const dati = {
-      nome: nome,
-      disponibilita: nessunTurnoCheckbox.checked ? "Nessun turno disponibile" : selections,
-      note: noteInput.value.trim(),
+      nome,
+      disponibilità: selezioni,
+      nessunaDisponibilità,
+      note
     };
 
-    fetch("https://script.google.com/macros/s/...", {
+    fetch("https://script.google.com/macros/s/AKfycbxYxxYOtUAz5CkW1oEQu0ZztdOwA2gZSnH0LZDEoU39qa7FA3jLDeOau_sF0JuVXyEy/exec", {
       method: "POST",
-      body: JSON.stringify(dati),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dati)
     })
-      .then((res) => {
-        if (res.ok) {
-          formContainer.style.display = "none";
-          thankYouScreen.style.display = "flex";
-        } else {
-          alert("Errore durante l'invio.");
-        }
+      .then(res => res.json())
+      .then(() => {
+        formulario.style.display = "none";
+        schermataFinale.style.display = "flex";
       })
-      .catch(() => alert("Errore di rete durante l'invio."));
+      .catch(error => {
+        alert("Errore durante l'invio. Riprova.");
+        console.error("Errore:", error);
+      });
+  });
+
+  indietroBtn.addEventListener("click", () => {
+    formulario.style.display = "none";
+    schermataNome.style.display = "flex";
+    nomeInput.value = "";
+    nomeUtente.textContent = "";
   });
 });
