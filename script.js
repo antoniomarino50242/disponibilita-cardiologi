@@ -169,7 +169,7 @@ inviaBtn.addEventListener('click', async () => {
     });
   });
 
-  await fetch('https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9_2o3WdefffjXEpzg/exec', {
+  await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: {
