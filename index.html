@@ -32,7 +32,7 @@
     }
 
     .logo {
-      max-width: 200px;
+      max-width: 250px;
       margin-bottom: 20px;
       display: block;
       margin-left: auto;
@@ -153,6 +153,10 @@
     #giorniContainer {
       display: none;
     }
+
+    #riepilogo {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -175,7 +179,7 @@
       <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
     </form>
 
-    <div class="riepilogo">
+    <div class="riepilogo" id="riepilogo">
       <h2>Riepilogo disponibilità</h2>
       <ul id="riepilogoLista"></ul>
     </div>
@@ -186,6 +190,7 @@
     const fasce = ['Mattina', 'Pomeriggio'];
     const container = document.getElementById('giorniContainer');
     const riepilogoLista = document.getElementById('riepilogoLista');
+    const riepilogo = document.getElementById('riepilogo');
     const modulo = document.getElementById('moduloDisponibilita');
     const verificaBtn = document.getElementById('verificaBtn');
     const verificaMsg = document.getElementById('verifica-msg');
@@ -245,69 +250,9 @@
       verificaMsg.style.color = '#666';
 
       try {
-        const response = await fetch('https://raw.githubusercontent.com/tuo-utente/tuo-repo/main/cardiologi.json'); // <-- 🔁 SOSTITUISCI QUESTO LINK
+        const response = await fetch('https://raw.githubusercontent.com/tuo-utente/tuo-repo/main/cardiologi.json'); // <-- Sostituisci questo URL
         const lista = await response.json();
 
         const trovato = lista.some(n => n.toLowerCase() === nome.toLowerCase());
         if (trovato) {
-          verificaMsg.textContent = 'Nome verificato ✅';
-          verificaMsg.style.color = 'green';
-          container.style.display = 'block';
-          submitBtn.style.display = 'inline-block';
-          if (!container.hasChildNodes()) creaFasce();
-        } else {
-          verificaMsg.textContent = 'Nome non trovato ❌';
-          verificaMsg.style.color = 'red';
-          container.style.display = 'none';
-          submitBtn.style.display = 'none';
-        }
-      } catch (err) {
-        verificaMsg.textContent = 'Errore durante la verifica';
-        verificaMsg.style.color = 'red';
-      }
-    });
-
-    modulo.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const nome = document.getElementById('nome').value.trim();
-
-      const selezioni = document.querySelectorAll('input[type=checkbox]:checked');
-
-      selezioni.forEach(c => {
-        const chiave = `${nome.toLowerCase()}|${c.value}`;
-        if (disponibilita.has(chiave)) return;
-
-        disponibilita.add(chiave);
-
-        const notaTextarea = c.parentElement.querySelector('textarea');
-        const nota = notaTextarea?.value.trim() || '';
-
-        const li = document.createElement('li');
-        li.className = 'turno';
-
-        let testo = `${nome}: ${c.value}`;
-        if (nota) testo += ` – <em>${nota}</em>`;
-
-        li.innerHTML = `<span>${testo}</span>`;
-
-        const btn = document.createElement('button');
-        btn.textContent = 'Rimuovi';
-        btn.className = 'rimuovi';
-        btn.onclick = () => {
-          disponibilita.delete(chiave);
-          li.remove();
-        };
-
-        li.appendChild(btn);
-        riepilogoLista.appendChild(li);
-      });
-
-      modulo.reset();
-      document.querySelectorAll('.annotazione').forEach(div => div.style.display = 'none');
-      container.style.display = 'none';
-      submitBtn.style.display = 'none';
-      verificaMsg.textContent = '';
-    });
-  </script>
-</body>
-</html>
+          verificaMsg.textContent = 'Nome verificato
