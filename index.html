@@ -52,12 +52,18 @@
       margin-bottom: 10px;
     }
 
-    input[type="text"] {
+    input[type="text"], textarea {
       padding: 8px;
       width: 100%;
       margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 6px;
+      font-family: inherit;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
     }
 
     button {
@@ -112,6 +118,9 @@
       <label for="nome">Nome:</label>
       <input type="text" id="nome" name="nome" required />
 
+      <label>Annotazioni:</label>
+      <textarea id="note" name="note" placeholder="Inserisci eventuali commenti..."></textarea>
+
       <label>Seleziona i giorni e le fasce orarie disponibili:</label>
       <div id="giorniContainer"></div>
 
@@ -161,17 +170,24 @@
     modulo.addEventListener('submit', function(e) {
       e.preventDefault();
       const nome = document.getElementById('nome').value.trim();
+      const nota = document.getElementById('note').value.trim();
       const selezionati = [...document.querySelectorAll('input[type=checkbox]:checked')];
 
       selezionati.forEach(c => {
         const chiave = `${nome.toLowerCase()}|${c.value}`;
-        if (disponibilita.has(chiave)) return; // Salta se già esiste
+        if (disponibilita.has(chiave)) return;
 
         disponibilita.add(chiave);
 
         const li = document.createElement('li');
         li.className = 'turno';
-        li.innerHTML = `<span>${nome}: ${c.value}</span>`;
+
+        let contenuto = `<span>${nome}: ${c.value}`;
+        if (nota) contenuto += ` – <em>${nota}</em>`;
+        contenuto += `</span>`;
+
+        li.innerHTML = contenuto;
+
         const btn = document.createElement('button');
         btn.textContent = 'Rimuovi';
         btn.className = 'rimuovi';
@@ -179,6 +195,7 @@
           disponibilita.delete(chiave);
           li.remove();
         };
+
         li.appendChild(btn);
         riepilogoLista.appendChild(li);
       });
