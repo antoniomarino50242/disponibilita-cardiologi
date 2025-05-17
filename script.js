@@ -87,7 +87,7 @@ verificaBtn.addEventListener('click', async () => {
     verificaMsg.style.color = '#666';
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_URL_HERE/exec');
+        const response = await fetch('https://script.google.com/macros/s/AKfycbyUcMJWj1DqqsRvE2ZFlqzkpo2xBKP9hbsLlZqNuJp8LLQy46cgrk-n8XSOpPMWIcFg9A/exec');
         const lista = await response.json();
 
         const normalizza = str =>
