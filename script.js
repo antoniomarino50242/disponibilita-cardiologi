@@ -2,12 +2,18 @@ const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sa
 const fasce = ['Mattina', 'Pomeriggio'];
 const container = document.getElementById('giorniContainer');
 const riepilogoLista = document.getElementById('riepilogoLista');
-const riepilogoSection = document.getElementById('riepilogo');
-const cognomeInput = document.getElementById('cognome');
-const nomeInput = document.getElementById('nome');
+const riepilogo = document.getElementById('riepilogo');
+const modulo = document.getElementById('moduloDisponibilita');
 const verificaBtn = document.getElementById('verificaBtn');
 const verificaMsg = document.getElementById('verifica-msg');
 const submitBtn = document.getElementById('submitBtn');
+const inviaBtn = document.getElementById('inviaBtn');
+const eliminaBtn = document.getElementById('eliminaBtn');
+const mainContainer = document.getElementById('mainContainer');
+const grazieScreen = document.getElementById('grazieScreen');
+const nomeSection = document.getElementById('nomeSection');
+
+const disponibilita = new Set();
 
 // **Funzione per creare le fasce settimanali**
 function creaFasce() {
@@ -72,47 +78,34 @@ ferieContainer.appendChild(ferieLabel);
 verificaMsg.after(ferieContainer);
 ferieContainer.style.display = 'none'; // Nascondiamo la checkbox fino alla verifica
 
-// **Gestione del pulsante "Verifica"**
-function controllaCampi() {
-    verificaBtn.disabled = !(cognomeInput.value.trim() && nomeInput.value.trim());
-}
-
-cognomeInput.addEventListener('input', controllaCampi);
-nomeInput.addEventListener('input', controllaCampi);
-
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter' && !verificaBtn.disabled) {
-        event.preventDefault();
-        verificaBtn.click();
-    }
-});
-
+// **Gestione del pulsante "Verifica" con controllo nome e cognome**
 verificaBtn.addEventListener('click', async () => {
-    const cognome = cognomeInput.value.trim().toLowerCase();
-    const nome = nomeInput.value.trim().toLowerCase();
-    if (!cognome || !nome) return;
+    const nomeInput = document.getElementById('nome').value.trim();
+    if (!nomeInput) return;
 
     verificaMsg.textContent = 'Verifica in corso...';
     verificaMsg.style.color = '#666';
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbyUcMJWj1DqqsRvE2ZFlqzkpo2xBKP9hbsLlZqNuJp8LLQy46cgrk-n8XSOpPMWIcFg9A/exec');
-        const datiFoglio = await response.json();
+        const response = await fetch('https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_URL_HERE/exec');
+        const lista = await response.json();
 
-        console.log("Dati ricevuti dal foglio Google:", datiFoglio);
+        const normalizza = str =>
+            str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
-        const listaCognomi = datiFoglio.map(riga => Array.isArray(riga) ? String(riga[0]).trim().toLowerCase() : "").filter(Boolean);
-        const listaNomi = datiFoglio.map(riga => Array.isArray(riga) ? String(riga[1]).trim().toLowerCase() : "").filter(Boolean);
+        const paroleInput = normalizza(nomeInput).split(' ').sort();
 
-        const indiceCognome = listaCognomi.findIndex(c => c === cognome);
+        const trovato = lista.some(nomeLista => {
+            const paroleLista = normalizza(nomeLista).split(' ').sort();
+            return JSON.stringify(paroleInput) === JSON.stringify(paroleLista);
+        });
 
-        if (indiceCognome !== -1 && listaNomi[indiceCognome] === nome) {
-            verificaMsg.textContent = 'Cardiologo verificato ✅';
+        if (trovato) {
+            verificaMsg.textContent = 'Nome verificato ✅';
             verificaMsg.style.color = 'green';
             creaFasce();
             container.style.display = 'block';
             submitBtn.style.display = 'inline-block';
-
             ferieContainer.style.display = 'block'; // Mostriamo la checkbox "FERIE" dopo la verifica
         } else {
             verificaMsg.textContent = 'Cardiologo non trovato. Contattare l’assistenza tecnica ❌';
@@ -123,30 +116,26 @@ verificaBtn.addEventListener('click', async () => {
     } catch (err) {
         verificaMsg.textContent = 'Errore durante la verifica';
         verificaMsg.style.color = 'red';
-        console.error("Errore durante la verifica:", err);
     }
 });
 
-// **Gestione della checkbox "FERIE"**
-ferieCheckbox.addEventListener('change', () => {
-    if (ferieCheckbox.checked) {
-        container.style.display = 'none'; // Nasconde la suddivisione dei giorni
-        submitBtn.textContent = 'Prosegui';
-    } else {
-        container.style.display = 'block'; // Mostra la suddivisione dei giorni
-        submitBtn.textContent = 'Aggiungi Disponibilità';
-    }
-});
-
-// **Gestione del pulsante "Aggiungi Disponibilità"**
+// **Gestione del riepilogo con eliminazione giorni**
 submitBtn.addEventListener('click', () => {
     riepilogoLista.innerHTML = '';
 
     const selezioni = document.querySelectorAll('input[name="fasce"]:checked');
     selezioni.forEach(checkbox => {
         const nota = checkbox.parentElement.querySelector('.annotazione textarea').value || 'Nessuna annotazione';
-        const item = document.createElement('p');
-        item.textContent = `${checkbox.value} - ${nota}`;
+        const item = document.createElement('li');
+        item.className = 'turno';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = '❌';
+        removeBtn.style.marginLeft = '10px';
+        removeBtn.addEventListener('click', () => item.remove());
+
+        item.innerHTML = `<span>${checkbox.value} - <em>${nota}</em></span>`;
+        item.appendChild(removeBtn);
         riepilogoLista.appendChild(item);
     });
 
@@ -155,5 +144,8 @@ submitBtn.addEventListener('click', () => {
         riepilogoLista.innerHTML = '<p>Il medico è in ferie.</p>';
     }
 
-    riepilogoSection.style.display = 'block'; // Mostriamo il riepilogo
+    riepilogo.style.display = 'block'; // Mostriamo il riepilogo
+    inviaBtn.style.display = 'inline-block';
+    eliminaBtn.style.display = 'inline-block';
+    nomeSection.style.display = 'none';
 });
