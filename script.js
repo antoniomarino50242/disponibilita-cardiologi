@@ -98,18 +98,17 @@ verificaBtn.addEventListener('click', async () => {
 
     console.log("Dati ricevuti dal foglio Google:", datiFoglio);
 
-    // Estrarre solo le prime due colonne (Cognome e Nome)
-    const listaCognomi = datiFoglio.map(riga => String(riga[0]).trim().toLowerCase());
-    const listaNomi = datiFoglio.map(riga => String(riga[1]).trim().toLowerCase());
-
+    // Estrarre correttamente solo le prime due colonne (Cognome e Nome)
+    const listaCognomi = datiFoglio.map(riga => Array.isArray(riga) ? String(riga[0]).trim().toLowerCase() : "").filter(Boolean);
+    const listaNomi = datiFoglio.map(riga => Array.isArray(riga) ? String(riga[1]).trim().toLowerCase() : "").filter(Boolean);
 
     console.log("Cognome inserito:", cognome);
     console.log("Nome inserito:", nome);
-    console.log("Lista cognomi:", listaCognomi);
-    console.log("Lista nomi:", listaNomi);
+    console.log("Lista cognomi completa:", listaCognomi);
+    console.log("Lista nomi completa:", listaNomi);
 
     // Trova il cognome nella lista
-    const indiceCognome = listaCognomi.indexOf(cognome);
+    const indiceCognome = listaCognomi.findIndex(c => c === cognome);
     console.log("Indice cognome trovato:", indiceCognome);
 
     // Se il cognome esiste, verifica che il nome corrisponda
