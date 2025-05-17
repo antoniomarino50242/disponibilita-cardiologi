@@ -29,6 +29,19 @@ function controllaCampi() {
 cognomeInput.addEventListener('input', controllaCampi);
 nomeInput.addEventListener('input', controllaCampi);
 
+// Gestione del tasto INVIO per attivare la verifica
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    // Evita l'invio automatico del modulo
+    event.preventDefault();
+
+    // Controlla se entrambi i campi sono compilati
+    if (cognomeInput.value.trim() !== "" && nomeInput.value.trim() !== "") {
+      verificaBtn.click(); // Simula il click sul pulsante
+    }
+  }
+});
+
 function creaFasce() {
   container.innerHTML = '';
   giorni.forEach(giorno => {
