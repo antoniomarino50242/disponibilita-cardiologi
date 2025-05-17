@@ -99,8 +99,9 @@ verificaBtn.addEventListener('click', async () => {
     console.log("Dati ricevuti dal foglio Google:", datiFoglio);
 
     // Estrarre solo le prime due colonne (Cognome e Nome)
-    const listaCognomi = datiFoglio.map(riga => riga[0]?.trim().toLowerCase());
-    const listaNomi = datiFoglio.map(riga => riga[1]?.trim().toLowerCase());
+    const listaCognomi = datiFoglio.map(riga => String(riga[0]).trim().toLowerCase());
+    const listaNomi = datiFoglio.map(riga => String(riga[1]).trim().toLowerCase());
+
 
     console.log("Cognome inserito:", cognome);
     console.log("Nome inserito:", nome);
