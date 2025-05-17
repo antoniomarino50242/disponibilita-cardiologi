@@ -14,12 +14,13 @@
 
     <form id="moduloDisponibilita">
       <div id="nomeSection">
-        <label for="nome" style="display: block; text-align: center; margin-bottom: 0.5em;">
-          Inserire nome e cognome per procedere:
+        <label style="display: block; text-align: center; margin-bottom: 0.5em;">
+          Inserire cognome e nome per procedere:
         </label>
         <div class="verifica-container">
-          <input type="text" id="nome" name="nome" required />
-          <button type="button" id="verificaBtn">Verifica nome</button>
+          <input type="text" id="cognome" name="cognome" placeholder="Cognome" required />
+          <input type="text" id="nome" name="nome" placeholder="Nome" required />
+          <button type="button" id="verificaBtn">Verifica cardiologo</button>
         </div>
         <div id="verifica-msg"></div>
       </div>
