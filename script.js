@@ -93,7 +93,7 @@ verificaBtn.addEventListener('click', async () => {
   verificaMsg.style.color = '#666';
 
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9_2o3WdefffjXEpzg/exec');
+    const response = await fetch('https://script.google.com/macros/s/AKfycbz_4sB7psoyYLQFsgS1vvGT1Q6UoDAEGuFloVFCuQvjqrTBJHF_em-npbDB4GOSJy1mhA/exec');
     const datiFoglio = await response.json();
 
     console.log("Dati ricevuti dal foglio Google:", datiFoglio);
