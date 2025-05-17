@@ -106,7 +106,7 @@ verificaBtn.addEventListener('click', async () => {
             creaFasce();
             container.style.display = 'block';
             submitBtn.style.display = 'inline-block';
-            ferieContainer.style.display = 'block'; // Mostriamo la checkbox "FERIE" dopo la verifica
+            ferieContainer.style.display = 'block';
         } else {
             verificaMsg.textContent = 'Cardiologo non trovato. Contattare l’assistenza tecnica ❌';
             verificaMsg.style.color = 'red';
@@ -139,13 +139,41 @@ submitBtn.addEventListener('click', () => {
         riepilogoLista.appendChild(item);
     });
 
-    // Se ferie è attivo, mostra solo "Sono in ferie"
-    if (ferieCheckbox.checked) {
-        riepilogoLista.innerHTML = '<p>Il medico è in ferie.</p>';
+    if (riepilogoLista.hasChildNodes()) {
+        riepilogo.style.display = 'block';
+        inviaBtn.style.display = 'inline-block';
+        eliminaBtn.style.display = 'inline-block';
+        nomeSection.style.display = 'none';
     }
 
-    riepilogo.style.display = 'block'; // Mostriamo il riepilogo
-    inviaBtn.style.display = 'inline-block';
-    eliminaBtn.style.display = 'inline-block';
-    nomeSection.style.display = 'none';
+    modulo.reset();
+    document.querySelectorAll('.annotazione').forEach(div => div.style.display = 'none');
+    container.style.display = 'none';
+    submitBtn.style.display = 'none';
+    verificaMsg.textContent = '';
+});
+
+// **Invio dei dati a Medea**
+inviaBtn.addEventListener('click', async () => {
+    inviaBtn.disabled = true;
+    inviaBtn.textContent = 'Invio in corso... attendere!';
+
+    const payload = [];
+    document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
+        const testo = li.querySelector('span').innerHTML;
+        const [nome, resto] = testo.split(':');
+        const [turno, notaHtml] = resto.split(' – ');
+        const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
+
+        payload.push({ nome: nome.trim(), turno: turno.trim(), annotazione });
+    });
+
+    await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    mainContainer.style.display = 'none';
+    grazieScreen.style.display = 'block';
 });
