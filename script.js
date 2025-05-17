@@ -89,7 +89,8 @@ verificaBtn.addEventListener('click', async () => {
     try {
         const response = await fetch('https://script.google.com/macros/s/AKfycbyUcMJWj1DqqsRvE2ZFlqzkpo2xBKP9hbsLlZqNuJp8LLQy46cgrk-n8XSOpPMWIcFg9A/exec');
         const lista = await response.json();
-
+        console.log(lista); 
+        
         const normalizza = str =>
             str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
