@@ -2,16 +2,14 @@ const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sa
 const fasce = ['Mattina', 'Pomeriggio'];
 const container = document.getElementById('giorniContainer');
 const riepilogoLista = document.getElementById('riepilogoLista');
-const riepilogoSection = document.getElementById('riepilogo'); // Sezione riepilogo già presente nella struttura
+const riepilogoSection = document.getElementById('riepilogo');
 const cognomeInput = document.getElementById('cognome');
 const nomeInput = document.getElementById('nome');
 const verificaBtn = document.getElementById('verificaBtn');
 const verificaMsg = document.getElementById('verifica-msg');
 const submitBtn = document.getElementById('submitBtn');
 
-const disponibilita = new Set();
-
-// **Definiamo la funzione `creaFasce()`**
+// **Funzione per creare le fasce settimanali**
 function creaFasce() {
     container.innerHTML = '';
     giorni.forEach(giorno => {
@@ -71,7 +69,6 @@ ferieLabel.htmlFor = 'ferieCheckbox';
 
 ferieContainer.appendChild(ferieCheckbox);
 ferieContainer.appendChild(ferieLabel);
-
 verificaMsg.after(ferieContainer);
 ferieContainer.style.display = 'none'; // Nascondiamo la checkbox fino alla verifica
 
@@ -83,6 +80,13 @@ function controllaCampi() {
 cognomeInput.addEventListener('input', controllaCampi);
 nomeInput.addEventListener('input', controllaCampi);
 
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Enter' && !verificaBtn.disabled) {
+        event.preventDefault();
+        verificaBtn.click();
+    }
+});
+
 verificaBtn.addEventListener('click', async () => {
     const cognome = cognomeInput.value.trim().toLowerCase();
     const nome = nomeInput.value.trim().toLowerCase();
@@ -92,7 +96,7 @@ verificaBtn.addEventListener('click', async () => {
     verificaMsg.style.color = '#666';
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbyUcMJWj1DqqsRvE2ZFlqzkpo2xBKP9hbsLlZqNuJp8LLQy46cgrk-n8XSOpPMWIcFg9A/exec');
+        const response = await fetch('https://script.google.com/macros/s/YOUR_GOOGLE_SCRIPT_URL_HERE/exec');
         const datiFoglio = await response.json();
 
         console.log("Dati ricevuti dal foglio Google:", datiFoglio);
@@ -105,7 +109,7 @@ verificaBtn.addEventListener('click', async () => {
         if (indiceCognome !== -1 && listaNomi[indiceCognome] === nome) {
             verificaMsg.textContent = 'Cardiologo verificato ✅';
             verificaMsg.style.color = 'green';
-            creaFasce(); // Ora la funzione esiste e viene eseguita correttamente!
+            creaFasce();
             container.style.display = 'block';
             submitBtn.style.display = 'inline-block';
 
@@ -132,4 +136,24 @@ ferieCheckbox.addEventListener('change', () => {
         container.style.display = 'block'; // Mostra la suddivisione dei giorni
         submitBtn.textContent = 'Aggiungi Disponibilità';
     }
+});
+
+// **Gestione del pulsante "Aggiungi Disponibilità"**
+submitBtn.addEventListener('click', () => {
+    riepilogoLista.innerHTML = '';
+
+    const selezioni = document.querySelectorAll('input[name="fasce"]:checked');
+    selezioni.forEach(checkbox => {
+        const nota = checkbox.parentElement.querySelector('.annotazione textarea').value || 'Nessuna annotazione';
+        const item = document.createElement('p');
+        item.textContent = `${checkbox.value} - ${nota}`;
+        riepilogoLista.appendChild(item);
+    });
+
+    // Se ferie è attivo, mostra solo "Sono in ferie"
+    if (ferieCheckbox.checked) {
+        riepilogoLista.innerHTML = '<p>Il medico è in ferie.</p>';
+    }
+
+    riepilogoSection.style.display = 'block'; // Mostriamo il riepilogo
 });
