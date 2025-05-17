@@ -99,13 +99,25 @@ verificaBtn.addEventListener('click', async () => {
     const response = await fetch('https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9_2o3WdefffjXEpzg/exec');
     const datiFoglio = await response.json();
 
+    console.log("Dati ricevuti dal foglio Google:", datiFoglio); // 🔹 Controllo dati ricevuti
+
+    // Estrarre solo le prime due colonne (Cognome e Nome)
+    const listaCognomi = datiFoglio.map(riga => riga[0]?.trim().toLowerCase());
+    const listaNomi = datiFoglio.map(riga => riga[1]?.trim().toLowerCase());
+
+    console.log("Cognome inserito:", cognome);
+    console.log("Nome inserito:", nome);
+    console.log("Lista cognomi:", listaCognomi);
+    console.log("Lista nomi:", listaNomi);
+
     // Estrarre solo le prime due colonne (Cognome e Nome)
     const listaCognomi = datiFoglio.map(riga => riga[0]?.trim().toLowerCase());
     const listaNomi = datiFoglio.map(riga => riga[1]?.trim().toLowerCase());
 
     // Trova il cognome nella lista
     const indiceCognome = listaCognomi.indexOf(cognome);
-
+    console.log("Indice cognome trovato:", indiceCognome); // 🔹 Verifica se il cognome è presente
+    
     // Se il cognome esiste, verifica che il nome corrisponda
     if (indiceCognome !== -1 && listaNomi[indiceCognome] === nome) {
       verificaMsg.textContent = 'Cardiologo verificato ✅';
@@ -122,5 +134,6 @@ verificaBtn.addEventListener('click', async () => {
   } catch (err) {
     verificaMsg.textContent = 'Errore durante la verifica';
     verificaMsg.style.color = 'red';
+    console.error("Errore durante la verifica:", err); // 🔹 Log dell'errore
   }
 });
