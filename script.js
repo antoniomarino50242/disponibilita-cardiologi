@@ -4,6 +4,8 @@ const container = document.getElementById('giorniContainer');
 const riepilogoLista = document.getElementById('riepilogoLista');
 const riepilogo = document.getElementById('riepilogo');
 const modulo = document.getElementById('moduloDisponibilita');
+const cognomeInput = document.getElementById('cognome');
+const nomeInput = document.getElementById('nome');
 const verificaBtn = document.getElementById('verificaBtn');
 const verificaMsg = document.getElementById('verifica-msg');
 const submitBtn = document.getElementById('submitBtn');
@@ -14,6 +16,18 @@ const grazieScreen = document.getElementById('grazieScreen');
 const nomeSection = document.getElementById('nomeSection');
 
 const disponibilita = new Set();
+
+// Controllo per abilitare il pulsante di verifica solo se entrambi i campi sono compilati
+function controllaCampi() {
+  if (cognomeInput.value.trim() !== "" && nomeInput.value.trim() !== "") {
+    verificaBtn.disabled = false;
+  } else {
+    verificaBtn.disabled = true;
+  }
+}
+
+cognomeInput.addEventListener('input', controllaCampi);
+nomeInput.addEventListener('input', controllaCampi);
 
 function creaFasce() {
   container.innerHTML = '';
@@ -61,9 +75,9 @@ function creaFasce() {
 }
 
 verificaBtn.addEventListener('click', async () => {
-  const cognomeInput = document.getElementById('cognome').value.trim();
-  const nomeInput = document.getElementById('nome').value.trim();
-  if (!cognomeInput || !nomeInput) return;
+  const cognome = cognomeInput.value.trim();
+  const nome = nomeInput.value.trim();
+  if (!cognome || !nome) return;
 
   verificaMsg.textContent = 'Verifica in corso...';
   verificaMsg.style.color = '#666';
@@ -72,27 +86,11 @@ verificaBtn.addEventListener('click', async () => {
     const response = await fetch('https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9_2o3WdefffjXEpzg/exec');
     const lista = await response.json();
 
-    const cognomeInput = document.getElementById('cognome');
-    const nomeInput = document.getElementById('nome');
-    const verificaBtn = document.getElementById('verificaBtn');
-    
-    function controllaCampi() {
-      if (cognomeInput.value.trim() !== "" && nomeInput.value.trim() !== "") {
-        verificaBtn.disabled = false;
-      } else {
-        verificaBtn.disabled = true;
-      }
-    }
-    
-    cognomeInput.addEventListener('input', controllaCampi);
-    nomeInput.addEventListener('input', controllaCampi);
-
-
     const normalizza = str =>
       str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
-    const cognomeNormalizzato = normalizza(cognomeInput);
-    const nomeNormalizzato = normalizza(nomeInput);
+    const cognomeNormalizzato = normalizza(cognome);
+    const nomeNormalizzato = normalizza(nome);
 
     const trovato = lista.some(nomeLista => {
       const [listaCognome, listaNome] = normalizza(nomeLista).split(' ');
@@ -119,8 +117,8 @@ verificaBtn.addEventListener('click', async () => {
 
 modulo.addEventListener('submit', function(e) {
   e.preventDefault();
-  const cognome = document.getElementById('cognome').value.trim();
-  const nome = document.getElementById('nome').value.trim();
+  const cognome = cognomeInput.value.trim();
+  const nome = nomeInput.value.trim();
   const selezioni = document.querySelectorAll('input[type=checkbox]:checked');
 
   selezioni.forEach(c => {
