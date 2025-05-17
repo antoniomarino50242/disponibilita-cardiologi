@@ -97,6 +97,8 @@ verificaBtn.addEventListener('click', async () => {
             creaFasce();
             container.style.display = 'block';
             submitBtn.style.display = 'inline-block';
+
+            mostraFerieCheckbox(); // Mostriamo la checkbox ferie
         } else {
             verificaMsg.textContent = 'Cardiologo non trovato. Contattare l’assistenza tecnica ❌';
             verificaMsg.style.color = 'red';
@@ -110,22 +112,38 @@ verificaBtn.addEventListener('click', async () => {
     }
 });
 
-// **Pulsante FERIE**
-const ferieBtn = document.createElement('button');
-ferieBtn.textContent = 'FERIE';
-ferieBtn.id = 'ferieBtn';
-verificaMsg.after(ferieBtn);
+// **Checkbox "FERIE"**
+const ferieContainer = document.createElement('div');
+ferieContainer.style.marginTop = '10px';
 
-ferieBtn.addEventListener('click', () => {
+const ferieCheckbox = document.createElement('input');
+ferieCheckbox.type = 'checkbox';
+ferieCheckbox.id = 'ferieCheckbox';
+
+const ferieLabel = document.createElement('label');
+ferieLabel.textContent = 'Sono in ferie';
+ferieLabel.htmlFor = 'ferieCheckbox';
+
+ferieContainer.appendChild(ferieCheckbox);
+ferieContainer.appendChild(ferieLabel);
+
+verificaMsg.after(ferieContainer);
+ferieContainer.style.display = 'none'; // Nascondiamo fino alla verifica
+
+// Funzione per gestire la checkbox "FERIE"
+ferieCheckbox.addEventListener('change', () => {
     const tutteLeCheckbox = document.querySelectorAll('input[type="checkbox"]');
 
-    if (ferieBtn.classList.contains('attivo')) {
-        tutteLeCheckbox.forEach(checkbox => checkbox.style.display = 'inline-block');
-        submitBtn.textContent = 'Aggiungi Disponibilità';
-        ferieBtn.classList.remove('attivo');
-    } else {
+    if (ferieCheckbox.checked) {
         tutteLeCheckbox.forEach(checkbox => checkbox.style.display = 'none');
         submitBtn.textContent = 'Prosegui';
-        ferieBtn.classList.add('attivo');
+    } else {
+        tutteLeCheckbox.forEach(checkbox => checkbox.style.display = 'inline-block');
+        submitBtn.textContent = 'Aggiungi Disponibilità';
     }
 });
+
+// Mostrare la checkbox ferie solo dopo la verifica riuscita
+function mostraFerieCheckbox() {
+    ferieContainer.style.display = 'block';
+}
