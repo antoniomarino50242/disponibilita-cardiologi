@@ -1,29 +1,36 @@
 const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
 const fasce = ['Mattina', 'Pomeriggio'];
 const container = document.getElementById('giorniContainer');
+const riepilogoLista = document.getElementById('riepilogoLista');
+const riepilogo = document.createElement('div'); // Elemento riepilogo
 const cognomeInput = document.getElementById('cognome');
 const nomeInput = document.getElementById('nome');
 const verificaBtn = document.getElementById('verificaBtn');
 const verificaMsg = document.getElementById('verifica-msg');
 const submitBtn = document.getElementById('submitBtn');
+const inviaBtn = document.createElement('button'); // Pulsante per l'invio
 
 const disponibilita = new Set();
 
-// Controllo per abilitare il pulsante di verifica solo se entrambi i campi sono compilati
-function controllaCampi() {
-    verificaBtn.disabled = !(cognomeInput.value.trim() && nomeInput.value.trim());
-}
+// **Checkbox "FERIE"**
+const ferieContainer = document.createElement('div');
+ferieContainer.style.marginTop = '10px';
 
-cognomeInput.addEventListener('input', controllaCampi);
-nomeInput.addEventListener('input', controllaCampi);
+const ferieCheckbox = document.createElement('input');
+ferieCheckbox.type = 'checkbox';
+ferieCheckbox.id = 'ferieCheckbox';
 
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter' && !verificaBtn.disabled) {
-        event.preventDefault();
-        verificaBtn.click();
-    }
-});
+const ferieLabel = document.createElement('label');
+ferieLabel.textContent = 'Sono in ferie';
+ferieLabel.htmlFor = 'ferieCheckbox';
 
+ferieContainer.appendChild(ferieCheckbox);
+ferieContainer.appendChild(ferieLabel);
+
+verificaMsg.after(ferieContainer);
+ferieContainer.style.display = 'none'; // Nascondiamo fino alla verifica
+
+// **Funzione per creare le fasce settimanali**
 function creaFasce() {
     container.innerHTML = '';
     giorni.forEach(giorno => {
@@ -69,81 +76,47 @@ function creaFasce() {
     });
 }
 
-verificaBtn.addEventListener('click', async () => {
-    const cognome = cognomeInput.value.trim().toLowerCase();
-    const nome = nomeInput.value.trim().toLowerCase();
-    if (!cognome || !nome) return;
+// **Funzione per mostrare la checkbox ferie dopo la verifica**
+function mostraFerieCheckbox() {
+    ferieContainer.style.display = 'block';
+}
 
-    verificaMsg.textContent = 'Verifica in corso...';
-    verificaMsg.style.color = '#666';
-
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbz_4sB7psoyYLQFsgS1vvGT1Q6UoDAEGuFloVFCuQvjqrTBJHF_em-npbDB4GOSJy1mhA/exec');
-        const datiFoglio = await response.json();
-
-        console.log("Dati ricevuti dal foglio Google:", datiFoglio);
-
-        const listaCognomi = datiFoglio.map(riga => Array.isArray(riga) ? String(riga[0]).trim().toLowerCase() : "").filter(Boolean);
-        const listaNomi = datiFoglio.map(riga => Array.isArray(riga) ? String(riga[1]).trim().toLowerCase() : "").filter(Boolean);
-
-        console.log("Cognome inserito:", cognome);
-        console.log("Nome inserito:", nome);
-
-        const indiceCognome = listaCognomi.findIndex(c => c === cognome);
-
-        if (indiceCognome !== -1 && listaNomi[indiceCognome] === nome) {
-            verificaMsg.textContent = 'Cardiologo verificato ✅';
-            verificaMsg.style.color = 'green';
-            creaFasce();
-            container.style.display = 'block';
-            submitBtn.style.display = 'inline-block';
-
-            mostraFerieCheckbox(); // Mostriamo la checkbox ferie
-        } else {
-            verificaMsg.textContent = 'Cardiologo non trovato. Contattare l’assistenza tecnica ❌';
-            verificaMsg.style.color = 'red';
-            container.style.display = 'none';
-            submitBtn.style.display = 'none';
-        }
-    } catch (err) {
-        verificaMsg.textContent = 'Errore durante la verifica';
-        verificaMsg.style.color = 'red';
-        console.error("Errore durante la verifica:", err);
-    }
-});
-
-// **Checkbox "FERIE"**
-const ferieContainer = document.createElement('div');
-ferieContainer.style.marginTop = '10px';
-
-const ferieCheckbox = document.createElement('input');
-ferieCheckbox.type = 'checkbox';
-ferieCheckbox.id = 'ferieCheckbox';
-
-const ferieLabel = document.createElement('label');
-ferieLabel.textContent = 'Sono in ferie';
-ferieLabel.htmlFor = 'ferieCheckbox';
-
-ferieContainer.appendChild(ferieCheckbox);
-ferieContainer.appendChild(ferieLabel);
-
-verificaMsg.after(ferieContainer);
-ferieContainer.style.display = 'none'; // Nascondiamo fino alla verifica
-
-// Funzione per gestire la checkbox "FERIE"
+// **Gestione della checkbox "FERIE"**
 ferieCheckbox.addEventListener('change', () => {
-    const tutteLeCheckbox = document.querySelectorAll('input[type="checkbox"]');
-
     if (ferieCheckbox.checked) {
-        tutteLeCheckbox.forEach(checkbox => checkbox.style.display = 'none');
+        container.style.display = 'none'; // Nasconde la suddivisione dei giorni
         submitBtn.textContent = 'Prosegui';
     } else {
-        tutteLeCheckbox.forEach(checkbox => checkbox.style.display = 'inline-block');
+        container.style.display = 'block'; // Mostra la suddivisione dei giorni
         submitBtn.textContent = 'Aggiungi Disponibilità';
     }
 });
 
-// Mostrare la checkbox ferie solo dopo la verifica riuscita
-function mostraFerieCheckbox() {
-    ferieContainer.style.display = 'block';
-}
+// **Gestione del pulsante "Aggiungi Disponibilità"**
+submitBtn.addEventListener('click', () => {
+    riepilogo.innerHTML = '<h3>Riepilogo Disponibilità:</h3>';
+    riepilogoLista.innerHTML = '';
+
+    const selezioni = document.querySelectorAll('input[name="fasce"]:checked');
+    selezioni.forEach(checkbox => {
+        const nota = checkbox.parentElement.querySelector('.annotazione textarea').value || 'Nessuna annotazione';
+        riepilogoLista.innerHTML += `<p>${checkbox.value} - ${nota}</p>`;
+    });
+
+    // Se ferie è attivo, aggiungiamo la nota
+    if (ferieCheckbox.checked) {
+        riepilogoLista.innerHTML = '<p>Il medico è in ferie.</p>';
+    }
+
+    riepilogo.appendChild(riepilogoLista);
+    riepilogo.appendChild(inviaBtn);
+    document.body.appendChild(riepilogo);
+});
+
+// **Pulsante INVIA a Medea**
+inviaBtn.textContent = 'Invia Disponibilità a Medea';
+inviaBtn.style.display = 'none';
+inviaBtn.addEventListener('click', () => {
+    alert('Dati inviati a Medea!');
+    riepilogo.style.display = 'none'; // Nasconde il riepilogo dopo l'invio
+});
