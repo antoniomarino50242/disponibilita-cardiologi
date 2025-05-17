@@ -1,92 +1,3 @@
-const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-const fasce = ['Mattina', 'Pomeriggio'];
-const container = document.getElementById('giorniContainer');
-const riepilogoLista = document.getElementById('riepilogoLista');
-const riepilogo = document.getElementById('riepilogo');
-const modulo = document.getElementById('moduloDisponibilita');
-const cognomeInput = document.getElementById('cognome');
-const nomeInput = document.getElementById('nome');
-const verificaBtn = document.getElementById('verificaBtn');
-const verificaMsg = document.getElementById('verifica-msg');
-const submitBtn = document.getElementById('submitBtn');
-const inviaBtn = document.getElementById('inviaBtn');
-const eliminaBtn = document.getElementById('eliminaBtn');
-const mainContainer = document.getElementById('mainContainer');
-const grazieScreen = document.getElementById('grazieScreen');
-const nomeSection = document.getElementById('nomeSection');
-
-const disponibilita = new Set();
-
-// Controllo per abilitare il pulsante di verifica solo se entrambi i campi sono compilati
-function controllaCampi() {
-  if (cognomeInput.value.trim() !== "" && nomeInput.value.trim() !== "") {
-    verificaBtn.disabled = false;
-  } else {
-    verificaBtn.disabled = true;
-  }
-}
-
-cognomeInput.addEventListener('input', controllaCampi);
-nomeInput.addEventListener('input', controllaCampi);
-
-// Gestione del tasto INVIO per attivare la verifica
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    // Evita l'invio automatico del modulo
-    event.preventDefault();
-
-    // Controlla se entrambi i campi sono compilati
-    if (cognomeInput.value.trim() !== "" && nomeInput.value.trim() !== "") {
-      verificaBtn.click(); // Simula il click sul pulsante
-    }
-  }
-});
-
-function creaFasce() {
-  container.innerHTML = '';
-  giorni.forEach(giorno => {
-    const giornoDiv = document.createElement('div');
-    giornoDiv.className = 'giorno';
-
-    const giornoLabel = document.createElement('label');
-    giornoLabel.textContent = giorno;
-    giornoDiv.appendChild(giornoLabel);
-
-    fasce.forEach(fascia => {
-      const fasciaCont = document.createElement('div');
-      fasciaCont.className = 'fascia-container';
-
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = `${giorno}-${fascia}`;
-      checkbox.name = 'fasce';
-      checkbox.value = `${giorno} ${fascia}`;
-
-      const label = document.createElement('label');
-      label.textContent = fascia;
-      label.htmlFor = checkbox.id;
-
-      const notaCont = document.createElement('div');
-      notaCont.className = 'annotazione';
-
-      const textarea = document.createElement('textarea');
-      textarea.placeholder = 'Annotazioni per questo turno';
-      notaCont.appendChild(textarea);
-
-      checkbox.addEventListener('change', () => {
-        notaCont.style.display = checkbox.checked ? 'block' : 'none';
-      });
-
-      fasciaCont.appendChild(checkbox);
-      fasciaCont.appendChild(label);
-      fasciaCont.appendChild(notaCont);
-      giornoDiv.appendChild(fasciaCont);
-    });
-
-    container.appendChild(giornoDiv);
-  });
-}
-
 verificaBtn.addEventListener('click', async () => {
   const cognome = cognomeInput.value.trim().toLowerCase();
   const nome = nomeInput.value.trim().toLowerCase();
@@ -99,7 +10,7 @@ verificaBtn.addEventListener('click', async () => {
     const response = await fetch('https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9_2o3WdefffjXEpzg/exec');
     const datiFoglio = await response.json();
 
-    console.log("Dati ricevuti dal foglio Google:", datiFoglio); // 🔹 Controllo dati ricevuti
+    console.log("Dati ricevuti dal foglio Google:", datiFoglio); 
 
     // Estrarre solo le prime due colonne (Cognome e Nome)
     const listaCognomi = datiFoglio.map(riga => riga[0]?.trim().toLowerCase());
@@ -110,14 +21,10 @@ verificaBtn.addEventListener('click', async () => {
     console.log("Lista cognomi:", listaCognomi);
     console.log("Lista nomi:", listaNomi);
 
-    // Estrarre solo le prime due colonne (Cognome e Nome)
-    const listaCognomi = datiFoglio.map(riga => riga[0]?.trim().toLowerCase());
-    const listaNomi = datiFoglio.map(riga => riga[1]?.trim().toLowerCase());
-
     // Trova il cognome nella lista
     const indiceCognome = listaCognomi.indexOf(cognome);
-    console.log("Indice cognome trovato:", indiceCognome); // 🔹 Verifica se il cognome è presente
-    
+    console.log("Indice cognome trovato:", indiceCognome);
+
     // Se il cognome esiste, verifica che il nome corrisponda
     if (indiceCognome !== -1 && listaNomi[indiceCognome] === nome) {
       verificaMsg.textContent = 'Cardiologo verificato ✅';
@@ -134,6 +41,6 @@ verificaBtn.addEventListener('click', async () => {
   } catch (err) {
     verificaMsg.textContent = 'Errore durante la verifica';
     verificaMsg.style.color = 'red';
-    console.error("Errore durante la verifica:", err); // 🔹 Log dell'errore
+    console.error("Errore durante la verifica:", err);
   }
 });
