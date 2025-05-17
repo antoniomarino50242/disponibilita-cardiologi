@@ -11,6 +11,52 @@ const submitBtn = document.getElementById('submitBtn');
 
 const disponibilita = new Set();
 
+// **Definiamo la funzione `creaFasce()`**
+function creaFasce() {
+    container.innerHTML = '';
+    giorni.forEach(giorno => {
+        const giornoDiv = document.createElement('div');
+        giornoDiv.className = 'giorno';
+
+        const giornoLabel = document.createElement('label');
+        giornoLabel.textContent = giorno;
+        giornoDiv.appendChild(giornoLabel);
+
+        fasce.forEach(fascia => {
+            const fasciaCont = document.createElement('div');
+            fasciaCont.className = 'fascia-container';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `${giorno}-${fascia}`;
+            checkbox.name = 'fasce';
+            checkbox.value = `${giorno} ${fascia}`;
+
+            const label = document.createElement('label');
+            label.textContent = fascia;
+            label.htmlFor = checkbox.id;
+
+            const notaCont = document.createElement('div');
+            notaCont.className = 'annotazione';
+
+            const textarea = document.createElement('textarea');
+            textarea.placeholder = 'Annotazioni per questo turno';
+            notaCont.appendChild(textarea);
+
+            checkbox.addEventListener('change', () => {
+                notaCont.style.display = checkbox.checked ? 'block' : 'none';
+            });
+
+            fasciaCont.appendChild(checkbox);
+            fasciaCont.appendChild(label);
+            fasciaCont.appendChild(notaCont);
+            giornoDiv.appendChild(fasciaCont);
+        });
+
+        container.appendChild(giornoDiv);
+    });
+}
+
 // **Checkbox "FERIE"**
 const ferieContainer = document.createElement('div');
 ferieContainer.style.marginTop = '10px';
@@ -26,7 +72,6 @@ ferieLabel.htmlFor = 'ferieCheckbox';
 ferieContainer.appendChild(ferieCheckbox);
 ferieContainer.appendChild(ferieLabel);
 
-// Aggiungiamo la checkbox "FERIE" dopo la verifica riuscita
 verificaMsg.after(ferieContainer);
 ferieContainer.style.display = 'none'; // Nascondiamo la checkbox fino alla verifica
 
@@ -60,7 +105,7 @@ verificaBtn.addEventListener('click', async () => {
         if (indiceCognome !== -1 && listaNomi[indiceCognome] === nome) {
             verificaMsg.textContent = 'Cardiologo verificato ✅';
             verificaMsg.style.color = 'green';
-            creaFasce();
+            creaFasce(); // Ora la funzione esiste e viene eseguita correttamente!
             container.style.display = 'block';
             submitBtn.style.display = 'inline-block';
 
@@ -87,24 +132,4 @@ ferieCheckbox.addEventListener('change', () => {
         container.style.display = 'block'; // Mostra la suddivisione dei giorni
         submitBtn.textContent = 'Aggiungi Disponibilità';
     }
-});
-
-// **Gestione del pulsante "Aggiungi Disponibilità"**
-submitBtn.addEventListener('click', () => {
-    riepilogoLista.innerHTML = '';
-
-    const selezioni = document.querySelectorAll('input[name="fasce"]:checked');
-    selezioni.forEach(checkbox => {
-        const nota = checkbox.parentElement.querySelector('.annotazione textarea').value || 'Nessuna annotazione';
-        const item = document.createElement('p');
-        item.textContent = `${checkbox.value} - ${nota}`;
-        riepilogoLista.appendChild(item);
-    });
-
-    // Se ferie è attivo, mostra solo "Sono in ferie"
-    if (ferieCheckbox.checked) {
-        riepilogoLista.innerHTML = '<p>Il medico è in ferie.</p>';
-    }
-
-    riepilogoSection.style.display = 'block'; // Mostriamo il riepilogo
 });
