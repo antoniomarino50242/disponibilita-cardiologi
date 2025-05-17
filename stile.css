@@ -68,6 +68,45 @@ button:hover {
   background-color: #2980b9;
 }
 
+/* 🔹 SEZIONE VERIFICA CARDIOLOGO CON COGNOME E NOME */
+.verifica-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#verifica-msg {
+  margin-top: 0.8rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* 🔹 INPUT COGNOME & NOME */
+#cognome, #nome {
+  width: calc(50% - 0.5rem);
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccd;
+  border-radius: 10px;
+  background-color: #f9fcff;
+}
+
+@media (max-width: 600px) {
+  #cognome, #nome {
+    width: 100%;
+  }
+}
+
+/* 🔹 DISABILITAZIONE DEL BOTTONE VERIFICA */
+button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 .giorno {
   margin-top: 1.5rem;
   text-align: left;
@@ -101,37 +140,6 @@ button:hover {
   max-width: 500px;
   border-radius: 8px;
   background-color: #f9fcff;
-}
-
-/* 🔹 SEZIONE VERIFICA CARDIOLOGO CON COGNOME E NOME */
-.verifica-container {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-#verifica-msg {
-  margin-top: 0.8rem;
-  font-weight: 500;
-  text-align: center;
-}
-
-/* 🔹 INPUT COGNOME & NOME */
-#cognome, #nome {
-  width: calc(50% - 0.5rem);
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #ccd;
-  border-radius: 10px;
-  background-color: #f9fcff;
-}
-
-@media (max-width: 600px) {
-  #cognome, #nome {
-    width: 100%;
-  }
 }
 
 .riepilogo {
@@ -170,13 +178,6 @@ button:hover {
   margin-top: 1.5rem;
 }
 
-button:disabled {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
 /* 🔽 SCHERMATA FINALE */
 #grazieScreen {
   display: none;
@@ -197,11 +198,3 @@ button:disabled {
   margin-left: auto;
   margin-right: auto;
 }
-
-button:disabled {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
