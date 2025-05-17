@@ -72,6 +72,22 @@ verificaBtn.addEventListener('click', async () => {
     const response = await fetch('https://script.google.com/macros/s/AKfycbwi9b8hgDuwdp-Vkr0xgkwjw7KG-8K2Wko1ibo4dQEHiEgRYMJum9_2o3WdefffjXEpzg/exec');
     const lista = await response.json();
 
+    const cognomeInput = document.getElementById('cognome');
+    const nomeInput = document.getElementById('nome');
+    const verificaBtn = document.getElementById('verificaBtn');
+    
+    function controllaCampi() {
+      if (cognomeInput.value.trim() !== "" && nomeInput.value.trim() !== "") {
+        verificaBtn.disabled = false;
+      } else {
+        verificaBtn.disabled = true;
+      }
+    }
+    
+    cognomeInput.addEventListener('input', controllaCampi);
+    nomeInput.addEventListener('input', controllaCampi);
+
+
     const normalizza = str =>
       str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
