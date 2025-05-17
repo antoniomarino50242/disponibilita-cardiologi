@@ -69,34 +69,20 @@ button:hover {
 }
 
 /* 🔹 SEZIONE VERIFICA CARDIOLOGO CON COGNOME E NOME */
-.verifica-container {
+#nomeSection {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-  justify-content: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: flex-start;
 }
 
-#verifica-msg {
-  margin-top: 0.8rem;
-  font-weight: 500;
-  text-align: center;
+#nomeSection label {
+  font-weight: bold;
 }
 
-/* 🔹 INPUT COGNOME & NOME */
-#cognome, #nome {
-  width: calc(50% - 0.5rem);
-  padding: 0.75rem;
-  font-size: 1rem;
-  border: 1px solid #ccd;
-  border-radius: 10px;
-  background-color: #f9fcff;
-}
-
-@media (max-width: 600px) {
-  #cognome, #nome {
-    width: 100%;
-  }
+#verificaBtn {
+  margin-top: 1rem;
+  align-self: center;
 }
 
 /* 🔹 DISABILITAZIONE DEL BOTTONE VERIFICA */
