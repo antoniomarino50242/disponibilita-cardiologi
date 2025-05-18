@@ -20,7 +20,7 @@ export async function verificaNome() {
   loader.style.display = 'block';
 
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbw4MFCU6m9TkiSHplEb7rYQejfejyWLOuIBXKX6qJ3yK7HTBR4MnDSt5Jd21yud_ttj4g/exec
+    const response = await fetch('https://script.google.com/macros/s/AKfycbw4MFCU6m9TkiSHplEb7rYQejfejyWLOuIBXKX6qJ3yK7HTBR4MnDSt5Jd21yud_ttj4g/exec');
     if (!response.ok) throw new Error(`Errore API (${response.status})`);
 
     const lista = await response.json(); // Array con [cognome, nome]
