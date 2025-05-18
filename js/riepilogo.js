@@ -5,7 +5,10 @@ export async function gestisciInvio() {
 
   inviaBtn.disabled = true;
   inviaBtn.textContent = 'Invio in corso... attendere!';
-
+  
+  const ferieCheckbox = document.getElementById('ferie');
+  const ferieSelezionate = ferieCheckbox.checked ? "SI" : ""; // Se selezionata, salva "SI"
+  
   const payload = [];
 
   document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
@@ -20,7 +23,8 @@ export async function gestisciInvio() {
     cognome: cognome.trim(),  // 👈 Cognome nella colonna A
     nome: nome.trim(),        // 👈 Nome nella colonna B
     turno: turno.trim(),
-    annotazione: annotazione
+    annotazione: annotazione,
+    ferie: ferieSelezionate // 🔹 Nuova aggiunta per gestire le ferie!
   });
 });
 
