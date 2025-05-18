@@ -224,22 +224,16 @@ button:disabled {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 60px;
-  aspect-ratio: 1;
+  height: 60px;
   border-radius: 50%;
   background: #25b09b;
-  --_m: 
-    conic-gradient(#0000 10%, #000),
-    linear-gradient(#000 0 0) content-box;
-  -webkit-mask: var(--_m);
-          mask: var(--_m);
-  -webkit-mask-composite: source-out;
-          mask-composite: subtract;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* 👈 Aggiunge ombra visibile */
   animation: l3 1s infinite linear;
-  display: block; /* 👈 Assicura che sia visibile */
-  opacity: 1; /* 👈 Rimuove la trasparenza iniziale */
-  transition: opacity 0.3s ease-in-out;
-  z-index: 1000;
+  display: none;
+  opacity: 1; /* 👈 Assicura che sia visibile */
+  z-index: 1000; /* 👈 Lo mantiene sopra gli altri elementi */
 }
+
 
 
 @keyframes l3 {
