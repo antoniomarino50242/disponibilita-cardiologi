@@ -17,17 +17,16 @@ export async function verificaNome() {
     return;
   }
 
-  // 👇 Attiva il loader e la verifica
   verificaMsg.textContent = 'Verifica in corso...';
   verificaMsg.style.color = '#666';
   loader.style.display = 'block';
 
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbzGm7Rbyst8E2hIil_rFl1Dt47RcDElYgNO4sdD-aYntBHCatBbLk8hFBHcMjV39EzYFQ/exec');
-    
+
     if (!response.ok) throw new Error(`Errore API (${response.status})`);
 
-    const lista = await response.json(); // Array con [cognome, nome]
+    const lista = await response.json();
 
     const normalizza = str =>
       str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
@@ -36,7 +35,7 @@ export async function verificaNome() {
     const cognomeNorm = normalizza(cognome);
 
     const trovato = lista.some(riga => {
-      if (riga.length < 2) return false; // Skip righe incomplete
+      if (riga.length < 2) return false;
       const cognomeLista = normalizza(riga[0]);
       const nomeLista = normalizza(riga[1]);
       return nomeLista === nomeNorm && cognomeLista === cognomeNorm;
@@ -45,24 +44,26 @@ export async function verificaNome() {
     if (trovato) {
       verificaMsg.textContent = '✅ Cardiologo verificato!';
       verificaMsg.style.color = 'green';
-    
-      // 👇 Mostra la checkbox per segnalare ferie
-      ferieSection.style.display = 'block';
-      ferieCheckbox.checked = false; // Reset della checkbox
-    
-      // 🔥 Genera le fasce dei turni e le mostra
+
+      // 🔥 Verifica che `ferieSection` esista prima di modificarlo
+      if (ferieSection) {
+        ferieSection.style.display = 'block';
+        ferieCheckbox.checked = false;
+      }
+
       creaFasceDynamic();
       container.style.display = 'block';
-    
       submitBtn.style.display = 'inline-block';
       procediBtn.style.display = 'none';
-} else {
+
+    } else {
       verificaMsg.textContent = '❌ Cardiologo non trovato';
       verificaMsg.style.color = 'red';
 
       container.style.display = 'none';
       submitBtn.style.display = 'none';
-      ferieSection.style.display = 'none';
+
+      if (ferieSection) ferieSection.style.display = 'none';
       procediBtn.style.display = 'none';
     }
   } catch (err) {
@@ -70,26 +71,25 @@ export async function verificaNome() {
     verificaMsg.textContent = '❌ Errore nella verifica';
     verificaMsg.style.color = 'red';
   } finally {
-    // 👇 Disattiva il loader al termine della verifica
     loader.style.display = 'none';
   }
 }
 
-// 👇 Gestisce la selezione della checkbox "Comunica ferie"
-document.getElementById('ferieCheckbox').addEventListener('change', function() {
-  const container = document.getElementById('giorniContainer');
-  const submitBtn = document.getElementById('submitBtn');
-  const procediBtn = document.getElementById('procediBtn');
+// 🔥 Assicura che `ferieCheckbox` esista prima di collegare l'evento
+if (ferieCheckbox) {
+  ferieCheckbox.addEventListener('change', function() {
+    const container = document.getElementById('giorniContainer');
+    const submitBtn = document.getElementById('submitBtn');
+    const procediBtn = document.getElementById('procediBtn');
 
-  if (this.checked) {
-    // 🔥 Se ferie è spuntato, nasconde i turni e mostra "Procedi"
-    container.style.display = 'none';
-    submitBtn.style.display = 'none';
-    procediBtn.style.display = 'inline-block';
-  } else {
-    // 🔥 Se ferie NON è spuntato, mostra i turni e il pulsante "Aggiungi disponibilità"
-    container.style.display = 'block';
-    submitBtn.style.display = 'inline-block';
-    procediBtn.style.display = 'none';
-  }
-});
+    if (this.checked) {
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+      procediBtn.style.display = 'inline-block';
+    } else {
+      container.style.display = 'block';
+      submitBtn.style.display = 'inline-block';
+      procediBtn.style.display = 'none';
+    }
+  });
+}
