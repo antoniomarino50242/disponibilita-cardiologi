@@ -6,16 +6,12 @@ export async function verificaNome() {
   const container = document.getElementById('giorniContainer');
   const verificaMsg = document.getElementById('verifica-msg');
   const submitBtn = document.getElementById('submitBtn');
-  const logo = document.querySelector('.logo'); // Logo per l'animazione
 
   if (!nome || !cognome) {
     verificaMsg.textContent = '⚠️ Inserire nome e cognome!';
     verificaMsg.style.color = 'orange';
     return;
   }
-
-  // Attiva animazione del logo (centrale e più grande)
-  logo.classList.add('logo-verifica');
 
   verificaMsg.textContent = 'Verifica in corso...';
   verificaMsg.style.color = '#666';
@@ -56,9 +52,5 @@ export async function verificaNome() {
     console.error('Errore:', err);
     verificaMsg.textContent = '❌ Errore nella verifica';
     verificaMsg.style.color = 'red';
-  } finally {
-    // Disattiva animazione logo e ripristina posizione
-    setTimeout(() => {
-    logo.classList.remove('logo-verifica');
-  }, 1000); // Aspetta 1 secondo per un effetto fluido
+  }
 }
