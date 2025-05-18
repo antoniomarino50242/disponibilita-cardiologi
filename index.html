@@ -21,12 +21,17 @@
         <input type="text" id="nome" name="nome" placeholder="Inserisci il nome" required />
 
         <button type="button" id="verificaBtn" disabled>Verifica cardiologo</button>
-        <div id="verifica-msg"></div>
-        <div id="loader" class="loader" style="display: none;"></div>
+      <div id="verifica-msg"></div>
+      <div id="loader" class="loader" style="display: none;"></div>
       </div>
-
+      <div id="ferieSection" style="display: none;">
+        <label>
+          <input type="checkbox" id="ferieCheckbox"> Il cardiologo sarà in ferie la prossima settimana
+        </label>
+      </div>
       <div id="giorniContainer"></div>
       <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
+      <button type="button" id="procediBtn" style="display: none;">Procedi</button>
     </form>
 
     <div class="riepilogo" id="riepilogo">
