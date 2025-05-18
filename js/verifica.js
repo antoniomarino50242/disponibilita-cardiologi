@@ -14,8 +14,8 @@ export async function verificaNome() {
     return;
   }
 
-  // Attiva animazione del logo
-  logo.classList.add('color-animation');
+  // Attiva animazione del logo (centrale e più grande)
+  logo.classList.add('logo-verifica');
 
   verificaMsg.textContent = 'Verifica in corso...';
   verificaMsg.style.color = '#666';
@@ -57,7 +57,7 @@ export async function verificaNome() {
     verificaMsg.textContent = '❌ Errore nella verifica';
     verificaMsg.style.color = 'red';
   } finally {
-    // Disattiva animazione logo
-    logo.classList.remove('color-animation');
+    // Disattiva animazione logo e ripristina posizione
+    logo.classList.remove('logo-verifica');
   }
 }
