@@ -45,15 +45,18 @@ export async function verificaNome() {
     if (trovato) {
       verificaMsg.textContent = '✅ Cardiologo verificato!';
       verificaMsg.style.color = 'green';
-
+    
       // 👇 Mostra la checkbox per segnalare ferie
       ferieSection.style.display = 'block';
       ferieCheckbox.checked = false; // Reset della checkbox
-      
-      container.style.display = 'block'; // 🔥 Mostra fasce orarie di default
+    
+      // 🔥 Genera le fasce dei turni e le mostra
+      creaFasceDynamic();
+      container.style.display = 'block';
+    
       submitBtn.style.display = 'inline-block';
       procediBtn.style.display = 'none';
-    } else {
+} else {
       verificaMsg.textContent = '❌ Cardiologo non trovato';
       verificaMsg.style.color = 'red';
 
