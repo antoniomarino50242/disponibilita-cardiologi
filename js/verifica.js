@@ -9,7 +9,7 @@ export async function verificaNome() {
   const procediBtn = document.getElementById('procediBtn');
   const ferieSection = document.getElementById('ferieSection');
   const ferieCheckbox = document.getElementById('ferieCheckbox');
-  const loader = document.getElementById('loader'); // 🔥 Loader animato
+  const loader = document.getElementById('loader');
 
   if (!nome || !cognome) {
     verificaMsg.textContent = '⚠️ Inserire nome e cognome!';
@@ -50,7 +50,7 @@ export async function verificaNome() {
       ferieSection.style.display = 'block';
       ferieCheckbox.checked = false; // Reset della checkbox
       
-      container.style.display = 'block';
+      container.style.display = 'block'; // 🔥 Mostra fasce orarie di default
       submitBtn.style.display = 'inline-block';
       procediBtn.style.display = 'none';
     } else {
@@ -72,19 +72,19 @@ export async function verificaNome() {
   }
 }
 
-// 👇 Gestisce la selezione della checkbox "Ferie"
+// 👇 Gestisce la selezione della checkbox "Comunica ferie"
 document.getElementById('ferieCheckbox').addEventListener('change', function() {
   const container = document.getElementById('giorniContainer');
   const submitBtn = document.getElementById('submitBtn');
   const procediBtn = document.getElementById('procediBtn');
 
   if (this.checked) {
-    // 👇 Se ferie è spuntato, nasconde i turni e mostra il pulsante "Procedi"
+    // 🔥 Se ferie è spuntato, nasconde i turni e mostra "Procedi"
     container.style.display = 'none';
     submitBtn.style.display = 'none';
     procediBtn.style.display = 'inline-block';
   } else {
-    // 👇 Se ferie NON è spuntato, mostra i turni e il pulsante "Aggiungi disponibilità"
+    // 🔥 Se ferie NON è spuntato, mostra i turni e il pulsante "Aggiungi disponibilità"
     container.style.display = 'block';
     submitBtn.style.display = 'inline-block';
     procediBtn.style.display = 'none';
