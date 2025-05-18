@@ -1,42 +1,39 @@
-export async function gestisciInvio() {
-  const inviaBtn = document.getElementById('inviaBtn');
-  const mainContainer = document.getElementById('mainContainer');
-  const grazieScreen = document.getElementById('grazieScreen');
+export async function gestisciInvio(event) {
+  event.preventDefault(); // 🔹 Evitiamo il comportamento predefinito del form
 
-  inviaBtn.disabled = true;
-  inviaBtn.textContent = 'Invio in corso... attendere!';
-  
+  const cognome = document.getElementById('cognome').value.trim();
+  const nome = document.getElementById('nome').value.trim();
   const ferieCheckbox = document.getElementById('ferie');
-  const ferieSelezionate = ferieCheckbox.checked ? "SI" : ""; // Se selezionata, salva "SI"
-  
+  const ferieSelezionate = ferieCheckbox.checked ? "SI" : ""; // 🔹 Salva "SI" se selezionata
+
   const payload = [];
 
   document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
-  const testo = li.querySelector('span').innerHTML;
-  const [nomeCompleto, resto] = testo.split(':'); 
-  const [turno, notaHtml] = resto.split(' – ');
-  const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
+    const testo = li.querySelector('span').innerHTML;
+    const [nomeCompleto, resto] = testo.split(':'); 
+    const [turno, notaHtml] = resto.split(' – ');
+    const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
 
-  const [cognome, nome] = nomeCompleto.split(' '); // 👈 Ora separiamo cognome e nome
+    const [cognomeTurno, nomeTurno] = nomeCompleto.split(' ');
 
-  payload.push({
-    cognome: cognome.trim(),  // 👈 Cognome nella colonna A
-    nome: nome.trim(),        // 👈 Nome nella colonna B
-    turno: turno.trim(),
-    annotazione: annotazione,
-    ferie: ferieSelezionate // 🔹 Nuova aggiunta per gestire le ferie!
+    payload.push({
+      cognome: cognomeTurno.trim(),
+      nome: nomeTurno.trim(),
+      turno: turno.trim(),
+      annotazione: annotazione,
+      ferie: ferieSelezionate // 🔹 Ora il valore delle ferie è separato dal turno!
+    });
   });
-});
 
+  console.log("📤 Dati inviati:", JSON.stringify(payload));
 
   await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
     method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(response => response.text()).then(data => {
+    console.log("✅ Risposta dal server:", data);
+  }).catch(error => {
+    console.error("❌ Errore nell'invio:", error);
   });
-
-  mainContainer.style.display = 'none';
-  grazieScreen.style.display = 'block';
 }
