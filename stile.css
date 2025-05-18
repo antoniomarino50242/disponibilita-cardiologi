@@ -218,8 +218,8 @@ button:disabled {
 
 /* logo di caricamento*/
 .loader {
-  position: center;
-  width: 60px;
+  width: 50px;
+  padding: 8px;
   aspect-ratio: 1;
   border-radius: 50%;
   background: #25b09b;
@@ -231,9 +231,6 @@ button:disabled {
   -webkit-mask-composite: source-out;
           mask-composite: subtract;
   animation: l3 1s infinite linear;
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
 }
 
 @keyframes l3 {
