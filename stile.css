@@ -209,8 +209,11 @@ button:disabled {
 
 /* logo di caricamento*/
 .loader {
-  width: 50px;
-  padding: 8px;
+  position: fixed; /* 👈 Lo posiziona rispetto alla finestra */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 👈 Lo centra */
+  width: 60px; /* 👈 Puoi regolare la grandezza */
   aspect-ratio: 1;
   border-radius: 50%;
   background: #25b09b;
@@ -222,7 +225,10 @@ button:disabled {
   -webkit-mask-composite: source-out;
           mask-composite: subtract;
   animation: l3 1s infinite linear;
+  display: none; /* 👈 Inizialmente nascosto */
+  z-index: 1000; /* 👈 Assicura che sia sopra gli altri elementi */
 }
+
 
 @keyframes l3 {
   to { transform: rotate(1turn); }
