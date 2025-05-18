@@ -41,31 +41,30 @@ export async function verificaNome() {
       return nomeLista === nomeNorm && cognomeLista === cognomeNorm;
     });
 
-    if (trovato) {
-      verificaMsg.textContent = '✅ Cardiologo verificato!';
-      verificaMsg.style.color = 'green';
-
-      // 🔥 Verifica che `ferieSection` esista prima di modificarlo
-      if (ferieSection) {
-        ferieSection.style.display = 'block';
-        ferieCheckbox.checked = false;
-      }
-
-      creaFasceDynamic();
-      container.style.display = 'block';
-      submitBtn.style.display = 'inline-block';
-      procediBtn.style.display = 'none';
-
-    } else {
-      verificaMsg.textContent = '❌ Cardiologo non trovato';
-      verificaMsg.style.color = 'red';
-
-      container.style.display = 'none';
-      submitBtn.style.display = 'none';
-
-      if (ferieSection) ferieSection.style.display = 'none';
-      procediBtn.style.display = 'none';
-    }
+     if (trovato) {
+    verificaMsg.textContent = '✅ Cardiologo verificato!';
+    verificaMsg.style.color = 'green';
+  
+    // 🔥 Assicura che `ferieSection` sia visibile SOLO dopo la verifica
+    ferieSection.style.display = 'block';
+    ferieCheckbox.checked = false;
+  
+    creaFasceDynamic();
+    container.style.display = 'block';
+    submitBtn.style.display = 'inline-block';
+    procediBtn.style.display = 'none';
+  } else {
+    verificaMsg.textContent = '❌ Cardiologo non trovato';
+    verificaMsg.style.color = 'red';
+  
+    container.style.display = 'none';
+    submitBtn.style.display = 'none';
+  
+    // 🔥 Nasconde la checkbox "Ferie" se la verifica fallisce
+    ferieSection.style.display = 'none';
+    procediBtn.style.display = 'none';
+  }
+  
   } catch (err) {
     console.error('Errore:', err);
     verificaMsg.textContent = '❌ Errore nella verifica';
