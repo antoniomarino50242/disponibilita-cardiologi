@@ -219,6 +219,10 @@ button:disabled {
 
 /* logo di caricamento*/
 .loader {
+  position: fixed; /* 👈 Posiziona rispetto alla finestra */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* 👈 Lo centra perfettamente */
   width: 50px;
   padding: 8px;
   aspect-ratio: 1;
