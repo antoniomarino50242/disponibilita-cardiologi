@@ -10,14 +10,15 @@ export async function gestisciInvio() {
 
   document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
   const testo = li.querySelector('span').innerHTML;
+  
+  // 👇 Verifica se il testo contiene "Ferie" e lo esclude
+  if (testo.toLowerCase().includes('ferie')) return;
+  
   const [nomeCompleto, resto] = testo.split(':'); 
   const [turno, notaHtml] = resto.split(' – ');
   const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
 
   const [cognome, nome] = nomeCompleto.split(' '); 
-
-  // 👇 Esclude la voce "Ferie" dal riepilogo
-  if (turno.toLowerCase().includes('ferie')) return;
 
   payload.push({
     cognome: cognome.trim(),  
@@ -26,6 +27,7 @@ export async function gestisciInvio() {
     annotazione: annotazione
   });
 });
+
 
 
 
