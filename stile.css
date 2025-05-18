@@ -218,7 +218,6 @@ button:disabled {
 
 /* logo di caricamento*/
 .loader {
-  position: fixed;
   width: 50px;
   padding: 8px;
   left: 50%;
