@@ -24,12 +24,12 @@ body {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
-@keyframes colorize {
-  0% { filter: grayscale(100%); } /* Logo in bianco e nero */
-  100% { filter: grayscale(0%); } /* Logo completamente colorato */
-}
 /*
+@keyframes colorize {
+  0% { filter: grayscale(100%); } 
+  100% { filter: grayscale(0%); } 
+}
+
 .logo-verifica {
   position: fixed;
   top: 50%;
