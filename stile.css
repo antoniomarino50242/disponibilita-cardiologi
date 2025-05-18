@@ -107,11 +107,14 @@ button:hover {
 }
 
 #verifica-msg {
-  text-align: center; /* 👈 Centra il testo */
+  text-align: center; /* Centra il testo */
   font-size: 1.2rem;
-  margin-top: 10px;
   font-weight: bold;
+  display: block;
+  width: 100%; /* Assicura che occupi l'intero spazio */
+  margin-top: 10px;
 }
+
 
 /* 🔹 DISABILITAZIONE DEL BOTTONE VERIFICA */
 button:disabled {
