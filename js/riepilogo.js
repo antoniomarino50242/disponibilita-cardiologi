@@ -9,17 +9,18 @@ export async function gestisciInvio() {
   const payload = [];
 
   document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
-    const testo = li.querySelector('span').innerHTML;
-    const [nome, resto] = testo.split(':');
-    const [turno, notaHtml] = resto.split(' – ');
-    const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
+  const testo = li.querySelector('span').innerHTML;
+  const [nomeCompleto, resto] = testo.split(':');  // 👈 Cambia da nome → nomeCompleto
+  const [turno, notaHtml] = resto.split(' – ');
+  const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
 
-    payload.push({
-      nome: nome.trim(),
-      turno: turno.trim(),
-      annotazione: annotazione
-    });
+  payload.push({
+    nome: nomeCompleto.trim(),  // 👈 Ora prende anche il cognome!
+    turno: turno.trim(),
+    annotazione: annotazione
   });
+});
+
 
   await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
     method: 'POST',
