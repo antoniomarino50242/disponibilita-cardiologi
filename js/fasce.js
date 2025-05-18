@@ -20,7 +20,9 @@ export function creaFasce(event) {
     const li = document.createElement('li');
     li.className = 'turno';
 
-    let testo = `${nome}: ${c.value}`;
+    const cognome = document.getElementById('cognome').value.trim();
+    let testo = `${cognome} ${nome}: ${c.value}`;
+
     if (nota) testo += ` – <em>${nota}</em>`;
 
     li.innerHTML = `<span>${testo}</span>`;
