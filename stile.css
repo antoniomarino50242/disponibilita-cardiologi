@@ -237,3 +237,24 @@ button:disabled {
 @keyframes l3 {
   to { transform: rotate(1turn); }
 }
+
+/* GESTIONE FERIE */
+#ferieSection {
+  margin-top: 1rem;
+  font-weight: bold;
+}
+
+#procediBtn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  display: none;
+}
+
+#procediBtn:hover {
+  background-color: #2980b9;
+}
