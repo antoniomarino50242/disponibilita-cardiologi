@@ -35,10 +35,11 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 180px; /* 👈 Dimensione più grande */
-  opacity: 0.8; /* 👈 Effetto trasparenza leggera */
+  width: 200px; /* 👈 Logo più grande */
+  opacity: 0.9; /* 👈 Leggero effetto trasparenza */
   transition: all 0.3s ease-in-out;
 }
+
 
 .color-animation {
   animation: colorize 2s linear infinite alternate; /* 👈 Effetto che si ripete */
