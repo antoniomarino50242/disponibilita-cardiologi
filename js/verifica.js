@@ -58,6 +58,7 @@ export async function verificaNome() {
     verificaMsg.style.color = 'red';
   } finally {
     // Disattiva animazione logo e ripristina posizione
+    setTimeout(() => {
     logo.classList.remove('logo-verifica');
-  }
+  }, 1000); // Aspetta 1 secondo per un effetto fluido
 }
