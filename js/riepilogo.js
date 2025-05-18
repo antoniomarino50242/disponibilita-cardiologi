@@ -16,13 +16,16 @@ export async function gestisciInvio() {
 
   const [cognome, nome] = nomeCompleto.split(' '); // 👈 Ora separiamo cognome e nome
 
-  payload.push({
-    cognome: cognome.trim(),  // 👈 Cognome nella colonna A
-    nome: nome.trim(),        // 👈 Nome nella colonna B
-    turno: turno.trim(),
-    annotazione: annotazione
+ // 👇 **Esclude la checkbox "Ferie" dal riepilogo**
+    if (turno.toLowerCase() !== 'ferie') { 
+      payload.push({
+        cognome: cognome.trim(),  
+        nome: nome.trim(),        
+        turno: turno.trim(),
+        annotazione: annotazione
+      });
+    }
   });
-});
 
 
   await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
