@@ -18,7 +18,6 @@ export async function verificaNome() {
   verificaMsg.textContent = 'Verifica in corso...';
   verificaMsg.style.color = '#666';
   loader.style.display = 'block';
-  loader.style.opacity = '1'; // 🔥 Garantisce che sia visibile
 
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbzGm7Rbyst8E2hIil_rFl1Dt47RcDElYgNO4sdD-aYntBHCatBbLk8hFBHcMjV39EzYFQ/exec');
@@ -57,10 +56,7 @@ export async function verificaNome() {
     verificaMsg.textContent = '❌ Errore nella verifica';
     verificaMsg.style.color = 'red';
   } finally {
-    // 👇 Disattiva il loader in modo fluido
-    loader.style.opacity = '0'; // 🔥 Fade out del loader
-    setTimeout(() => {
-      loader.style.display = 'none';
-    }, 300); // 👈 Tempo di dissolvenza
+    // 👇 Disattiva il loader al termine della verifica
+    loader.style.display = 'none';
   }
 }
