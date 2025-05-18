@@ -9,7 +9,6 @@ const inviaBtn = document.getElementById('inviaBtn');
 const eliminaBtn = document.getElementById('eliminaBtn');
 const nomeInput = document.getElementById('nome');
 const cognomeInput = document.getElementById('cognome');
-const verificaBtn = document.getElementById('verificaBtn');
 
 function controllaCampi() {
   console.log("🔍 Controllo campi avviato...");
