@@ -98,6 +98,7 @@ button:hover {
 }
 
 #nomeSection label {
+  text-align: center; /* 👈 Centra il testo */
   font-weight: bold;
 }
 
