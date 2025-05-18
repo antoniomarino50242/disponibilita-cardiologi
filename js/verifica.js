@@ -13,7 +13,7 @@ export async function verificaNome() {
   verificaMsg.style.color = '#666';
 
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbyUcMJWj1DqqsRvE2ZFlqzkpo2xBKP9hbsLlZqNuJp8LLQy46cgrk-n8XSOpPMWIcFg9A/exec');
+    const response = await fetch('https://script.google.com/macros/s/AKfycbzGm7Rbyst8E2hIil_rFl1Dt47RcDElYgNO4sdD-aYntBHCatBbLk8hFBHcMjV39EzYFQ/exec');
     const lista = await response.json(); // ← lista sarà un array di righe, ogni riga è un array tipo: [cognome, nome]
 
     const normalizza = str =>
