@@ -221,7 +221,6 @@ button:disabled {
   width: 50px;
   padding: 8px;
   left: 50%;
-  transform: translate(-50%, -50%); /* 👈 Lo centra in modo preciso */
   aspect-ratio: 1;
   border-radius: 50%;
   background: #3498db; /* 👈 Cambiato da verde (#25b09b) a blu */
