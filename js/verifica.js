@@ -78,8 +78,8 @@ export async function verificaNome() {
   }
 }
 
-// 🔥 Assicura che `ferieCheckbox` esista prima di collegare l'evento
-if (ferieCheckbox) {
+// 🔥 Assicura che `ferieSection` esista PRIMA di aggiungere l'evento
+if (ferieSection && ferieCheckbox) {
   ferieCheckbox.addEventListener('change', function() {
     const container = document.getElementById('giorniContainer');
     const submitBtn = document.getElementById('submitBtn');
