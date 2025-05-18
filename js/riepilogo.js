@@ -1,28 +1,38 @@
-export async function gestisciInvio(event) {
-  event.preventDefault(); // 🔹 Evitiamo il comportamento predefinito del form
+export async function gestisciInvio() {
+  const inviaBtn = document.getElementById('inviaBtn');
+  const mainContainer = document.getElementById('mainContainer');
+  const grazieScreen = document.getElementById('grazieScreen');
 
-  const cognome = document.getElementById('cognome').value.trim();
-  const nome = document.getElementById('nome').value.trim();
-  const turno = document.getElementById('turno').value.trim(); // 🔹 Assicuriamoci che il turno venga raccolto!
-  const ferieCheckbox = document.getElementById('ferie');
-  const ferieSelezionate = ferieCheckbox.checked ? "SI" : ""; // 🔹 Salva "SI" se selezionata
+  inviaBtn.disabled = true;
+  inviaBtn.textContent = 'Invio in corso... attendere!';
 
-  const payload = {
-    cognome: cognome,
-    nome: nome,
-    turno: turno, // 🔹 Ora il turno viene incluso nel payload correttamente
-    ferie: ferieSelezionate
-  };
+  const payload = [];
 
-  console.log("📤 Dati inviati:", JSON.stringify(payload));
+  document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
+  const testo = li.querySelector('span').innerHTML;
+  const [nomeCompleto, resto] = testo.split(':'); 
+  const [turno, notaHtml] = resto.split(' – ');
+  const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
+
+  const [cognome, nome] = nomeCompleto.split(' '); // 👈 Ora separiamo cognome e nome
+
+  payload.push({
+    cognome: cognome.trim(),  // 👈 Cognome nella colonna A
+    nome: nome.trim(),        // 👈 Nome nella colonna B
+    turno: turno.trim(),
+    annotazione: annotazione
+  });
+});
+
 
   await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  }).then(response => response.text()).then(data => {
-    console.log("✅ Risposta dal server:", data);
-  }).catch(error => {
-    console.error("❌ Errore nell'invio:", error);
+    body: JSON.stringify(payload),
+    headers: {
+      'Content-Type': 'application/json'
+    }
   });
+
+  mainContainer.style.display = 'none';
+  grazieScreen.style.display = 'block';
 }
