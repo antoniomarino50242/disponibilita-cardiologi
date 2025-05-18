@@ -219,10 +219,10 @@ button:disabled {
 
 /* logo di caricamento*/
 .loader {
-  position: fixed; /* 👈 Posiziona rispetto alla finestra */
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* 👈 Lo centra perfettamente */
+  transform: translate(-50%, -50%);
   width: 60px;
   aspect-ratio: 1;
   border-radius: 50%;
@@ -235,11 +235,12 @@ button:disabled {
   -webkit-mask-composite: source-out;
           mask-composite: subtract;
   animation: l3 1s infinite linear;
-  display: none;
-  opacity: 0;
+  display: block; /* 👈 Assicura che sia visibile */
+  opacity: 1; /* 👈 Rimuove la trasparenza iniziale */
   transition: opacity 0.3s ease-in-out;
-  z-index: 1000; /* 👈 Lo mantiene sopra agli altri elementi */
+  z-index: 1000;
 }
+
 
 @keyframes l3 {
   to { transform: rotate(1turn); }
