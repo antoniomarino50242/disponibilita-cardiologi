@@ -12,8 +12,10 @@ const cognomeInput = document.getElementById('cognome');
 const verificaBtn = document.getElementById('verificaBtn');
 
 function controllaCampi() {
+  console.log("🔍 Controllo campi avviato...");
   const nomeVal = nomeInput.value.trim();
   const cognomeVal = cognomeInput.value.trim();
+  console.log(`Nome: ${nomeVal}, Cognome: ${cognomeVal}`);
   verificaBtn.disabled = !(nomeVal && cognomeVal);
 }
 
