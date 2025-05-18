@@ -25,6 +25,16 @@ body {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes colorize {
+  0% { filter: grayscale(100%); } /* Logo in bianco e nero */
+  100% { filter: grayscale(0%); } /* Logo completamente colorato */
+}
+
+.color-animation {
+  animation: colorize 2s linear infinite alternate; /* 👈 Effetto che si ripete */
+}
+
+
 h1, h2 {
   color: #2c3e50;
   margin-bottom: 1rem;
