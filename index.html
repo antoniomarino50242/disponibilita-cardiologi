@@ -21,13 +21,17 @@
         <input type="text" id="nome" name="nome" placeholder="Inserisci il nome" required />
 
         <button type="button" id="verificaBtn" disabled>Verifica cardiologo</button>
-        <div id="verifica-msg"></div>
-        <div id="loader" class="loader" style="display: none;"></div>
       </div>
-
-      <div id="giorniContainer"></div>
-      <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
     </form>
+
+    <!-- 🔹 Contenitore per Verifica + Loader -->
+    <div id="verifica-container">
+      <div id="verifica-msg">Verifica in corso...</div>
+      <div id="loader" class="loader" style="display: none;"></div>
+    </div>
+
+    <div id="giorniContainer"></div>
+    <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
 
     <div class="riepilogo" id="riepilogo">
       <h2>Riepilogo disponibilità</h2>
@@ -44,6 +48,6 @@
     <h2>Grazie per aver inviato le disponibilità.</h2>
   </div>
 
- <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
