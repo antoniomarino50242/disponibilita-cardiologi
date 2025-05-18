@@ -10,12 +10,15 @@ export async function gestisciInvio() {
 
   document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
   const testo = li.querySelector('span').innerHTML;
-  const [nomeCompleto, resto] = testo.split(':');  // 👈 Cambia da nome → nomeCompleto
+  const [nomeCompleto, resto] = testo.split(':'); 
   const [turno, notaHtml] = resto.split(' – ');
   const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
 
+  const [cognome, nome] = nomeCompleto.split(' '); // 👈 Ora separiamo cognome e nome
+
   payload.push({
-    nome: nomeCompleto.trim(),  // 👈 Ora prende anche il cognome!
+    cognome: cognome.trim(),  // 👈 Cognome nella colonna A
+    nome: nome.trim(),        // 👈 Nome nella colonna B
     turno: turno.trim(),
     annotazione: annotazione
   });
