@@ -6,6 +6,9 @@ export async function verificaNome() {
   const container = document.getElementById('giorniContainer');
   const verificaMsg = document.getElementById('verifica-msg');
   const submitBtn = document.getElementById('submitBtn');
+  const procediBtn = document.getElementById('procediBtn');
+  const ferieSection = document.getElementById('ferieSection');
+  const ferieCheckbox = document.getElementById('ferieCheckbox');
   const loader = document.getElementById('loader'); // 🔥 Loader animato
 
   if (!nome || !cognome) {
@@ -42,14 +45,22 @@ export async function verificaNome() {
     if (trovato) {
       verificaMsg.textContent = '✅ Cardiologo verificato!';
       verificaMsg.style.color = 'green';
-      creaFasceDynamic();
+
+      // 👇 Mostra la checkbox per segnalare ferie
+      ferieSection.style.display = 'block';
+      ferieCheckbox.checked = false; // Reset della checkbox
+      
       container.style.display = 'block';
       submitBtn.style.display = 'inline-block';
+      procediBtn.style.display = 'none';
     } else {
       verificaMsg.textContent = '❌ Cardiologo non trovato';
       verificaMsg.style.color = 'red';
+
       container.style.display = 'none';
       submitBtn.style.display = 'none';
+      ferieSection.style.display = 'none';
+      procediBtn.style.display = 'none';
     }
   } catch (err) {
     console.error('Errore:', err);
@@ -60,3 +71,22 @@ export async function verificaNome() {
     loader.style.display = 'none';
   }
 }
+
+// 👇 Gestisce la selezione della checkbox "Ferie"
+document.getElementById('ferieCheckbox').addEventListener('change', function() {
+  const container = document.getElementById('giorniContainer');
+  const submitBtn = document.getElementById('submitBtn');
+  const procediBtn = document.getElementById('procediBtn');
+
+  if (this.checked) {
+    // 👇 Se ferie è spuntato, nasconde i turni e mostra il pulsante "Procedi"
+    container.style.display = 'none';
+    submitBtn.style.display = 'none';
+    procediBtn.style.display = 'inline-block';
+  } else {
+    // 👇 Se ferie NON è spuntato, mostra i turni e il pulsante "Aggiungi disponibilità"
+    container.style.display = 'block';
+    submitBtn.style.display = 'inline-block';
+    procediBtn.style.display = 'none';
+  }
+});
