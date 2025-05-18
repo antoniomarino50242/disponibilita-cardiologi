@@ -216,18 +216,13 @@ button:disabled {
   margin-right: auto;
 }
 
-
 /* logo di caricamento*/
 .loader {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: center;
   width: 60px;
-  height: 60px;
+  aspect-ratio: 1;
   border-radius: 50%;
   background: #25b09b;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   --_m: 
     conic-gradient(#0000 10%, #000),
     linear-gradient(#000 0 0) content-box;
@@ -235,14 +230,11 @@ button:disabled {
           mask: var(--_m);
   -webkit-mask-composite: source-out;
           mask-composite: subtract;
-  animation: l3 1s infinite linear; /* 🔥 Riporta l'animazione */
+  animation: l3 1s infinite linear;
   display: none;
-  opacity: 1;
-  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
 }
-
-
-
 
 @keyframes l3 {
   to { transform: rotate(1turn); }
