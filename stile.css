@@ -98,13 +98,19 @@ button:hover {
 }
 
 #nomeSection label {
-  text-align: center; /* 👈 Centra il testo */
   font-weight: bold;
 }
 
 #verificaBtn {
   margin-top: 1rem;
   align-self: center;
+}
+
+#verifica-msg {
+  text-align: center; /* 👈 Centra il testo */
+  font-size: 1.2rem;
+  margin-top: 10px;
+  font-weight: bold;
 }
 
 /* 🔹 DISABILITAZIONE DEL BOTTONE VERIFICA */
