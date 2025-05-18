@@ -26,15 +26,16 @@
       </div>
 
       <div id="giorniContainer">
-        <!-- 👇 La checkbox "Ferie" ora è posizionata accanto alle fasce -->
+        <!-- 🔥 La checkbox ora è ben posizionata -->
         <div id="ferieSection" style="display: none;">
           <label>
             <input type="checkbox" id="ferieCheckbox"> Comunica ferie
           </label>
         </div>
+        <!-- Qui verranno generati dinamicamente i giorni di disponibilità -->
       </div>
 
-      <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
+      <button type="submit" id="submitBtn" style="display: none;">Aggiungi disponibilità</button>
       <button type="button" id="procediBtn" style="display: none;">Procedi</button>
     </form>
 
@@ -48,7 +49,7 @@
     </div>
   </div>
 
-  <div id="grazieScreen">
+  <div id="grazieScreen" style="display: none;">
     <img src="logo.png" alt="Logo aziendale" />
     <h2>Grazie per aver inviato le disponibilità.</h2>
   </div>
