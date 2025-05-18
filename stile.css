@@ -240,7 +240,7 @@ button:disabled {
 
 /* GESTIONE FERIE */
 #ferieSection {
-  display: none;
+  display: block;
   margin-top: 1rem;
   font-weight: bold;
 }
