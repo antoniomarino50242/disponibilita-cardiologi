@@ -29,16 +29,16 @@ body {
   0% { filter: grayscale(100%); } /* Logo in bianco e nero */
   100% { filter: grayscale(0%); } /* Logo completamente colorato */
 }
-
+/*
 .logo-verifica {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 200px; /* 👈 Logo più grande */
-  opacity: 0.9; /* 👈 Leggero effetto trasparenza */
+  width: 200px;
+  opacity: 0.9; 
   transition: all 0.5s ease-in-out;
-}
+}*/
 
 
 .color-animation {
