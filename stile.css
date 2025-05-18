@@ -225,8 +225,10 @@ button:disabled {
   -webkit-mask-composite: source-out;
           mask-composite: subtract;
   animation: l3 1s infinite linear;
-  display: none; /* 👈 Nascondi inizialmente */
-  z-index: 1000; /* 👈 Garantisce visibilità sopra gli altri elementi */
+  display: none;
+  z-index: 1000;
+  opacity: 0; /* 👈 Inizialmente trasparente */
+  transition: opacity 0.3s ease-in-out; /* 👈 Effetto fade */
 }
 
 @keyframes l3 {
