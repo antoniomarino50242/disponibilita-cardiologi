@@ -6,6 +6,7 @@ export async function verificaNome() {
   const container = document.getElementById('giorniContainer');
   const verificaMsg = document.getElementById('verifica-msg');
   const submitBtn = document.getElementById('submitBtn');
+  const loader = document.getElementById('loader'); // 🔥 Loader animato
 
   if (!nome || !cognome) {
     verificaMsg.textContent = '⚠️ Inserire nome e cognome!';
@@ -13,8 +14,10 @@ export async function verificaNome() {
     return;
   }
 
+  // 👇 Attiva il loader e la verifica
   verificaMsg.textContent = 'Verifica in corso...';
   verificaMsg.style.color = '#666';
+  loader.style.display = 'block';
 
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbzGm7Rbyst8E2hIil_rFl1Dt47RcDElYgNO4sdD-aYntBHCatBbLk8hFBHcMjV39EzYFQ/exec');
@@ -52,5 +55,8 @@ export async function verificaNome() {
     console.error('Errore:', err);
     verificaMsg.textContent = '❌ Errore nella verifica';
     verificaMsg.style.color = 'red';
+  } finally {
+    // 👇 Disattiva il loader al termine della verifica
+    loader.style.display = 'none';
   }
 }
