@@ -61,9 +61,11 @@ export async function verificaNome() {
         riepilogoLista.appendChild(li);
       });
 
+      // **Rimuove pulsanti duplicati**
       document.getElementById('modificaBtn')?.remove();
       document.getElementById('eliminaTuttoBtn')?.remove();
 
+      // **Pulsante unico "Modifica Disponibilità"**
       const modificaBtn = document.createElement('button');
       modificaBtn.textContent = 'Modifica Disponibilità';
       modificaBtn.className = 'modifica-btn';
@@ -71,6 +73,7 @@ export async function verificaNome() {
       modificaBtn.onclick = () => riapriForm();
       riepilogo.appendChild(modificaBtn);
 
+      // **Pulsante "Elimina Tutto"**
       const eliminaBtn = document.createElement('button');
       eliminaBtn.textContent = 'Elimina Tutto';
       eliminaBtn.className = 'elimina-btn';
@@ -78,7 +81,7 @@ export async function verificaNome() {
       eliminaBtn.onclick = () => confermaEliminazione();
       riepilogo.appendChild(eliminaBtn);
 
-      riepilogo.style.display = 'block';
+      // **Nasconde altri pulsanti**
       container.style.display = 'none';
       submitBtn.style.display = 'none';
     } else {
@@ -97,12 +100,14 @@ export async function verificaNome() {
   }
 }
 
+/* 🔹 Funzione per riaprire il form */
 function riapriForm() {
   document.getElementById('riepilogo').style.display = 'none';
   document.getElementById('giorniContainer').style.display = 'block';
   document.getElementById('submitBtn').style.display = 'inline-block';
 }
 
+/* 🔹 Funzione per eliminare disponibilità */
 async function eliminaDisponibilità(nome, cognome) {
   const response = await fetch('https://script.google.com/macros/s/AKfycbxGBHEBZ_HPWAKqXW8k9ZLUcrjaENu9m9ESUAx8f-zcaD-upohL9F-P-969B6a02kXEbw/exec', {
     method: 'POST',
@@ -113,6 +118,7 @@ async function eliminaDisponibilità(nome, cognome) {
   return response.json();
 }
 
+/* 🔹 Popup di conferma prima di eliminare */
 async function confermaEliminazione() {
   const nome = document.getElementById('nome').value.trim();
   const cognome = document.getElementById('cognome').value.trim();
