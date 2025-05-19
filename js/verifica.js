@@ -54,6 +54,10 @@ export async function verificaNome() {
 
       riepilogoLista.innerHTML = '';
 
+      // 🔥 **Evita pulsanti duplicati**
+      document.getElementById('modificaBtn')?.remove();
+      document.getElementById('eliminaTuttoBtn')?.remove();
+      
       disponibilitàRegistrata.forEach(entry => {
         const li = document.createElement('li');
         li.className = 'turno';
