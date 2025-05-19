@@ -25,7 +25,7 @@ export async function verificaNome() {
     const lista = await response.json(); // Array con [cognome, nome]
     
     /*verifica disponibilità già inserite*/
-    const responseDisponibilità = await fetch('https://script.google.com/macros/s/AKfycbz9QNa4VSfp8OVLkQmBB9iKZIXnlHH9KJWHpZrskuEexS9_6kqhKPzIqraW-HGzIkh8xA/exec');
+    const responseDisponibilità = await fetch('https://script.google.com/macros/s/AKfycbyMlUN3lH2tp5ZlcWvELAz2KlMD0JLhy9L4DyDf4L4eym94-dkhfGrkKOJ025_e55WrNg/exec');
     if (!responseDisponibilità.ok) throw new Error(`Errore API (${responseDisponibilità.status})`);
     const datiDisponibilità = await responseDisponibilità.json();
     
