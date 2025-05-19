@@ -8,7 +8,7 @@ export async function verificaNome() {
   const submitBtn = document.getElementById('submitBtn');
   const riepilogoLista = document.getElementById('riepilogoLista');
   const riepilogo = document.getElementById('riepilogo');
-  const loader = document.getElementById('loader');
+  const loader = document.getElementById('loader'); // 🔥 Loader animato
 
   if (!nome || !cognome) {
     verificaMsg.textContent = '⚠️ Inserire nome e cognome!';
@@ -16,6 +16,7 @@ export async function verificaNome() {
     return;
   }
 
+  // 👇 Attiva il loader e la verifica
   verificaMsg.textContent = 'Verifica in corso...';
   verificaMsg.style.color = '#666';
   loader.style.display = 'block';
@@ -25,7 +26,8 @@ export async function verificaNome() {
     if (!responseLista.ok) throw new Error(`Errore API (${responseLista.status})`);
     const lista = await responseLista.json();
     
-    const responseDisponibilità = await fetch('https://script.google.com/macros/s/AKfycbxGBHEBZ_HPWAKqXW8k9ZLUcrjaENu9m9ESUAx8f-zcaD-upohL9F-P-969B6a02kXEbw/exec');
+    /* verifica disponibilità già inserite */
+    const responseDisponibilità = await fetch('https://script.google.com/macros/s/AKfycbyMlUN3lH2tp5ZlcWvELAz2KlMD0JLhy9L4DyDf4L4eym94-dkhfGrkKOJ025_e55WrNg/exec');
     if (!responseDisponibilità.ok) throw new Error(`Errore API (${responseDisponibilità.status})`);
     const datiDisponibilità = await responseDisponibilità.json();
     
@@ -37,7 +39,7 @@ export async function verificaNome() {
 
     const trovato = lista.some(riga => normalizza(riga[0]) === cognomeNorm && normalizza(riga[1]) === nomeNorm);
     
-    console.log("Dati ricevuti dalla disponibilità:", JSON.stringify(datiDisponibilità, null, 2));
+    console.log("Dati ricevuti dalla disponibilità:", JSON.stringify(datiDisponibilità, null, 2)); // 🛠 Debug per verificare il formato
 
     const disponibilitàRegistrata = datiDisponibilità.filter(riga => 
       normalizza(riga.cognome) === cognomeNorm && normalizza(riga.nome) === nomeNorm
@@ -52,40 +54,25 @@ export async function verificaNome() {
       verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Ecco il riepilogo:';
       verificaMsg.style.color = 'blue';
 
-      riepilogoLista.innerHTML = '';
+      riepilogoLista.innerHTML = ''; // Pulizia per evitare doppioni
 
-      // 🔥 **Evita pulsanti duplicati**
-      document.getElementById('modificaBtn')?.remove();
-      document.getElementById('eliminaTuttoBtn')?.remove();
-      
       disponibilitàRegistrata.forEach(entry => {
         const li = document.createElement('li');
         li.className = 'turno';
         li.innerHTML = `<span>${entry.cognome} ${entry.nome}: ${entry.turno} – <em>${entry.annotazione}</em></span>`;
+
+        // **Pulsante per modificare**
+        const modificaBtn = document.createElement('button');
+        modificaBtn.textContent = 'Modifica';
+        modificaBtn.className = 'modifica';
+        modificaBtn.onclick = () => riapriForm(entry);
+        li.appendChild(modificaBtn);
+
         riepilogoLista.appendChild(li);
       });
 
-      // **Rimuove pulsanti duplicati**
-      document.getElementById('modificaBtn')?.remove();
-      document.getElementById('eliminaTuttoBtn')?.remove();
-
-      // **Pulsante unico "Modifica Disponibilità"**
-      const modificaBtn = document.createElement('button');
-      modificaBtn.textContent = 'Modifica Disponibilità';
-      modificaBtn.className = 'modifica-btn';
-      modificaBtn.id = 'modificaBtn';
-      modificaBtn.onclick = () => riapriForm();
-      riepilogo.appendChild(modificaBtn);
-
-      // **Pulsante "Elimina Tutto"**
-      const eliminaBtn = document.createElement('button');
-      eliminaBtn.textContent = 'Elimina Tutto';
-      eliminaBtn.className = 'elimina-btn';
-      eliminaBtn.id = 'eliminaTuttoBtn';
-      eliminaBtn.onclick = () => confermaEliminazione();
-      riepilogo.appendChild(eliminaBtn);
-
-      // **Nasconde altri pulsanti**
+      // Mostriamo il riepilogo invece del form
+      riepilogo.style.display = 'block';
       container.style.display = 'none';
       submitBtn.style.display = 'none';
     } else {
@@ -104,32 +91,21 @@ export async function verificaNome() {
   }
 }
 
-/* 🔹 Funzione per riaprire il form */
-function riapriForm() {
+/* Funzione per riaprire il form di modifica */
+function riapriForm(entry) {
   document.getElementById('riepilogo').style.display = 'none';
   document.getElementById('giorniContainer').style.display = 'block';
   document.getElementById('submitBtn').style.display = 'inline-block';
-}
 
-/* 🔹 Funzione per eliminare disponibilità */
-async function eliminaDisponibilità(nome, cognome) {
-  const response = await fetch('https://script.google.com/macros/s/AKfycbxGBHEBZ_HPWAKqXW8k9ZLUcrjaENu9m9ESUAx8f-zcaD-upohL9F-P-969B6a02kXEbw/exec', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome, cognome })
+  // Preseleziona le fasce già inserite
+  document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.checked = checkbox.value === entry.turno;
   });
 
-  return response.json();
-}
-
-/* 🔹 Popup di conferma prima di eliminare */
-async function confermaEliminazione() {
-  const nome = document.getElementById('nome').value.trim();
-  const cognome = document.getElementById('cognome').value.trim();
-
-  if (confirm("⚠️ Sei sicuro di voler eliminare tutte le disponibilità?")) {
-    const result = await eliminaDisponibilità(nome, cognome);
-    alert(result.message);
-    location.reload();
-  }
+  // Precompila l'annotazione
+  document.querySelectorAll('textarea').forEach(textarea => {
+    if (textarea.placeholder === 'Annotazioni per questo turno') {
+      textarea.value = entry.annotazione;
+    }
+  });
 }
