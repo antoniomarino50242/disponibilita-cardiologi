@@ -53,28 +53,23 @@ export async function verificaNome() {
     } else if (disponibilitàRegistrata.length > 0) {
       verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Ecco il riepilogo:';
       verificaMsg.style.color = 'blue';
-    
-      riepilogoLista.innerHTML = ''; // Pulizia per evitare doppioni
-    
-      disponibilitàRegistrata.forEach(entry => {
-      const li = document.createElement('li');
-      li.className = 'turno';
-      li.innerHTML = `<span>${entry.cognome} ${entry.nome}: ${entry.turno} – <em>${entry.annotazione}</em></span>`;
-      riepilogoLista.appendChild(li);
-    });
 
-  // **Pulsante unico "Modifica"**
+      riepilogoLista.innerHTML = ''; // Pulizia per evitare doppioni
+
+      disponibilitàRegistrata.forEach(entry => {
+        const li = document.createElement('li');
+        li.className = 'turno';
+        li.innerHTML = `<span>${entry.cognome} ${entry.nome}: ${entry.turno} – <em>${entry.annotazione}</em></span>`;
+        riepilogoLista.appendChild(li);
+      });
+
+      // **Pulsante unico "Modifica"**
       const modificaBtn = document.createElement('button');
       modificaBtn.textContent = 'Modifica Disponibilità';
       modificaBtn.className = 'modifica-btn';
       modificaBtn.onclick = () => riapriForm(disponibilitàRegistrata); // Passiamo tutti i dati alla funzione
-    
+
       riepilogo.appendChild(modificaBtn);
-    
-      riepilogo.style.display = 'block';
-      container.style.display = 'none';
-      submitBtn.style.display = 'none';
-    });
 
       // Mostriamo il riepilogo invece del form
       riepilogo.style.display = 'block';
