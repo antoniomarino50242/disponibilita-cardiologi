@@ -43,15 +43,7 @@ export async function verificaNome() {
     });
 
     console.log("Dati ricevuti dalla disponibilità:", datiDisponibilità); // 🛠 Debug per verificare il formato
-    
-    const disponibilitàRegistrata = datiDisponibilità.some(riga => {
-      if (!riga.cognome || !riga.nome) return false; // 💡 Evita errori se i dati mancano
-      const cognomeLista = normalizza(riga.cognome);
-      const nomeLista = normalizza(riga.nome);
-      return nomeLista === nomeNorm && cognomeLista === cognomeNorm;
-    });
 
-    
     const disponibilitàRegistrata = datiDisponibilità.some(riga => {
       if (!riga.cognome || !riga.nome) return false; // 💡 Evita errori se i dati mancano
       const cognomeLista = normalizza(riga.cognome);
