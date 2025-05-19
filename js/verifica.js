@@ -53,23 +53,28 @@ export async function verificaNome() {
     } else if (disponibilitàRegistrata.length > 0) {
       verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Ecco il riepilogo:';
       verificaMsg.style.color = 'blue';
-
+    
       riepilogoLista.innerHTML = ''; // Pulizia per evitare doppioni
-
+    
       disponibilitàRegistrata.forEach(entry => {
-        const li = document.createElement('li');
-        li.className = 'turno';
-        li.innerHTML = `<span>${entry.cognome} ${entry.nome}: ${entry.turno} – <em>${entry.annotazione}</em></span>`;
+      const li = document.createElement('li');
+      li.className = 'turno';
+      li.innerHTML = `<span>${entry.cognome} ${entry.nome}: ${entry.turno} – <em>${entry.annotazione}</em></span>`;
+      riepilogoLista.appendChild(li);
+    });
 
-        // **Pulsante per modificare**
-        const modificaBtn = document.createElement('button');
-        modificaBtn.textContent = 'Modifica';
-        modificaBtn.className = 'modifica';
-        modificaBtn.onclick = () => riapriForm(entry);
-        li.appendChild(modificaBtn);
-
-        riepilogoLista.appendChild(li);
-      });
+  // **Pulsante unico "Modifica"**
+      const modificaBtn = document.createElement('button');
+      modificaBtn.textContent = 'Modifica Disponibilità';
+      modificaBtn.className = 'modifica-btn';
+      modificaBtn.onclick = () => riapriForm(disponibilitàRegistrata); // Passiamo tutti i dati alla funzione
+    
+      riepilogo.appendChild(modificaBtn);
+    
+      riepilogo.style.display = 'block';
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+    });
 
       // Mostriamo il riepilogo invece del form
       riepilogo.style.display = 'block';
@@ -92,20 +97,20 @@ export async function verificaNome() {
 }
 
 /* Funzione per riaprire il form di modifica */
-function riapriForm(entry) {
+function riapriForm(disponibilitàRegistrata) {
   document.getElementById('riepilogo').style.display = 'none';
   document.getElementById('giorniContainer').style.display = 'block';
   document.getElementById('submitBtn').style.display = 'inline-block';
 
   // Preseleziona le fasce già inserite
   document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.checked = checkbox.value === entry.turno;
+    checkbox.checked = disponibilitàRegistrata.some(entry => checkbox.value === entry.turno);
   });
 
   // Precompila l'annotazione
-  document.querySelectorAll('textarea').forEach(textarea => {
-    if (textarea.placeholder === 'Annotazioni per questo turno') {
-      textarea.value = entry.annotazione;
+  document.querySelectorAll('textarea').forEach((textarea, index) => {
+    if (textarea.placeholder === 'Annotazioni per questo turno' && disponibilitàRegistrata[index]) {
+      textarea.value = disponibilitàRegistrata[index].annotazione;
     }
   });
 }
