@@ -22,40 +22,52 @@ export async function verificaNome() {
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbz9QNa4VSfp8OVLkQmBB9iKZIXnlHH9KJWHpZrskuEexS9_6kqhKPzIqraW-HGzIkh8xA/exec');
     if (!response.ok) throw new Error(`Errore API (${response.status})`);
-
     const lista = await response.json(); // Array con [cognome, nome]
-
+    
+    /*verifica disponibilità già inserite*/
+    const responseDisponibilità = await fetch('https://script.google.com/macros/s/AKfycbz9QNa4VSfp8OVLkQmBB9iKZIXnlHH9KJWHpZrskuEexS9_6kqhKPzIqraW-HGzIkh8xA/exec');
+    if (!responseDisponibilità.ok) throw new Error(`Errore API (${responseDisponibilità.status})`);
+    const datiDisponibilità = await responseDisponibilità.json();
+    
     const normalizza = str =>
-      str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
+    str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
     const nomeNorm = normalizza(nome);
     const cognomeNorm = normalizza(cognome);
 
     const trovato = lista.some(riga => {
-      if (riga.length < 2) return false; // Skip righe incomplete
+      if (riga.length < 2) return false;
       const cognomeLista = normalizza(riga[0]);
       const nomeLista = normalizza(riga[1]);
       return nomeLista === nomeNorm && cognomeLista === cognomeNorm;
     });
 
-    if (trovato) {
+    const disponibilitàRegistrata = datiDisponibilità.some(riga => 
+      normalizza(riga.cognome) === cognomeNorm && normalizza(riga.nome) === nomeNorm
+    );
+
+    if (!trovato) {
+      verificaMsg.textContent = '❌ Cardiologo non trovato';
+      verificaMsg.style.color = 'red';
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+    } else if (disponibilitàRegistrata) {
+      verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Attendi la riapertura!';
+      verificaMsg.style.color = 'blue';
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+    } else {
       verificaMsg.textContent = '✅ Cardiologo verificato!';
       verificaMsg.style.color = 'green';
       creaFasceDynamic();
       container.style.display = 'block';
       submitBtn.style.display = 'inline-block';
-    } else {
-      verificaMsg.textContent = '❌ Cardiologo non trovato';
-      verificaMsg.style.color = 'red';
-      container.style.display = 'none';
-      submitBtn.style.display = 'none';
     }
   } catch (err) {
     console.error('Errore:', err);
     verificaMsg.textContent = '❌ Errore nella verifica';
     verificaMsg.style.color = 'red';
   } finally {
-    // 👇 Disattiva il loader al termine della verifica
     loader.style.display = 'none';
   }
 }
