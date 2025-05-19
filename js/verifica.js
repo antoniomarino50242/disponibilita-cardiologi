@@ -8,7 +8,7 @@ export async function verificaNome() {
   const submitBtn = document.getElementById('submitBtn');
   const riepilogoLista = document.getElementById('riepilogoLista');
   const riepilogo = document.getElementById('riepilogo');
-  const loader = document.getElementById('loader'); // 🔥 Loader animato
+  const loader = document.getElementById('loader');
 
   if (!nome || !cognome) {
     verificaMsg.textContent = '⚠️ Inserire nome e cognome!';
@@ -16,7 +16,6 @@ export async function verificaNome() {
     return;
   }
 
-  // 👇 Attiva il loader e la verifica
   verificaMsg.textContent = 'Verifica in corso...';
   verificaMsg.style.color = '#666';
   loader.style.display = 'block';
@@ -26,8 +25,7 @@ export async function verificaNome() {
     if (!responseLista.ok) throw new Error(`Errore API (${responseLista.status})`);
     const lista = await responseLista.json();
     
-    /* verifica disponibilità già inserite */
-    const responseDisponibilità = await fetch('https://script.google.com/macros/s/AKfycbyMlUN3lH2tp5ZlcWvELAz2KlMD0JLhy9L4DyDf4L4eym94-dkhfGrkKOJ025_e55WrNg/exec');
+    const responseDisponibilità = await fetch('https://script.google.com/macros/s/AKfycbxGBHEBZ_HPWAKqXW8k9ZLUcrjaENu9m9ESUAx8f-zcaD-upohL9F-P-969B6a02kXEbw/exec');
     if (!responseDisponibilità.ok) throw new Error(`Errore API (${responseDisponibilità.status})`);
     const datiDisponibilità = await responseDisponibilità.json();
     
@@ -39,7 +37,7 @@ export async function verificaNome() {
 
     const trovato = lista.some(riga => normalizza(riga[0]) === cognomeNorm && normalizza(riga[1]) === nomeNorm);
     
-    console.log("Dati ricevuti dalla disponibilità:", JSON.stringify(datiDisponibilità, null, 2)); // 🛠 Debug per verificare il formato
+    console.log("Dati ricevuti dalla disponibilità:", JSON.stringify(datiDisponibilità, null, 2));
 
     const disponibilitàRegistrata = datiDisponibilità.filter(riga => 
       normalizza(riga.cognome) === cognomeNorm && normalizza(riga.nome) === nomeNorm
@@ -54,7 +52,7 @@ export async function verificaNome() {
       verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Ecco il riepilogo:';
       verificaMsg.style.color = 'blue';
 
-      riepilogoLista.innerHTML = ''; // Pulizia per evitare doppioni
+      riepilogoLista.innerHTML = '';
 
       disponibilitàRegistrata.forEach(entry => {
         const li = document.createElement('li');
@@ -63,15 +61,23 @@ export async function verificaNome() {
         riepilogoLista.appendChild(li);
       });
 
-      // **Pulsante unico "Modifica"**
+      document.getElementById('modificaBtn')?.remove();
+      document.getElementById('eliminaTuttoBtn')?.remove();
+
       const modificaBtn = document.createElement('button');
       modificaBtn.textContent = 'Modifica Disponibilità';
       modificaBtn.className = 'modifica-btn';
-      modificaBtn.onclick = () => riapriForm(disponibilitàRegistrata); // Passiamo tutti i dati alla funzione
-
+      modificaBtn.id = 'modificaBtn';
+      modificaBtn.onclick = () => riapriForm();
       riepilogo.appendChild(modificaBtn);
 
-      // Mostriamo il riepilogo invece del form
+      const eliminaBtn = document.createElement('button');
+      eliminaBtn.textContent = 'Elimina Tutto';
+      eliminaBtn.className = 'elimina-btn';
+      eliminaBtn.id = 'eliminaTuttoBtn';
+      eliminaBtn.onclick = () => confermaEliminazione();
+      riepilogo.appendChild(eliminaBtn);
+
       riepilogo.style.display = 'block';
       container.style.display = 'none';
       submitBtn.style.display = 'none';
@@ -91,21 +97,29 @@ export async function verificaNome() {
   }
 }
 
-/* Funzione per riaprire il form di modifica */
-function riapriForm(disponibilitàRegistrata) {
+function riapriForm() {
   document.getElementById('riepilogo').style.display = 'none';
   document.getElementById('giorniContainer').style.display = 'block';
   document.getElementById('submitBtn').style.display = 'inline-block';
+}
 
-  // Preseleziona le fasce già inserite
-  document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.checked = disponibilitàRegistrata.some(entry => checkbox.value === entry.turno);
+async function eliminaDisponibilità(nome, cognome) {
+  const response = await fetch('https://script.google.com/macros/s/AKfycbxGBHEBZ_HPWAKqXW8k9ZLUcrjaENu9m9ESUAx8f-zcaD-upohL9F-P-969B6a02kXEbw/exec', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome, cognome })
   });
 
-  // Precompila l'annotazione
-  document.querySelectorAll('textarea').forEach((textarea, index) => {
-    if (textarea.placeholder === 'Annotazioni per questo turno' && disponibilitàRegistrata[index]) {
-      textarea.value = disponibilitàRegistrata[index].annotazione;
-    }
-  });
+  return response.json();
+}
+
+async function confermaEliminazione() {
+  const nome = document.getElementById('nome').value.trim();
+  const cognome = document.getElementById('cognome').value.trim();
+
+  if (confirm("⚠️ Sei sicuro di voler eliminare tutte le disponibilità?")) {
+    const result = await eliminaDisponibilità(nome, cognome);
+    alert(result.message);
+    location.reload();
+  }
 }
