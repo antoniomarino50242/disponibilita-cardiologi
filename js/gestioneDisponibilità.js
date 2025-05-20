@@ -53,17 +53,17 @@ export function attivaModificaDisponibilità(disponibilitàRegistrata) {
   giorniContainer.style.display = 'block';
   submitBtn.style.display = 'inline-block';
 
-  // **Preseleziona le checkbox e annotazioni**
+  // 🔥 **Se le checkbox non esistono, le creiamo**
   if (document.querySelectorAll('input[type="checkbox"]').length === 0) {
-    console.log("⚠️ Nessuna checkbox trovata, sto ricreandole...");
     creaCheckboxDisponibilità();
   }
 
+  // **Preseleziona le checkbox e annotazioni**
   document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
     const selezionato = disponibilitàRegistrata.some(entry => entry.turno === checkbox.value);
     checkbox.checked = selezionato;
 
-    const notaTextarea = checkbox.parentElement.querySelector('.annotazione textarea');
+    const notaTextarea = checkbox.parentElement.querySelector('.annotazione');
     const annotazione = disponibilitàRegistrata.find(entry => entry.turno === checkbox.value)?.annotazione || '';
 
     if (notaTextarea) {
@@ -92,6 +92,57 @@ export function preselezionaCheckbox(disponibilitàRegistrata) {
   });
 
   giorniContainer.style.display = 'block';
+}
+
+function creaCheckboxDisponibilità() {
+  console.log("⚙️ Creazione dinamica delle checkbox");
+
+  const giorniContainer = document.getElementById('giorniContainer');
+  if (!giorniContainer) {
+    console.error("❌ Errore: #giorniContainer non trovato!");
+    return;
+  }
+
+  // **Elenco turni disponibili**
+  const turniDisponibili = [
+    "Lunedì Mattina", "Lunedì Pomeriggio",
+    "Martedì Mattina", "Martedì Pomeriggio",
+    "Mercoledì Mattina", "Mercoledì Pomeriggio",
+    "Giovedì Mattina", "Giovedì Pomeriggio",
+    "Venerdì Mattina", "Venerdì Pomeriggio"
+  ];
+
+  // **Svuota il contenitore prima di rigenerarlo**
+  giorniContainer.innerHTML = '';
+
+  turniDisponibili.forEach(turno => {
+    const label = document.createElement('label');
+    label.className = 'fascia-container';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.value = turno;
+
+    const text = document.createElement('span');
+    text.textContent = turno;
+
+    const annotazione = document.createElement('textarea');
+    annotazione.className = 'annotazione';
+    annotazione.placeholder = `Annotazioni per ${turno}`;
+    annotazione.style.display = 'none';
+
+    // **Mostra annotazione solo se la checkbox è selezionata**
+    checkbox.addEventListener('change', () => {
+      annotazione.style.display = checkbox.checked ? 'block' : 'none';
+    });
+
+    label.appendChild(checkbox);
+    label.appendChild(text);
+    label.appendChild(annotazione);
+    giorniContainer.appendChild(label);
+  });
+
+  console.log("✅ Checkbox create correttamente!");
 }
 
 export async function aggiornaDisponibilità(payload) {
