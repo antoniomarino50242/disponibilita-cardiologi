@@ -95,7 +95,7 @@ export function preselezionaCheckbox(disponibilitàRegistrata) {
 }
 
 function creaCheckboxDisponibilità() {
-  console.log("⚙️ Creazione dinamica delle checkbox");
+  console.log("⚙️ Creazione dinamica delle checkbox con stile uniforme");
 
   const giorniContainer = document.getElementById('giorniContainer');
   if (!giorniContainer) {
@@ -117,11 +117,12 @@ function creaCheckboxDisponibilità() {
 
   turniDisponibili.forEach(turno => {
     const label = document.createElement('label');
-    label.className = 'fascia-container';
+    label.className = 'fascia-container'; // 🔥 Stessa classe originale
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.value = turno;
+    checkbox.className = 'fascia-checkbox'; // 🔥 Aggiunta classe identica
 
     const text = document.createElement('span');
     text.textContent = turno;
@@ -142,9 +143,8 @@ function creaCheckboxDisponibilità() {
     giorniContainer.appendChild(label);
   });
 
-  console.log("✅ Checkbox create correttamente!");
+  console.log("✅ Checkbox create con lo stile originale!");
 }
-
 export async function aggiornaDisponibilità(payload) {
   await fetch('https://script.google.com/macros/s/AKfycbzmb_VtqcHM_xpch_5sLUx0_pc2kXEEoy7KRamHg2GE88QCe07doUzeUXdJw28oprFBbg/exec', {
     method: 'DELETE',
