@@ -1,4 +1,5 @@
 import { creaFasceDynamic } from './utils.js';
+import { gestisciRiepilogo, preselezionaCheckbox } from './gestioneDisponibilità.js';
 
 export async function verificaNome() {
   const nome = document.getElementById('nome').value.trim();
@@ -51,30 +52,11 @@ export async function verificaNome() {
       container.style.display = 'none';
       submitBtn.style.display = 'none';
     } else if (disponibilitàRegistrata.length > 0) {
-      verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Ecco il riepilogo:';
+      verificaMsg.textContent = '✅ Le disponibilità sono già state inviate.';
       verificaMsg.style.color = 'blue';
 
-      riepilogoLista.innerHTML = ''; // Pulizia per evitare doppioni
-
-      disponibilitàRegistrata.forEach(entry => {
-        const li = document.createElement('li');
-        li.className = 'turno';
-        li.innerHTML = `<span>${entry.cognome} ${entry.nome}: ${entry.turno} – <em>${entry.annotazione}</em></span>`;
-
-        // **Pulsante per modificare**
-        const modificaBtn = document.createElement('button');
-        modificaBtn.textContent = 'Modifica';
-        modificaBtn.className = 'modifica';
-        modificaBtn.onclick = () => riapriForm(entry);
-        li.appendChild(modificaBtn);
-
-        riepilogoLista.appendChild(li);
-      });
-
-      // Mostriamo il riepilogo invece del form
-      riepilogo.style.display = 'block';
-      container.style.display = 'none';
-      submitBtn.style.display = 'none';
+      gestisciRiepilogo(disponibilitàRegistrata);
+      preselezionaCheckbox(disponibilitàRegistrata);
     } else {
       verificaMsg.textContent = '✅ Cardiologo verificato!';
       verificaMsg.style.color = 'green';
@@ -89,23 +71,4 @@ export async function verificaNome() {
   } finally {
     loader.style.display = 'none';
   }
-}
-
-/* Funzione per riaprire il form di modifica */
-function riapriForm(entry) {
-  document.getElementById('riepilogo').style.display = 'none';
-  document.getElementById('giorniContainer').style.display = 'block';
-  document.getElementById('submitBtn').style.display = 'inline-block';
-
-  // Preseleziona le fasce già inserite
-  document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.checked = checkbox.value === entry.turno;
-  });
-
-  // Precompila l'annotazione
-  document.querySelectorAll('textarea').forEach(textarea => {
-    if (textarea.placeholder === 'Annotazioni per questo turno') {
-      textarea.value = entry.annotazione;
-    }
-  });
 }
