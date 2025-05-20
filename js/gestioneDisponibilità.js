@@ -211,12 +211,10 @@ export function gestisciAggiungiDisponibilità() {
 
     disponibilitàSelezionata.push({ turno, annotazione });
 
-    // **Creiamo elemento nel riepilogo**
     const li = document.createElement('li');
     li.className = 'turno';
     li.innerHTML = `<span>${turno} – <em>${annotazione}</em></span>`;
 
-    // **Aggiungiamo pulsante per eliminare il singolo turno**
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = '❌ Cancella';
     deleteBtn.className = 'deleteDisponibilità';
@@ -229,7 +227,41 @@ export function gestisciAggiungiDisponibilità() {
     riepilogoLista.appendChild(li);
   });
 
-  console.log("✅ Disponibilità filtrate e riepilogo aggiornato!");
-  return disponibilitàSelezionata;
+  console.log("✅ Disponibilità filtrate:", disponibilitàSelezionata);
+
+  return disponibilitàSelezionata.length > 0 ? disponibilitàSelezionata : null; // 🔥 Se l'array è vuoto, restituisci `null`
 }
 
+export async function invioDatiAMedea(nome, cognome) {
+  console.log(`🚀 Controllo disponibilità per ${nome} ${cognome}...`);
+
+  const nuoveDisponibilità = gestisciAggiungiDisponibilità();
+
+  if (!nuoveDisponibilità) {
+    console.warn("⚠️ Seleziona almeno una disponibilità prima di inviare!");
+    return;
+  }
+
+  console.log(`🚀 Eliminazione delle disponibilità precedenti per ${nome} ${cognome}...`);
+
+  await fetch('https://script.google.com/macros/s/AKfycbzmb_VtqcHM_xpch_5sLUx0_pc2kXEEoy7KRamHg2GE88QCe07doUzeUXdJw28oprFBbg/exec', {
+    method: 'DELETE',
+    body: JSON.stringify({ cognome, nome }),
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  console.log("✅ Vecchie disponibilità cancellate. Ora scrivo le nuove...");
+
+  await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
+    method: 'POST',
+    body: JSON.stringify(nuoveDisponibilità.map(entry => ({
+      cognome,
+      nome,
+      turno: entry.turno,
+      annotazione: entry.annotazione
+    }))),
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  console.log("✅ Nuove disponibilità salvate con successo!");
+}
