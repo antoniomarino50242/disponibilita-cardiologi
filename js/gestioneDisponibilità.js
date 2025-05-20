@@ -196,40 +196,51 @@ export async function aggiornaDisponibilità(payload) {
     headers: { 'Content-Type': 'application/json' }
   });
 }
+
 export function gestisciAggiungiDisponibilità() {
   console.log("🔄 Filtraggio delle disponibilità selezionate...");
 
-  const riepilogoLista = document.getElementById('riepilogoLista');
-  riepilogoLista.innerHTML = ''; // 🔥 Svuota il riepilogo prima di aggiornare
+  setTimeout(() => { // 🔥 Aspetta per garantire che le checkbox siano caricate nel DOM
+    const riepilogoLista = document.getElementById('riepilogoLista');
+    riepilogoLista.innerHTML = ''; // 🔥 Svuota il riepilogo prima di aggiornare
 
-  const disponibilitàSelezionata = [];
+    const disponibilitàSelezionata = [];
 
-  document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
-    const turno = checkbox.value;
-    const notaTextarea = checkbox.parentElement.querySelector('.annotazione');
-    const annotazione = notaTextarea ? notaTextarea.value : '';
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+    console.log("🔍 Debug checkbox selezionate (dopo attesa):", checkboxes);
 
-    disponibilitàSelezionata.push({ turno, annotazione });
+    checkboxes.forEach(checkbox => {
+      const turno = checkbox.value;
+      const notaTextarea = checkbox.parentElement.querySelector('.annotazione');
+      const annotazione = notaTextarea ? notaTextarea.value.trim() : '';
 
-    const li = document.createElement('li');
-    li.className = 'turno';
-    li.innerHTML = `<span>${turno} – <em>${annotazione}</em></span>`;
+      disponibilitàSelezionata.push({ turno, annotazione });
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = '❌ Cancella';
-    deleteBtn.className = 'deleteDisponibilità';
-    deleteBtn.onclick = () => {
-      li.remove();
-      disponibilitàSelezionata.splice(disponibilitàSelezionata.findIndex(entry => entry.turno === turno), 1);
-    };
+      const li = document.createElement('li');
+      li.className = 'turno';
+      li.innerHTML = `<span>${turno} – <em>${annotazione}</em></span>`;
 
-    li.appendChild(deleteBtn);
-    riepilogoLista.appendChild(li);
-  });
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '❌ Cancella';
+      deleteBtn.className = 'deleteDisponibilità';
+      deleteBtn.onclick = () => {
+        li.remove();
+        disponibilitàSelezionata = disponibilitàSelezionata.filter(entry => entry.turno !== turno);
+      };
 
-  console.log("✅ Disponibilità filtrate:", disponibilitàSelezionata);
+      li.appendChild(deleteBtn);
+      riepilogoLista.appendChild(li);
+    });
 
-  return disponibilitàSelezionata.length > 0 ? disponibilitàSelezionata : null; // 🔥 Se l'array è vuoto, restituisci `null`
+    console.log("✅ Disponibilità pronte per l'invio:", disponibilitàSelezionata);
+
+    if (disponibilitàSelezionata.length === 0) {
+      console.warn("⚠️ Nessuna disponibilità trovata! Assicurati di aver scelto almeno un turno.");
+      return null;
+    }
+
+    return disponibilitàSelezionata;
+  }, 300); // 🔥 Aspettiamo 300ms per garantire la presenza delle checkbox nel DOM
 }
 
 export async function invioDatiAMedea(nome, cognome) {
