@@ -41,20 +41,21 @@ export function attivaModificaDisponibilità(disponibilitàRegistrata) {
   document.getElementById('giorniContainer').style.display = 'block';
   document.getElementById('submitBtn').style.display = 'inline-block';
 
+  // Preseleziona le fasce e annotazioni già inserite
   document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
     const selezionato = disponibilitàRegistrata.some(entry => entry.turno === checkbox.value);
     checkbox.checked = selezionato;
 
+    // Trova il campo annotazione associato e lo precompila
     const notaTextarea = checkbox.parentElement.querySelector('textarea');
     const annotazione = disponibilitàRegistrata.find(entry => entry.turno === checkbox.value)?.annotazione || '';
-    
+
     if (notaTextarea) {
       notaTextarea.value = annotazione;
       notaTextarea.style.display = selezionato ? 'block' : 'none';
     }
   });
 }
-
 
 export function preselezionaCheckbox(disponibilitàRegistrata) {
   const giorniContainer = document.getElementById('giorniContainer');
