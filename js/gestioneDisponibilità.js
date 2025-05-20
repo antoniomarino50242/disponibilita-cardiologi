@@ -43,8 +43,13 @@ export function attivaModificaDisponibilità(disponibilitàRegistrata) {
   const giorniContainer = document.getElementById('giorniContainer');
   const submitBtn = document.getElementById('submitBtn');
 
-  // **Mostra il container delle disponibilità**
-  riepilogo.classList.remove('modifica-attiva');
+  if (!giorniContainer) {
+    console.error("❌ Errore: #giorniContainer non trovato!");
+    return;
+  }
+
+  // **Nascondi il riepilogo e mostra le disponibilità**
+  riepilogo.style.display = 'none';
   giorniContainer.style.display = 'block';
   submitBtn.style.display = 'inline-block';
 
