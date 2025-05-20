@@ -3,7 +3,7 @@ export function gestisciRiepilogo(disponibilitàRegistrata) {
   const riepilogo = document.getElementById('riepilogo');
   const verificaMsg = document.getElementById('verifica-msg');
 
-  verificaMsg.textContent = '✅ Le disponibilità sono già state inviate.';
+  verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Attendere la riapertura! Qui di seguito le ultime disponibilità inviate.';
   verificaMsg.style.color = 'blue';
 
   riepilogoLista.innerHTML = ''; // Pulizia per evitare doppioni
