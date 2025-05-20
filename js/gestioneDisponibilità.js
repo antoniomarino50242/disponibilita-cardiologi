@@ -95,7 +95,7 @@ export function preselezionaCheckbox(disponibilitàRegistrata) {
 }
 
 function creaCheckboxDisponibilità() {
-  console.log("⚙️ Creazione dinamica delle checkbox con stile uniforme");
+  console.log("⚙️ Creazione dinamica delle checkbox identiche alle originali");
 
   const giorniContainer = document.getElementById('giorniContainer');
   if (!giorniContainer) {
@@ -103,26 +103,30 @@ function creaCheckboxDisponibilità() {
     return;
   }
 
-  // **Elenco turni disponibili**
+  // **Elenco turni disponibili con il SABATO**
   const turniDisponibili = [
     "Lunedì Mattina", "Lunedì Pomeriggio",
     "Martedì Mattina", "Martedì Pomeriggio",
     "Mercoledì Mattina", "Mercoledì Pomeriggio",
     "Giovedì Mattina", "Giovedì Pomeriggio",
-    "Venerdì Mattina", "Venerdì Pomeriggio"
+    "Venerdì Mattina", "Venerdì Pomeriggio",
+    "Sabato Mattina", "Sabato Pomeriggio"
   ];
 
   // **Svuota il contenitore prima di rigenerarlo**
   giorniContainer.innerHTML = '';
 
   turniDisponibili.forEach(turno => {
+    const divGiorno = document.createElement('div');
+    divGiorno.className = 'giorno'; // 🔥 Stessa classe della sezione iniziale
+
     const label = document.createElement('label');
     label.className = 'fascia-container'; // 🔥 Stessa classe originale
 
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.value = turno;
-    checkbox.className = 'fascia-checkbox'; // 🔥 Aggiunta classe identica
+    checkbox.className = 'fascia-checkbox'; // 🔥 Identica a quella iniziale
 
     const text = document.createElement('span');
     text.textContent = turno;
@@ -139,12 +143,14 @@ function creaCheckboxDisponibilità() {
 
     label.appendChild(checkbox);
     label.appendChild(text);
-    label.appendChild(annotazione);
-    giorniContainer.appendChild(label);
+    divGiorno.appendChild(label);
+    divGiorno.appendChild(annotazione);
+    giorniContainer.appendChild(divGiorno);
   });
 
-  console.log("✅ Checkbox create con lo stile originale!");
+  console.log("✅ Checkbox ricreate con lo stesso stile delle originali!");
 }
+
 export async function aggiornaDisponibilità(payload) {
   await fetch('https://script.google.com/macros/s/AKfycbzmb_VtqcHM_xpch_5sLUx0_pc2kXEEoy7KRamHg2GE88QCe07doUzeUXdJw28oprFBbg/exec', {
     method: 'DELETE',
