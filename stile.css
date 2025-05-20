@@ -24,27 +24,6 @@ body {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-/*
-@keyframes colorize {
-  0% { filter: grayscale(100%); } 
-  100% { filter: grayscale(0%); } 
-}
-
-.logo-verifica {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  opacity: 0.9; 
-  transition: all 0.5s ease-in-out;
-}*/
-
-
-.color-animation {
-  animation: colorize 2s linear infinite alternate; /* 👈 Effetto che si ripete */
-}
-
 
 h1, h2 {
   color: #2c3e50;
@@ -58,6 +37,7 @@ h1, h2 {
   margin: 0 auto 1rem auto;
 }
 
+/* 🔹 Input e pulsanti */
 input[type="text"], textarea {
   width: 100%;
   padding: 0.75rem;
@@ -89,7 +69,7 @@ button:hover {
   background-color: #2980b9;
 }
 
-/* 🔹 SEZIONE VERIFICA CARDIOLOGO CON COGNOME E NOME */
+/* 🔹 Sezione verifica cardiologo */
 #nomeSection {
   display: flex;
   flex-direction: column;
@@ -97,26 +77,16 @@ button:hover {
   align-items: flex-start;
 }
 
-#nomeSection label {
-  font-weight: bold;
-}
-
-#verificaBtn {
-  margin-top: 1rem;
-  align-self: center;
-}
-
 #verifica-msg {
-  text-align: center; /* Centra il testo */
+  text-align: center;
   font-size: 1.2rem;
   font-weight: bold;
   display: block;
-  width: 100%; /* Assicura che occupi l'intero spazio */
+  width: 100%;
   margin-top: 10px;
 }
 
-
-/* 🔹 DISABILITAZIONE DEL BOTTONE VERIFICA */
+/* 🔹 Bottone disabilitato */
 button:disabled {
   background-color: #ccc;
   color: #666;
@@ -124,6 +94,7 @@ button:disabled {
   opacity: 0.7;
 }
 
+/* 🔹 Disponibilità e annotazioni */
 .giorno {
   margin-top: 1.5rem;
   text-align: left;
@@ -145,10 +116,8 @@ button:disabled {
   color: #2c3e50;
 }
 
+/* 🔹 Nascondi annotazioni inizialmente */
 .annotazione {
-  margin-left: 2rem;
-  margin-top: 0.5rem;
-  width: 100%;
   display: none;
 }
 
@@ -159,17 +128,24 @@ button:disabled {
   background-color: #f9fcff;
 }
 
+/* 🔥 Mostra annotazione solo se checkbox selezionata */
+input[type="checkbox"]:checked + .annotazione {
+  display: block;
+}
+
+/* 🔹 Riepilogo */
 .riepilogo {
   display: none;
   margin-top: 2.5rem;
   text-align: left;
 }
 
-.riepilogo ul {
-  padding-left: 1.2rem;
+/* 🔥 Mostra il form quando si clicca su "Modifica" */
+.modifica-attiva #giorniContainer {
+  display: block !important;
 }
 
-.turno {
+/.turno {
   background-color: #eef6fb;
   padding: 0.8rem 1rem;
   border-radius: 10px;
@@ -184,6 +160,7 @@ button:disabled {
   background-color: #e74c3c;
 }
 
+/* 🔹 Pulsanti centrati */
 .center-buttons {
   display: flex;
   gap: 1rem;
@@ -191,11 +168,12 @@ button:disabled {
   margin-top: 1.5rem;
 }
 
-#submitBtn {
+/* 🔹 Bottone di invio e reset */
+#submitBtn, #eliminaBtn {
   margin-top: 1.5rem;
 }
 
-/* 🔽 SCHERMATA FINALE */
+/* 🔹 Nascondi il form dopo l'invio */
 #grazieScreen {
   display: none;
   text-align: center;
@@ -206,34 +184,4 @@ button:disabled {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   margin: auto;
-}
-
-#grazieScreen img {
-  max-width: 140px;
-  margin-bottom: 1.5rem;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* logo di caricamento*/
-.loader {
-  width: 50px;
-  padding: 8px;
-  left: 50%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #3498db; /* 👈 Cambiato da verde (#25b09b) a blu */
-  --_m: 
-    conic-gradient(#0000 10%, #000),
-    linear-gradient(#000 0 0) content-box;
-  -webkit-mask: var(--_m);
-          mask: var(--_m);
-  -webkit-mask-composite: source-out;
-          mask-composite: subtract;
-  animation: l3 1s infinite linear;
-}
-
-@keyframes l3 {
-  to { transform: rotate(1turn); }
 }
