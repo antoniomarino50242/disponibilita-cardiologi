@@ -20,37 +20,24 @@ export function gestisciRiepilogo(disponibilitàRegistrata) {
 
 export function preselezionaCheckbox(disponibilitàRegistrata) {
   const giorniContainer = document.getElementById('giorniContainer');
-  giorniContainer.innerHTML = '';
 
-  const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-  const fasce = ['Mattina', 'Pomeriggio'];
+  document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    const selezionato = disponibilitàRegistrata.some(entry => entry.turno === checkbox.value);
+    checkbox.checked = selezionato;
 
-  giorni.forEach(giorno => {
-    const giornoDiv = document.createElement('div');
-    giornoDiv.className = 'giorno';
-
-    const giornoLabel = document.createElement('label');
-    giornoLabel.textContent = giorno;
-    giornoDiv.appendChild(giornoLabel);
-
-    fasce.forEach(fascia => {
-      const checkbox = document.createElement('input');
-      checkbox.type = 'checkbox';
-      checkbox.id = `${giorno}-${fascia}`;
-      checkbox.name = 'fasce';
-      checkbox.value = `${giorno} ${fascia}`;
-      
-      const selezionato = disponibilitàRegistrata.some(entry => entry.turno === checkbox.value);
-      checkbox.checked = selezionato;
-
-      giornoDiv.appendChild(checkbox);
-    });
-
-    giorniContainer.appendChild(giornoDiv);
+    // Trova l'annotazione corrispondente e precompilala
+    const notaTextarea = checkbox.parentElement.querySelector('textarea');
+    const annotazione = disponibilitàRegistrata.find(entry => entry.turno === checkbox.value)?.annotazione || '';
+    
+    if (notaTextarea) {
+      notaTextarea.value = annotazione;
+      notaTextarea.style.display = selezionato ? 'block' : 'none';
+    }
   });
 
   giorniContainer.style.display = 'block';
 }
+
 
 export async function aggiornaDisponibilità(payload) {
   await fetch('https://api-per-cancellare-disponibilita/', {
