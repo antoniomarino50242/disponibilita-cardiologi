@@ -2,9 +2,10 @@ export function gestisciRiepilogo(disponibilitàRegistrata) {
   const riepilogoLista = document.getElementById('riepilogoLista');
   const riepilogo = document.getElementById('riepilogo');
   const verificaMsg = document.getElementById('verifica-msg');
-  const modificaBtn = document.createElement('button');
+  const inviaBtn = document.getElementById('inviaBtn');
+  const eliminaBtn = document.getElementById('eliminaBtn');
 
-  verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Attendere la riapertura. Ecco il riepiogo delle ultime disponibilità inviate.';
+  verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Attendere la riapertura. Ecco il riepilogo delle ultime disponibilità inviate.';
   verificaMsg.style.color = 'blue';
 
   riepilogoLista.innerHTML = '';
@@ -16,12 +17,22 @@ export function gestisciRiepilogo(disponibilitàRegistrata) {
     riepilogoLista.appendChild(li);
   });
 
-  modificaBtn.textContent = '✏️ Modifica';
-  modificaBtn.className = 'modificaDisponibilità';
-  modificaBtn.style.float = 'right';
-  modificaBtn.onclick = () => attivaModificaDisponibilità(disponibilitàRegistrata);
+  // Nascondiamo i pulsanti del form
+  inviaBtn.style.display = 'none';
+  eliminaBtn.style.display = 'none';
 
-  riepilogo.appendChild(modificaBtn);
+  // **Evitiamo la duplicazione del pulsante "Modifica"**
+  if (!document.getElementById('modificaBtn')) {
+    const modificaBtn = document.createElement('button');
+    modificaBtn.textContent = '✏️ Modifica';
+    modificaBtn.id = 'modificaBtn';
+    modificaBtn.className = 'modificaDisponibilità';
+    modificaBtn.style.float = 'right';
+    modificaBtn.onclick = () => attivaModificaDisponibilità(disponibilitàRegistrata);
+
+    riepilogo.appendChild(modificaBtn);
+  }
+
   riepilogo.style.display = 'block';
 }
 
