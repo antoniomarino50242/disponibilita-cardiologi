@@ -2,11 +2,12 @@ export function gestisciRiepilogo(disponibilitàRegistrata) {
   const riepilogoLista = document.getElementById('riepilogoLista');
   const riepilogo = document.getElementById('riepilogo');
   const verificaMsg = document.getElementById('verifica-msg');
+  const modificaBtn = document.createElement('button');
 
-  verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Attendere la riapertura! Qui di seguito le ultime disponibilità inviate.';
+  verificaMsg.textContent = '✅ Le disponibilità sono già state inviate. Attendere la riapertura. Ecco il riepiogo delle ultime disponibilità inviate.';
   verificaMsg.style.color = 'blue';
 
-  riepilogoLista.innerHTML = ''; // Pulizia per evitare doppioni
+  riepilogoLista.innerHTML = '';
 
   disponibilitàRegistrata.forEach(entry => {
     const li = document.createElement('li');
@@ -15,8 +16,34 @@ export function gestisciRiepilogo(disponibilitàRegistrata) {
     riepilogoLista.appendChild(li);
   });
 
+  modificaBtn.textContent = '✏️ Modifica';
+  modificaBtn.className = 'modificaDisponibilità';
+  modificaBtn.style.float = 'right';
+  modificaBtn.onclick = () => attivaModificaDisponibilità(disponibilitàRegistrata);
+
+  riepilogo.appendChild(modificaBtn);
   riepilogo.style.display = 'block';
 }
+
+export function attivaModificaDisponibilità(disponibilitàRegistrata) {
+  document.getElementById('riepilogo').style.display = 'none';
+  document.getElementById('giorniContainer').style.display = 'block';
+  document.getElementById('submitBtn').style.display = 'inline-block';
+
+  document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    const selezionato = disponibilitàRegistrata.some(entry => entry.turno === checkbox.value);
+    checkbox.checked = selezionato;
+
+    const notaTextarea = checkbox.parentElement.querySelector('textarea');
+    const annotazione = disponibilitàRegistrata.find(entry => entry.turno === checkbox.value)?.annotazione || '';
+    
+    if (notaTextarea) {
+      notaTextarea.value = annotazione;
+      notaTextarea.style.display = selezionato ? 'block' : 'none';
+    }
+  });
+}
+
 
 export function preselezionaCheckbox(disponibilitàRegistrata) {
   const giorniContainer = document.getElementById('giorniContainer');
