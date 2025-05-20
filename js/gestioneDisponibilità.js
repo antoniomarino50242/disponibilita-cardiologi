@@ -66,7 +66,7 @@ export function preselezionaCheckbox(disponibilitàRegistrata) {
 }
 
 export async function aggiornaDisponibilità(payload) {
-  await fetch('https://api-per-cancellare-disponibilita/', {
+  await fetch('https://script.google.com/macros/s/AKfycbzmb_VtqcHM_xpch_5sLUx0_pc2kXEEoy7KRamHg2GE88QCe07doUzeUXdJw28oprFBbg/exec', {
     method: 'DELETE',
     body: JSON.stringify({ cognome: payload[0].cognome, nome: payload[0].nome }),
     headers: { 'Content-Type': 'application/json' }
