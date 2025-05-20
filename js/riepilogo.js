@@ -1,3 +1,5 @@
+import { aggiornaDisponibilità } from './gestioneDisponibilità.js';
+
 export async function gestisciInvio() {
   const inviaBtn = document.getElementById('inviaBtn');
   const mainContainer = document.getElementById('mainContainer');
@@ -8,30 +10,30 @@ export async function gestisciInvio() {
 
   const payload = [];
 
-  document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
-  const testo = li.querySelector('span').innerHTML;
-  const [nomeCompleto, resto] = testo.split(':'); 
-  const [turno, notaHtml] = resto.split(' – ');
-  const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
+  document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+    const giornoFascia = checkbox.value;
+    const cognome = document.getElementById('cognome').value.trim();
+    const nome = document.getElementById('nome').value.trim();
+    
+    const notaTextarea = checkbox.parentElement.querySelector('textarea');
+    const annotazione = notaTextarea?.value.trim() || '';
 
-  const [cognome, nome] = nomeCompleto.split(' '); // 👈 Ora separiamo cognome e nome
-
-  payload.push({
-    cognome: cognome.trim(),  // 👈 Cognome nella colonna A
-    nome: nome.trim(),        // 👈 Nome nella colonna B
-    turno: turno.trim(),
-    annotazione: annotazione
+    payload.push({
+      cognome,
+      nome,
+      turno: giornoFascia,
+      annotazione
+    });
   });
-});
 
+  if (payload.length === 0) {
+    alert("⚠️ Seleziona almeno una disponibilità prima di inviare!");
+    inviaBtn.disabled = false;
+    inviaBtn.textContent = "Invia a Medea";
+    return;
+  }
 
-  await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
+  await aggiornaDisponibilità(payload);
 
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
