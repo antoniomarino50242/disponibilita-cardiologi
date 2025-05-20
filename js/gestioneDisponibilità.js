@@ -38,7 +38,6 @@ export function preselezionaCheckbox(disponibilitàRegistrata) {
   giorniContainer.style.display = 'block';
 }
 
-
 export async function aggiornaDisponibilità(payload) {
   await fetch('https://api-per-cancellare-disponibilita/', {
     method: 'DELETE',
