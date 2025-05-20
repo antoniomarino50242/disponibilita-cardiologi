@@ -37,24 +37,23 @@ export function gestisciRiepilogo(disponibilitàRegistrata) {
 }
 
 export function attivaModificaDisponibilità(disponibilitàRegistrata) {
-  console.log("🔄 Modifica disponibilità attivata"); // Debug
+  console.log("🔄 Modifica disponibilità attivata"); 
 
   const riepilogo = document.getElementById('riepilogo');
   const giorniContainer = document.getElementById('giorniContainer');
   const submitBtn = document.getElementById('submitBtn');
 
-  // **Mostra il form e nasconde il riepilogo**
-  riepilogo.style.display = 'none';
+  // **Mostra il container delle disponibilità**
+  riepilogo.classList.remove('modifica-attiva');
   giorniContainer.style.display = 'block';
   submitBtn.style.display = 'inline-block';
 
-  // **Preseleziona le checkbox già inserite**
+  // **Preseleziona le checkbox e annotazioni**
   document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
     const selezionato = disponibilitàRegistrata.some(entry => entry.turno === checkbox.value);
     checkbox.checked = selezionato;
 
-    // **Riempie il campo annotazione**
-    const notaTextarea = checkbox.parentElement.querySelector('textarea');
+    const notaTextarea = checkbox.parentElement.querySelector('.annotazione textarea');
     const annotazione = disponibilitàRegistrata.find(entry => entry.turno === checkbox.value)?.annotazione || '';
 
     if (notaTextarea) {
@@ -65,7 +64,6 @@ export function attivaModificaDisponibilità(disponibilitàRegistrata) {
 
   console.log("✅ Modifica pronta, checkbox e annotazioni precompilate!");
 }
-
 
 export function preselezionaCheckbox(disponibilitàRegistrata) {
   const giorniContainer = document.getElementById('giorniContainer');
