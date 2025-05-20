@@ -36,6 +36,38 @@ export function gestisciRiepilogo(disponibilitàRegistrata) {
   riepilogo.style.display = 'block';
 }
 
+export async function invioDatiAMedea(nome, cognome) {
+  console.log(`🚀 Eliminazione delle disponibilità precedenti per ${nome} ${cognome}...`);
+
+  await fetch('https://script.google.com/macros/s/AKfycbzmb_VtqcHM_xpch_5sLUx0_pc2kXEEoy7KRamHg2GE88QCe07doUzeUXdJw28oprFBbg/exec', {
+    method: 'DELETE',
+    body: JSON.stringify({ cognome, nome }),
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  console.log("✅ Vecchie disponibilità cancellate. Ora scrivo le nuove...");
+
+  const nuoveDisponibilità = gestisciAggiungiDisponibilità(); // 🔥 Recupera solo le selezioni confermate
+
+  if (nuoveDisponibilità.length === 0) {
+    console.warn("⚠️ Nessuna nuova disponibilità da inviare!");
+    return;
+  }
+
+  await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
+    method: 'POST',
+    body: JSON.stringify(nuoveDisponibilità.map(entry => ({
+      cognome,
+      nome,
+      turno: entry.turno,
+      annotazione: entry.annotazione
+    }))),
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  console.log("✅ Nuove disponibilità salvate con successo!");
+}
+
 export function attivaModificaDisponibilità(disponibilitàRegistrata) {
   console.log("🔄 Modifica disponibilità attivata"); 
 
