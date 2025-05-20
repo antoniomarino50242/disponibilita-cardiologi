@@ -107,7 +107,11 @@ button:disabled {
 .fascia-container {
   display: flex;
   align-items: center;
-  margin-top: 0.6rem;
+  gap: 0.8rem;
+  padding: 0.75rem;
+  border: 1px solid #e0eaf1;
+  border-radius: 10px;
+  background-color: #f9fcff;
 }
 
 .fascia-container label {
@@ -116,16 +120,32 @@ button:disabled {
   color: #2c3e50;
 }
 
-/* 🔹 Nascondi annotazioni inizialmente */
+/* 🔹 Checkbox migliorate */
+.fascia-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #3498db;
+}
+
+/.fascia-container span {
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+/* 🔹 Annotazione migliorata */
 .annotazione {
+  width: 100%;
+  margin-top: 0.5rem;
   display: none;
 }
 
 .annotazione textarea {
-  width: 80%;
-  max-width: 500px;
+  width: 100%;
+  padding: 0.75rem;
   border-radius: 8px;
-  background-color: #f9fcff;
+  background-color: #eef6fb;
+  border: 1px solid #ccd;
 }
 
 /* 🔥 Mostra annotazione solo se checkbox selezionata */
