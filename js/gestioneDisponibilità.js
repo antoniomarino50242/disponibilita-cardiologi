@@ -164,3 +164,40 @@ export async function aggiornaDisponibilità(payload) {
     headers: { 'Content-Type': 'application/json' }
   });
 }
+export function gestisciAggiungiDisponibilità() {
+  console.log("🔄 Filtraggio delle disponibilità selezionate...");
+
+  const riepilogoLista = document.getElementById('riepilogoLista');
+  riepilogoLista.innerHTML = ''; // 🔥 Svuota il riepilogo prima di aggiornare
+
+  const disponibilitàSelezionata = [];
+
+  document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
+    const turno = checkbox.value;
+    const notaTextarea = checkbox.parentElement.querySelector('.annotazione');
+    const annotazione = notaTextarea ? notaTextarea.value : '';
+
+    disponibilitàSelezionata.push({ turno, annotazione });
+
+    // **Creiamo elemento nel riepilogo**
+    const li = document.createElement('li');
+    li.className = 'turno';
+    li.innerHTML = `<span>${turno} – <em>${annotazione}</em></span>`;
+
+    // **Aggiungiamo pulsante per eliminare il singolo turno**
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '❌ Cancella';
+    deleteBtn.className = 'deleteDisponibilità';
+    deleteBtn.onclick = () => {
+      li.remove();
+      disponibilitàSelezionata.splice(disponibilitàSelezionata.findIndex(entry => entry.turno === turno), 1);
+    };
+
+    li.appendChild(deleteBtn);
+    riepilogoLista.appendChild(li);
+  });
+
+  console.log("✅ Disponibilità filtrate e riepilogo aggiornato!");
+  return disponibilitàSelezionata;
+}
+
