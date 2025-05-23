@@ -39,13 +39,13 @@ export async function verificaNome() {
     });
 
     if (trovato) {
-      verificaMsg.textContent = '✅ Cardiologo verificato!';
+      verificaMsg.textContent = '✅ Utente verificato!';
       verificaMsg.style.color = 'green';
       creaFasceDynamic();
       container.style.display = 'block';
       submitBtn.style.display = 'inline-block';
     } else {
-      verificaMsg.textContent = '❌ Cardiologo non trovato';
+      verificaMsg.textContent = '❌ Utente non trovato, contattare assistenza tecnica';
       verificaMsg.style.color = 'red';
       container.style.display = 'none';
       submitBtn.style.display = 'none';
