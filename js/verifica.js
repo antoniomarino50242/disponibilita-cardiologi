@@ -1,5 +1,5 @@
 import { creaFasceDynamic } from './utils.js';
-import { gestisciRiepilogo, preselezionaCheckbox } from './gestioneDisponibilità.js';
+import { gestisciRiepilogo, preselezionaCheckbox } from './gestioneDisponibilita.js';
 
 export async function verificaNome() {
   const nome = document.getElementById('nome').value.trim();
