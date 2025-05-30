@@ -1,26 +1,27 @@
-const disponibileCheckbox = document.getElementById('disponibileCheckbox');
-const ferieCheckbox = document.getElementById('ferieCheckbox');
-const giorniContainer = document.getElementById('giorniContainer');
-const submitBtn = document.getElementById('submitBtn');
+import { creaFasce } from './fasce.js';
+import { verificaNome } from './verifica.js';
+import { gestisciInvio } from './riepilogo.js';
+import { resetDisponibilita } from './reset.js';
 
-// 🔹 Mostra le fasce orarie solo se selezionato "Sono disponibile"
-disponibileCheckbox.addEventListener('change', function () {
-  if (this.checked) {
-    ferieCheckbox.checked = false;
-    giorniContainer.style.display = 'block';
-    submitBtn.style.display = 'inline-block';
-    creaFasceDynamic(); // ⚡ Genera le fasce orarie dinamicamente
-  } else {
-    giorniContainer.style.display = 'none';
-    submitBtn.style.display = 'none';
-  }
-});
+const verificaBtn = document.getElementById('verificaBtn');
+const modulo = document.getElementById('moduloDisponibilita');
+const inviaBtn = document.getElementById('inviaBtn');
+const eliminaBtn = document.getElementById('eliminaBtn');
+const nomeInput = document.getElementById('nome');
+const cognomeInput = document.getElementById('cognome');
 
-// 🔹 Se selezionato "Sono in ferie", nasconde le fasce orarie
-ferieCheckbox.addEventListener('change', function () {
-  if (this.checked) {
-    disponibileCheckbox.checked = false;
-    giorniContainer.style.display = 'none';
-    submitBtn.style.display = 'none';
-  }
-});
+function controllaCampi() {
+  console.log("🔍 Controllo campi avviato...");
+  const nomeVal = nomeInput.value.trim();
+  const cognomeVal = cognomeInput.value.trim();
+  console.log(`Nome: ${nomeVal}, Cognome: ${cognomeVal}`);
+  verificaBtn.disabled = !(nomeVal && cognomeVal);
+}
+
+// Controlla ogni volta che l’utente digita qualcosa
+nomeInput.addEventListener('input', controllaCampi);
+cognomeInput.addEventListener('input', controllaCampi);
+verificaBtn.addEventListener('click', verificaNome);
+modulo.addEventListener('submit', creaFasce);
+inviaBtn.addEventListener('click', gestisciInvio);
+eliminaBtn.addEventListener('click', resetDisponibilita);
