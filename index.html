@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Disponibilità Cardiologi</title>
+  <link rel="icon" type="image/x-icon" href="Images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="stile.css">
+</head>
+<body>
+  <div class="container" id="mainContainer">
+    <img src="logo.png" class="logo color-animation" alt="Logo aziendale">
+    <h1>Inserire i propri dati per procedere</h1>
+
+    <form id="moduloDisponibilita">
+      <div id="nomeSection">
+        <label for="cognome">Cognome:</label>
+        <input type="text" id="cognome" name="cognome" placeholder="Inserisci il cognome" required />
+
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" placeholder="Inserisci il nome" required />
+
+        <button type="button" id="verificaBtn" disabled>Verifica cardiologo</button>
+        <div id="verifica-msg"></div>
+        <div id="loader" class="loader" style="display: none;"></div>
+      </div>
+
+      <div id="giorniContainer"></div>
+      <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
+    </form>
+
+    <div class="riepilogo" id="riepilogo">
+      <h2>Riepilogo disponibilità</h2>
+      <ul id="riepilogoLista"></ul>
+      <div class="center-buttons">
+        <button id="inviaBtn">Invia a Medea</button>
+        <button id="eliminaBtn" style="background-color: #e74c3c;">Elimina tutto</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="grazieScreen">
+    <img src="logo.png" alt="Logo aziendale" />
+    <h2>Grazie per aver inviato le disponibilità.</h2>
+  </div>
+
+ <script type="module" src="js/main.js"></script>
+</body>
+</html>
