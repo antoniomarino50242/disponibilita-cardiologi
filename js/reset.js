@@ -9,4 +9,5 @@ export function resetDisponibilita() {
   document.getElementById('verifica-msg').textContent = '';
   document.getElementById('nome').value = '';
   document.getElementById('nomeSection').style.display = 'block';
+  document.getElementById('disponibilitaSettimana').style.display = 'none';
 }
