@@ -26,6 +26,19 @@
         <div id="loader" class="loader" style="display: none;"></div>
       </div>
 
+      <!-- 🔽 Nuova sezione DOMANDA SETTIMANA -->
+      <div id="disponibilitaSettimana" style="display: none; margin-top: 20px;">
+        <p><strong>Disponibile prossima settimana?</strong></p>
+        <label style="margin-right: 20px;">
+          <input type="radio" name="settimana" value="disponibile" />
+          Disponibile
+        </label>
+        <label>
+          <input type="radio" name="settimana" value="ferie" />
+          Ferie
+        </label>
+      </div>
+
       <div id="giorniContainer"></div>
       <button type="submit" id="submitBtn" style="display:none;">Aggiungi disponibilità</button>
     </form>
@@ -45,6 +58,6 @@
     <h2>Grazie per aver inviato le disponibilità.</h2>
   </div>
 
- <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
