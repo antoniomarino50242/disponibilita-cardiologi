@@ -8,6 +8,7 @@ export async function verificaNome() {
   const submitBtn = document.getElementById('submitBtn');
   const loader = document.getElementById('loader');
   const disponibilitaSettimana = document.getElementById('disponibilitaSettimana');
+  const inviaBtn = document.getElementById('inviaBtn'); // 👈 Aggiunto riferimento
 
   if (!nome || !cognome) {
     verificaMsg.textContent = '⚠️ Inserire nome e cognome!';
@@ -42,18 +43,15 @@ export async function verificaNome() {
       verificaMsg.textContent = '✅ Cardiologo verificato!';
       verificaMsg.style.color = 'green';
       
-      // Disabilita i campi input
       document.getElementById('nome').disabled = true;
       document.getElementById('cognome').disabled = true;
 
-      // Mostra la sezione della scelta (disponibile/ferie)
       disponibilitaSettimana.style.display = 'block';
 
-      // Pulisce elementi precedenti
       container.style.display = 'none';
       submitBtn.style.display = 'none';
+      inviaBtn.style.display = 'none'; // 👈 Nasconde invia all'inizio
 
-      // Ascolta i radio button
       const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
       const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
 
@@ -61,11 +59,13 @@ export async function verificaNome() {
         creaFasceDynamic();
         container.style.display = 'block';
         submitBtn.style.display = 'inline-block';
+        inviaBtn.style.display = 'none'; // 👈 Nasconde invia quando si seleziona "disponibile"
       });
 
       radioFerie.addEventListener('change', () => {
         container.style.display = 'none';
         submitBtn.style.display = 'none';
+        inviaBtn.style.display = 'inline-block'; // 👈 Mostra invia quando si seleziona "ferie"
       });
 
     } else {
@@ -74,12 +74,14 @@ export async function verificaNome() {
       container.style.display = 'none';
       submitBtn.style.display = 'none';
       disponibilitaSettimana.style.display = 'none';
+      inviaBtn.style.display = 'none';
     }
   } catch (err) {
     console.error('Errore:', err);
     verificaMsg.textContent = '❌ Errore nella verifica';
     verificaMsg.style.color = 'red';
     disponibilitaSettimana.style.display = 'none';
+    inviaBtn.style.display = 'none';
   } finally {
     loader.style.display = 'none';
   }
