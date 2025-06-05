@@ -8,7 +8,7 @@ export async function verificaNome() {
   const submitBtn = document.getElementById('submitBtn');
   const loader = document.getElementById('loader');
   const disponibilitaSettimana = document.getElementById('disponibilitaSettimana');
-  const inviaBtn = document.getElementById('inviaBtn'); // 👈 Aggiunto riferimento
+  const inviaBtn = document.getElementById('inviaBtn');
 
   if (!nome || !cognome) {
     verificaMsg.textContent = '⚠️ Inserire nome e cognome!';
@@ -24,7 +24,7 @@ export async function verificaNome() {
     const response = await fetch('https://script.google.com/macros/s/AKfycbz9QNa4VSfp8OVLkQmBB9iKZIXnlHH9KJWHpZrskuEexS9_6kqhKPzIqraW-HGzIkh8xA/exec');
     if (!response.ok) throw new Error(`Errore API (${response.status})`);
 
-    const lista = await response.json(); // Array con [cognome, nome]
+    const lista = await response.json();
 
     const normalizza = str =>
       str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
@@ -42,7 +42,7 @@ export async function verificaNome() {
     if (trovato) {
       verificaMsg.textContent = '✅ Cardiologo verificato!';
       verificaMsg.style.color = 'green';
-      
+
       document.getElementById('nome').disabled = true;
       document.getElementById('cognome').disabled = true;
 
@@ -50,7 +50,7 @@ export async function verificaNome() {
 
       container.style.display = 'none';
       submitBtn.style.display = 'none';
-      inviaBtn.style.display = 'none'; // 👈 Nasconde invia all'inizio
+      inviaBtn.style.display = 'none'; // 🔒 Nascondi all'inizio
 
       const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
       const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
@@ -59,13 +59,13 @@ export async function verificaNome() {
         creaFasceDynamic();
         container.style.display = 'block';
         submitBtn.style.display = 'inline-block';
-        inviaBtn.style.display = 'none'; // 👈 Nasconde invia quando si seleziona "disponibile"
+        inviaBtn.style.display = 'none';
       });
 
       radioFerie.addEventListener('change', () => {
         container.style.display = 'none';
         submitBtn.style.display = 'none';
-        inviaBtn.style.display = 'inline-block'; // 👈 Mostra invia quando si seleziona "ferie"
+        inviaBtn.style.display = 'inline-block'; // ✅ MOSTRA QUI
       });
 
     } else {
