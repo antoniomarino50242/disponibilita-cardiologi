@@ -39,12 +39,50 @@ export async function verificaNome() {
     });
 
     if (trovato) {
-      verificaMsg.textContent = '✅ Cardiologo verificato!';
-      verificaMsg.style.color = 'green';
-      creaFasceDynamic();
-      container.style.display = 'block';
-      submitBtn.style.display = 'inline-block';
-    } else {
+  verificaMsg.textContent = '✅ Cardiologo verificato!';
+  verificaMsg.style.color = 'green';
+
+  // 👇 Mostra scelta disponibilità
+  const sceltaDisponibilita = document.getElementById('disponibilitaSettimana');
+  sceltaDisponibilita.style.display = 'block';
+
+  // Gestione selezione disponibilità
+  const opzioni = document.querySelectorAll('input[name="settimana"]');
+    opzioni.forEach(opzione => {
+      opzione.addEventListener('change', e => {
+        const valore = e.target.value;
+        const container = document.getElementById('giorniContainer');
+        const submitBtn = document.getElementById('submitBtn');
+  
+        if (valore === 'disponibile') {
+          creaFasceDynamic();
+          container.style.display = 'block';
+          submitBtn.style.display = 'inline-block';
+          document.getElementById('inviaBtn').style.display = 'none';
+        } else {
+          // FERIE
+          container.style.display = 'none';
+          submitBtn.style.display = 'none';
+          document.getElementById('inviaBtn').style.display = 'inline-block';
+  
+          // Precarica riepilogo
+          const riepilogo = document.getElementById('riepilogo');
+          const riepilogoLista = document.getElementById('riepilogoLista');
+          riepilogoLista.innerHTML = '';
+  
+          const li = document.createElement('li');
+          const nome = document.getElementById('nome').value.trim();
+          const cognome = document.getElementById('cognome').value.trim();
+          li.innerHTML = `<span>${cognome} ${nome}: Ferie tutta la settimana</span>`;
+          riepilogoLista.appendChild(li);
+  
+          riepilogo.style.display = 'block';
+          document.getElementById('eliminaBtn').style.display = 'inline-block';
+          document.getElementById('nomeSection').style.display = 'none';
+        }
+      });
+    });
+  } else {
       verificaMsg.textContent = '❌ Cardiologo non trovato';
       verificaMsg.style.color = 'red';
       container.style.display = 'none';
