@@ -8,22 +8,43 @@ export async function gestisciInvio() {
 
   const payload = [];
 
-  document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
-  const testo = li.querySelector('span').innerHTML;
-  const [nomeCompleto, resto] = testo.split(':'); 
-  const [turno, notaHtml] = resto.split(' – ');
-  const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
+  const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
+  const isFerie = radioFerie && radioFerie.checked;
 
-  const [cognome, nome] = nomeCompleto.split(' '); // 👈 Ora separiamo cognome e nome
+  if (isFerie) {
+    // FERIE selezionato: invia solo nome, cognome, ferie e timestamp
+    const nome = document.getElementById('nome').value.trim();
+    const cognome = document.getElementById('cognome').value.trim();
 
-  payload.push({
-    cognome: cognome.trim(),  // 👈 Cognome nella colonna A
-    nome: nome.trim(),        // 👈 Nome nella colonna B
-    turno: turno.trim(),
-    annotazione: annotazione
-  });
-});
+    payload.push({
+      cognome: cognome,
+      nome: nome,
+      turno: '',
+      annotazione: '',
+      ferie: 'FERIE',
+      timestamp: new Date().toISOString()
+    });
 
+  } else {
+    // Modalità normale: invia le fasce selezionate
+    document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
+      const testo = li.querySelector('span').innerHTML;
+      const [nomeCompleto, resto] = testo.split(':'); 
+      const [turno, notaHtml] = resto.split(' – ');
+      const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
+
+      const [cognome, nome] = nomeCompleto.split(' ');
+
+      payload.push({
+        cognome: cognome.trim(),
+        nome: nome.trim(),
+        turno: turno.trim(),
+        annotazione: annotazione,
+        ferie: '',
+        timestamp: new Date().toISOString()
+      });
+    });
+  }
 
   await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
     method: 'POST',
