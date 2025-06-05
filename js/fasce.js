@@ -50,7 +50,12 @@ export function creaFasce(event) {
     document.getElementById('inviaBtn').style.display = 'inline-block';
     document.getElementById('eliminaBtn').style.display = 'inline-block';
     document.getElementById('nomeSection').style.display = 'none';
+  
+    // 👇 Nasconde la sezione Disponibile/Ferie
+    const disponibilitaSettimana = document.getElementById('disponibilitaSettimana');
+    if (disponibilitaSettimana) disponibilitaSettimana.style.display = 'none';
   }
+
 
   document.getElementById('moduloDisponibilita').reset();
   document.querySelectorAll('.annotazione').forEach(div => div.style.display = 'none');
