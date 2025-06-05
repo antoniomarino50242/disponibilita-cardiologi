@@ -21,7 +21,7 @@ export async function gestisciInvio() {
       nome: nome,
       turno: '',
       annotazione: '',
-      ferie: 'FERIE',
+      ferie: true,
       timestamp: new Date().toISOString()
     });
 
