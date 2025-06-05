@@ -41,10 +41,6 @@ export async function verificaNome() {
     if (trovato) {
       verificaMsg.textContent = '✅ Cardiologo verificato!';
       verificaMsg.style.color = 'green';
-
-      // Mostra il nome/cognome statico e blocca i campi
-      document.getElementById('utenteVerificato').style.display = 'block';
-      document.getElementById('nomeCompletoStatico').textContent = `${cognome} ${nome}`;
       
       // Disabilita i campi input
       document.getElementById('nome').disabled = true;
