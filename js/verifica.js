@@ -6,7 +6,8 @@ export async function verificaNome() {
   const container = document.getElementById('giorniContainer');
   const verificaMsg = document.getElementById('verifica-msg');
   const submitBtn = document.getElementById('submitBtn');
-  const loader = document.getElementById('loader'); // 🔥 Loader animato
+  const loader = document.getElementById('loader');
+  const disponibilitaSettimana = document.getElementById('disponibilitaSettimana');
 
   if (!nome || !cognome) {
     verificaMsg.textContent = '⚠️ Inserire nome e cognome!';
@@ -14,7 +15,6 @@ export async function verificaNome() {
     return;
   }
 
-  // 👇 Attiva il loader e la verifica
   verificaMsg.textContent = 'Verifica in corso...';
   verificaMsg.style.color = '#666';
   loader.style.display = 'block';
@@ -32,68 +32,51 @@ export async function verificaNome() {
     const cognomeNorm = normalizza(cognome);
 
     const trovato = lista.some(riga => {
-      if (riga.length < 2) return false; // Skip righe incomplete
+      if (riga.length < 2) return false;
       const cognomeLista = normalizza(riga[0]);
       const nomeLista = normalizza(riga[1]);
       return nomeLista === nomeNorm && cognomeLista === cognomeNorm;
     });
 
     if (trovato) {
-  verificaMsg.textContent = '✅ Cardiologo verificato!';
-  verificaMsg.style.color = 'green';
+      verificaMsg.textContent = '✅ Cardiologo verificato!';
+      verificaMsg.style.color = 'green';
 
-  // 👇 Mostra scelta disponibilità
-  const sceltaDisponibilita = document.getElementById('disponibilitaSettimana');
-  sceltaDisponibilita.style.display = 'block';
+      // Mostra la sezione della scelta (disponibile/ferie)
+      disponibilitaSettimana.style.display = 'block';
 
-  // Gestione selezione disponibilità
-  const opzioni = document.querySelectorAll('input[name="settimana"]');
-    opzioni.forEach(opzione => {
-      opzione.addEventListener('change', e => {
-        const valore = e.target.value;
-        const container = document.getElementById('giorniContainer');
-        const submitBtn = document.getElementById('submitBtn');
-  
-        if (valore === 'disponibile') {
-          creaFasceDynamic();
-          container.style.display = 'block';
-          submitBtn.style.display = 'inline-block';
-          document.getElementById('inviaBtn').style.display = 'none';
-        } else {
-          // FERIE
-          container.style.display = 'none';
-          submitBtn.style.display = 'none';
-          document.getElementById('inviaBtn').style.display = 'inline-block';
-  
-          // Precarica riepilogo
-          const riepilogo = document.getElementById('riepilogo');
-          const riepilogoLista = document.getElementById('riepilogoLista');
-          riepilogoLista.innerHTML = '';
-  
-          const li = document.createElement('li');
-          const nome = document.getElementById('nome').value.trim();
-          const cognome = document.getElementById('cognome').value.trim();
-          li.innerHTML = `<span>${cognome} ${nome}: Ferie tutta la settimana</span>`;
-          riepilogoLista.appendChild(li);
-  
-          riepilogo.style.display = 'block';
-          document.getElementById('eliminaBtn').style.display = 'inline-block';
-          document.getElementById('nomeSection').style.display = 'none';
-        }
+      // Pulisce elementi precedenti
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+
+      // Ascolta i radio button
+      const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
+      const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
+
+      radioDisponibile.addEventListener('change', () => {
+        creaFasceDynamic();
+        container.style.display = 'block';
+        submitBtn.style.display = 'inline-block';
       });
-    });
-  } else {
+
+      radioFerie.addEventListener('change', () => {
+        container.style.display = 'none';
+        submitBtn.style.display = 'none';
+      });
+
+    } else {
       verificaMsg.textContent = '❌ Cardiologo non trovato';
       verificaMsg.style.color = 'red';
       container.style.display = 'none';
       submitBtn.style.display = 'none';
+      disponibilitaSettimana.style.display = 'none';
     }
   } catch (err) {
     console.error('Errore:', err);
     verificaMsg.textContent = '❌ Errore nella verifica';
     verificaMsg.style.color = 'red';
+    disponibilitaSettimana.style.display = 'none';
   } finally {
-    // 👇 Disattiva il loader al termine della verifica
     loader.style.display = 'none';
   }
 }
