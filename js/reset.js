@@ -8,6 +8,11 @@ export function resetDisponibilita() {
   document.getElementById('submitBtn').style.display = 'none';
   document.getElementById('verifica-msg').textContent = '';
   document.getElementById('nome').value = '';
+  document.getElementById('cognome').value = '';
+  document.getElementById('nome').disabled = false;
+  document.getElementById('cognome').disabled = false;
+  document.getElementById('utenteVerificato').style.display = 'none';
+  document.getElementById('nomeCompletoStatico').textContent = '';
   document.getElementById('nomeSection').style.display = 'block';
 
   const disponibilitaSettimana = document.getElementById('disponibilitaSettimana');
