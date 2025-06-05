@@ -9,5 +9,11 @@ export function resetDisponibilita() {
   document.getElementById('verifica-msg').textContent = '';
   document.getElementById('nome').value = '';
   document.getElementById('nomeSection').style.display = 'block';
-  document.getElementById('disponibilitaSettimana').style.display = 'none';
+
+  const disponibilitaSettimana = document.getElementById('disponibilitaSettimana');
+  if (disponibilitaSettimana) {
+    disponibilitaSettimana.style.display = 'none';
+    const radios = disponibilitaSettimana.querySelectorAll('input[type="radio"]');
+    radios.forEach(r => r.checked = false);
+  }
 }
