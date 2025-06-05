@@ -35,4 +35,5 @@ export async function gestisciInvio() {
 
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
+  document.getElementById('disponibilitaSettimana').style.display = 'none';
 }
