@@ -1,4 +1,8 @@
 export async function gestisciInvio() {
+  // Rimuove un eventuale pulsante esistente
+  const bottoneEsistente = document.getElementById('inviaBtn');
+  if (bottoneEsistente) bottoneEsistente.remove();
+  
   const inviaBtn = document.getElementById('inviaBtn');
   const mainContainer = document.getElementById('mainContainer');
   const grazieScreen = document.getElementById('grazieScreen');
