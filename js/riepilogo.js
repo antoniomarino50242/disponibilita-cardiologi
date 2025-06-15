@@ -1,8 +1,27 @@
+// Funzione per aggiornare il riepilogo con lista turni e aggiungere un solo pulsante
+export function aggiornaRiepilogo(listaTurni) {
+  const container = document.getElementById('riepilogoLista');
+  container.innerHTML = ''; // Pulisce il contenitore
+
+  listaTurni.forEach(turno => {
+    const li = document.createElement('li');
+    li.className = 'turno';
+    li.innerHTML = `<span>${turno.cognome} ${turno.nome}: ${turno.turno} – ${turno.annotazione || ''}</span>`;
+    container.appendChild(li);
+  });
+
+  // Aggiunge il pulsante solo se non esiste
+  if (!document.getElementById('inviaBtn')) {
+    const btn = document.createElement('button');
+    btn.id = 'inviaBtn';
+    btn.textContent = 'Invia a Medea';
+    btn.classList.add('btn');
+    btn.addEventListener('click', gestisciInvio);
+    container.appendChild(btn);
+  }
+}
+
 export async function gestisciInvio() {
-  // Rimuove un eventuale pulsante esistente
-  const bottoneEsistente = document.getElementById('inviaBtn');
-  if (bottoneEsistente) bottoneEsistente.remove();
-  
   const inviaBtn = document.getElementById('inviaBtn');
   const mainContainer = document.getElementById('mainContainer');
   const grazieScreen = document.getElementById('grazieScreen');
