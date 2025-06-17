@@ -11,54 +11,46 @@ export function aggiornaRiepilogo(listaTurni) {
   });
 }
 
-export async function gestisciInvio() {
-  const inviaBtn = document.getElementById('inviaBtn');
+// ✅ Funzione unica che gestisce l'invio (normale o ferie)
+async function inviaDati(isSoloFerie = false) {
+  const nome = document.getElementById('nome').value.trim();
+  const cognome = document.getElementById('cognome').value.trim();
   const mainContainer = document.getElementById('mainContainer');
   const grazieScreen = document.getElementById('grazieScreen');
 
-  inviaBtn.disabled = true;
-  inviaBtn.textContent = 'Invio in corso... attendere!';
-
   const payload = [];
 
-  const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
-  const isFerie = radioFerie && radioFerie.checked;
-
-  if (isFerie) {
-    // FERIE selezionato: invia solo nome, cognome, ferie e timestamp
-    const nome = document.getElementById('nome').value.trim();
-    const cognome = document.getElementById('cognome').value.trim();
-
+  if (isSoloFerie) {
+    // Solo ferie
     payload.push({
-      cognome: cognome,
-      nome: nome,
+      cognome,
+      nome,
       turno: '',
       annotazione: '',
       ferie: true,
       timestamp: new Date().toISOString()
     });
-
   } else {
-    // Modalità normale: invia le fasce selezionate
+    // Modalità normale: leggi dal riepilogo
     document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
       const testo = li.querySelector('span').innerHTML;
-      const [nomeCompleto, resto] = testo.split(':'); 
+      const [nomeCompleto, resto] = testo.split(':');
       const [turno, notaHtml] = resto.split(' – ');
       const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
-
-      const [cognome, nome] = nomeCompleto.split(' ');
+      const [cognomeParsed, nomeParsed] = nomeCompleto.trim().split(' ');
 
       payload.push({
-        cognome: cognome.trim(),
-        nome: nome.trim(),
+        cognome: cognomeParsed.trim(),
+        nome: nomeParsed.trim(),
         turno: turno.trim(),
-        annotazione: annotazione,
+        annotazione,
         ferie: '',
         timestamp: new Date().toISOString()
       });
     });
   }
 
+  // Invio a server
   await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
     method: 'POST',
     body: JSON.stringify(payload),
@@ -70,4 +62,24 @@ export async function gestisciInvio() {
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
   document.getElementById('disponibilitaSettimana').style.display = 'none';
+}
+
+// 🔘 Listener per pulsante INVIA normale
+export function gestisciInvio() {
+  const inviaBtn = document.getElementById('inviaBtn');
+  inviaBtn.disabled = true;
+  inviaBtn.textContent = 'Invio in corso... attendere!';
+  inviaDati(false);
+}
+
+// 🔘 Listener per pulsante INVIA FERIE
+export function setupInviaBtnFerie() {
+  const inviaBtnFerie = document.getElementById('inviaBtnFerie');
+  if (!inviaBtnFerie) return;
+
+  inviaBtnFerie.addEventListener('click', () => {
+    inviaBtnFerie.disabled = true;
+    inviaBtnFerie.textContent = 'Invio ferie in corso...';
+    inviaDati(true);
+  });
 }
