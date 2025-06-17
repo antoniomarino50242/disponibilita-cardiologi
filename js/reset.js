@@ -21,4 +21,8 @@ export function resetDisponibilita() {
     const radios = disponibilitaSettimana.querySelectorAll('input[type="radio"]');
     radios.forEach(r => r.checked = false);
   }
+
+  // Riattiva la scritta "Inserire i propri dati per procedere"
+  const istruzioni = document.getElementById('istruzioni');
+  if (istruzioni) istruzioni.style.display = 'block';
 }
