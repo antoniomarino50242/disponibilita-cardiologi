@@ -22,10 +22,9 @@ export async function verificaNome() {
   loader.style.display = 'block';
 
   try {
-    // Verifica presenza cardiologo nella lista
+    // 1) Verifica cardiologo esistente (come già fai tu)
     const response = await fetch('https://script.google.com/macros/s/AKfycbz9QNa4VSfp8OVLkQmBB9iKZIXnlHH9KJWHpZrskuEexS9_6kqhKPzIqraW-HGzIkh8xA/exec');
     if (!response.ok) throw new Error(`Errore API (${response.status})`);
-
     const lista = await response.json();
 
     const normalizza = str =>
@@ -41,73 +40,7 @@ export async function verificaNome() {
       return nomeLista === nomeNorm && cognomeLista === cognomeNorm;
     });
 
-    if (trovato) {
-      verificaMsg.textContent = '✅ Cardiologo verificato!';
-      verificaMsg.style.color = 'green';
-
-      // CHIAMATA API CLOUDflare PER VERIFICA DISPONIBILITÀ ESISTENTI
-      try {
-        const checkResp = await fetch(
-          `https://verificadisponibilita.testmedeatelemedicina.workers.dev/checkDisponibilita?nome=${encodeURIComponent(nome)}&cognome=${encodeURIComponent(cognome)}`
-        );
-        if (!checkResp.ok) throw new Error(`Errore check disponibilità (${checkResp.status})`);
-        const checkData = await checkResp.json();
-
-        if (checkData.exists) {
-          verificaMsg.textContent = '⚠️ Disponibilità già inviate. Per modifiche contattare l\'assistenza.';
-          verificaMsg.style.color = 'orange';
-
-          // Blocca il form per modifiche
-          disponibilitaSettimana.style.display = 'none';
-          container.style.display = 'none';
-          submitBtn.style.display = 'none';
-          inviaBtn.style.display = 'none';
-          inviaBtnFerie.style.display = 'none';
-
-          document.getElementById('nome').disabled = true;
-          document.getElementById('cognome').disabled = true;
-
-          loader.style.display = 'none';
-          return; // interrompe qui la funzione
-        }
-      } catch (checkErr) {
-        console.error('Errore verifica disponibilità:', checkErr);
-        // Se errore, lasciamo continuare con il form per non bloccare l’utente
-      }
-
-      // Se non esistono disponibilità già inviate, continua con il form normale
-      document.getElementById('nome').disabled = true;
-      document.getElementById('cognome').disabled = true;
-
-      disponibilitaSettimana.style.display = 'block';
-
-      container.style.display = 'none';
-      submitBtn.style.display = 'none';
-      inviaBtn.style.display = 'none'; // 🔒 Nascondi all'inizio
-      inviaBtnFerie.style.display = 'none';
-
-      // Nascondi la scritta istruzioni
-      document.getElementById('istruzioni').style.display = 'none';
-
-      const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
-      const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
-
-      radioDisponibile.addEventListener('change', () => {
-        creaFasceDynamic();
-        container.style.display = 'block';
-        submitBtn.style.display = 'inline-block';
-        inviaBtn.style.display = 'none';
-        inviaBtnFerie.style.display = 'none';
-      });
-
-      radioFerie.addEventListener('change', () => {
-        container.style.display = 'none';
-        submitBtn.style.display = 'none';
-        inviaBtn.style.display = 'none';
-        inviaBtnFerie.style.display = 'inline-block'; // ✅ MOSTRA QUI
-      });
-
-    } else {
+    if (!trovato) {
       verificaMsg.textContent = '❌ Cardiologo non trovato';
       verificaMsg.style.color = 'red';
       container.style.display = 'none';
@@ -115,7 +48,66 @@ export async function verificaNome() {
       disponibilitaSettimana.style.display = 'none';
       inviaBtn.style.display = 'none';
       inviaBtnFerie.style.display = 'none';
+      return;
     }
+
+    // 2) Verifica se ha già disponibilità (chiamata al tuo endpoint Cloudflare)
+    const checkDispResponse = await fetch(`https://verificadisponibilita.testmedeatelemedicina.workers.dev/?action=checkDisponibilita&nome=${encodeURIComponent(nome)}&cognome=${encodeURIComponent(cognome)}`);
+    if (!checkDispResponse.ok) throw new Error(`Errore API Disponibilità (${checkDispResponse.status})`);
+    const checkDispData = await checkDispResponse.json();
+
+    if (checkDispData.exists) {
+      verificaMsg.textContent = '⚠️ Disponibilità già inviate. Per modifiche contattare l\'assistenza.';
+      verificaMsg.style.color = 'orange';
+
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+      disponibilitaSettimana.style.display = 'none';
+      inviaBtn.style.display = 'none';
+      inviaBtnFerie.style.display = 'none';
+
+      document.getElementById('nome').disabled = true;
+      document.getElementById('cognome').disabled = true;
+
+      loader.style.display = 'none';
+      return;
+    }
+
+    // 3) Se non ha disponibilità, procedi come prima (mostra form ecc)
+    verificaMsg.textContent = '✅ Cardiologo verificato!';
+    verificaMsg.style.color = 'green';
+
+    document.getElementById('nome').disabled = true;
+    document.getElementById('cognome').disabled = true;
+
+    disponibilitaSettimana.style.display = 'block';
+
+    container.style.display = 'none';
+    submitBtn.style.display = 'none';
+    inviaBtn.style.display = 'none'; // 🔒 Nascondi all'inizio
+    inviaBtnFerie.style.display = 'none';
+
+    // Nascondi la scritta istruzioni qui
+    document.getElementById('istruzioni').style.display = 'none';
+
+    const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
+    const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
+
+    radioDisponibile.addEventListener('change', () => {
+      creaFasceDynamic();
+      container.style.display = 'block';
+      submitBtn.style.display = 'inline-block';
+      inviaBtn.style.display = 'none';
+      inviaBtnFerie.style.display = 'none';
+    });
+
+    radioFerie.addEventListener('change', () => {
+      container.style.display = 'none';
+      submitBtn.style.display = 'none';
+      inviaBtn.style.display = 'none';
+      inviaBtnFerie.style.display = 'inline-block'; // ✅ MOSTRA QUI
+    });
+
   } catch (err) {
     console.error('Errore:', err);
     verificaMsg.textContent = '❌ Errore nella verifica';
