@@ -7,6 +7,13 @@
   <link rel="icon" type="image/x-icon" href="Images/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="stile.css">
+
+  <style>
+    /* Nascondi tutta la pagina finché non è completamente caricata */
+    body {
+      visibility: hidden;
+    }
+  </style>
 </head>
 <body>
   <div class="container" id="mainContainer">
@@ -54,11 +61,18 @@
     </div>
   </div>
 
-  <div id="grazieScreen">
+  <div id="grazieScreen" style="display:none;">
     <img src="logo.png" alt="Logo aziendale" />
     <h2>Grazie per aver inviato le disponibilità.</h2>
   </div>
 
   <script type="module" src="js/main.js"></script>
+
+  <script>
+    // Rendi visibile il body solo dopo che la pagina e il CSS sono caricati
+    window.addEventListener('load', () => {
+      document.body.style.visibility = 'visible';
+    });
+  </script>
 </body>
 </html>
