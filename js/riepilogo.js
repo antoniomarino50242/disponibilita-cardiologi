@@ -62,6 +62,9 @@ async function inviaDati(isSoloFerie = false) {
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
   document.getElementById('disponibilitaSettimana').style.display = 'none';
+  
+  // Qui nascondi la scritta "Inserire i propri dati per procedere"
+  document.getElementById('istruzioni').style.display = 'none'; 
 }
 
 // 🔘 Listener per pulsante INVIA normale
