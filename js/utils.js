@@ -2,8 +2,10 @@ export function creaFasceDynamic() {
   const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
   const fasce = ['Mattina', 'Pomeriggio'];
   const container = document.getElementById('giorniContainer');
+  const submitBtn = document.getElementById('submitBtn');  // bottone aggiungi disponibilità
 
   container.innerHTML = '';
+
   giorni.forEach(giorno => {
     const giornoDiv = document.createElement('div');
     giornoDiv.className = 'giorno';
@@ -33,8 +35,10 @@ export function creaFasceDynamic() {
       textarea.placeholder = 'Annotazioni per questo turno';
       notaCont.appendChild(textarea);
 
+      // Aggiunta la chiamata per aggiornare lo stato del bottone
       checkbox.addEventListener('change', () => {
         notaCont.style.display = checkbox.checked ? 'block' : 'none';
+        aggiornaStatoSubmit();
       });
 
       fasciaCont.appendChild(checkbox);
@@ -45,4 +49,14 @@ export function creaFasceDynamic() {
 
     container.appendChild(giornoDiv);
   });
+
+  // Funzione che abilita/disabilita il bottone aggiungi disponibilità
+  function aggiornaStatoSubmit() {
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    const almenoUnoSelezionato = Array.from(checkboxes).some(cb => cb.checked);
+    submitBtn.disabled = !almenoUnoSelezionato;
+  }
+
+  // Disabilita subito il bottone, perché all'inizio non c'è nulla selezionato
+  submitBtn.disabled = true;
 }
