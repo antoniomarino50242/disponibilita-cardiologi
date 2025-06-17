@@ -9,6 +9,7 @@ export async function verificaNome() {
   const loader = document.getElementById('loader');
   const disponibilitaSettimana = document.getElementById('disponibilitaSettimana');
   const inviaBtn = document.getElementById('inviaBtn');
+  const inviaBtnFerie = document.getElementById('inviaBtnFerie');
 
   if (!nome || !cognome) {
     verificaMsg.textContent = '⚠️ Inserire nome e cognome!';
@@ -51,7 +52,8 @@ export async function verificaNome() {
       container.style.display = 'none';
       submitBtn.style.display = 'none';
       inviaBtn.style.display = 'none'; // 🔒 Nascondi all'inizio
-
+      inviaBtnFerie.style.display = 'none'; 
+      
       const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
       const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
 
@@ -60,12 +62,14 @@ export async function verificaNome() {
         container.style.display = 'block';
         submitBtn.style.display = 'inline-block';
         inviaBtn.style.display = 'none';
+        inviaBtnFerie.style.display = 'none'; 
       });
 
       radioFerie.addEventListener('change', () => {
         container.style.display = 'none';
         submitBtn.style.display = 'none';
-        inviaBtn.style.display = 'inline-block'; // ✅ MOSTRA QUI
+        inviaBtn.style.display = 'none';
+        inviaBtnFerie.style.display = 'inline-block'; // ✅ MOSTRA QUI
       });
 
     } else {
@@ -75,6 +79,7 @@ export async function verificaNome() {
       submitBtn.style.display = 'none';
       disponibilitaSettimana.style.display = 'none';
       inviaBtn.style.display = 'none';
+      inviaBtnFerie.style.display = 'none';
     }
   } catch (err) {
     console.error('Errore:', err);
@@ -82,6 +87,7 @@ export async function verificaNome() {
     verificaMsg.style.color = 'red';
     disponibilitaSettimana.style.display = 'none';
     inviaBtn.style.display = 'none';
+    inviaBtnFerie.style.display = 'none';
   } finally {
     loader.style.display = 'none';
   }
