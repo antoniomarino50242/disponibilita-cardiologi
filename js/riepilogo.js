@@ -9,16 +9,6 @@ export function aggiornaRiepilogo(listaTurni) {
     li.innerHTML = `<span>${turno.cognome} ${turno.nome}: ${turno.turno} – ${turno.annotazione || ''}</span>`;
     container.appendChild(li);
   });
-
-  // Aggiunge il pulsante solo se non esiste
-  if (!document.getElementById('inviaBtn')) {
-    const btn = document.createElement('button');
-    btn.id = 'inviaBtn';
-    btn.textContent = 'Invia a Medea';
-    btn.classList.add('btn');
-    btn.addEventListener('click', gestisciInvio);
-    container.appendChild(btn);
-  }
 }
 
 export async function gestisciInvio() {
