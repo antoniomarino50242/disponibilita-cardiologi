@@ -53,6 +53,9 @@ export async function verificaNome() {
       submitBtn.style.display = 'none';
       inviaBtn.style.display = 'none'; // 🔒 Nascondi all'inizio
       inviaBtnFerie.style.display = 'none'; 
+
+      // Nascondi la scritta istruzioni qui
+      document.getElementById('istruzioni').style.display = 'none';
       
       const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
       const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
