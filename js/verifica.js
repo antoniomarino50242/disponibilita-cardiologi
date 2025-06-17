@@ -45,9 +45,6 @@ export async function verificaNome() {
 
       document.getElementById('nome').disabled = true;
       document.getElementById('cognome').disabled = true;
-      
-      // NASCONDI SEZIONE DATI
-      document.getElementById('nomeSection').style.display = 'none';
   
       disponibilitaSettimana.style.display = 'block';
 
