@@ -78,11 +78,19 @@ export async function verificaNome() {
       const tipologiaRes = await fetch(`https://tipologiaturni.testmedeatelemedicina.workers.dev/?nome=${encodeURIComponent(nome)}&cognome=${encodeURIComponent(cognome)}`);
       const tipologiaData = await tipologiaRes.json();
 
-      if (tipologiaData.tipologia && tipologiaData.tipologia.trim() !== '') {
-        const tipologie = tipologiaData.tipologia.split(' - ').map(t => t.trim());
+      let tipologie = [];
+
+      if (Array.isArray(tipologiaData.tipologie) && tipologiaData.tipologie.length > 0) {
+        tipologie = tipologiaData.tipologie;
+      } else if (typeof tipologiaData.tipologia === 'string' && tipologiaData.tipologia.trim() !== '') {
+        tipologie = tipologiaData.tipologia.split(' - ').map(t => t.trim());
+      }
+
+      if (tipologie.length > 0) {
         console.log(`✅ Tipologie trovate per ${nome} ${cognome}:`, tipologie);
+        // eventualmente salva o usa tipologie come ti serve
       } else {
-        console.log(`⚠️ Nessuna tipologia assegnata a ${nome} ${cognome}`);
+        console.warn(`⚠️ Nessuna tipologia assegnata a ${nome} ${cognome}`);
       }
     } catch (tipErr) {
       console.warn('⚠️ Errore nel recupero della tipologia:', tipErr);
