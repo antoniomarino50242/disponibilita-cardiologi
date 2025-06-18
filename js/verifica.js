@@ -75,7 +75,7 @@ export async function verificaNome() {
 
     // 3) Verifica tipologia tramite Worker
     try {
-      const tipologiaRes = await fetch(`https://proxy-disponibilita.testmedeatelemedicina.workers.dev/?nome=${encodeURIComponent(nome)}&cognome=${encodeURIComponent(cognome)}`);
+      const tipologiaRes = await fetch(`https://tipologiaturni.testmedeatelemedicina.workers.dev/?nome=${encodeURIComponent(nome)}&cognome=${encodeURIComponent(cognome)}`);
       const tipologiaData = await tipologiaRes.json();
 
       if (tipologiaData.tipologia && tipologiaData.tipologia.trim() !== '') {
