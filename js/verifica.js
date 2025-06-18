@@ -1,5 +1,8 @@
 import { creaFasceDynamic } from './utils.js';
 
+// Funzione esterna da settare per la verifica disponibilità in base a tipologia
+export let verificaDisponibilitaPerTipologia = null;
+
 export async function verificaNome() {
   const nome = document.getElementById('nome').value.trim();
   const cognome = document.getElementById('cognome').value.trim();
@@ -22,7 +25,6 @@ export async function verificaNome() {
   loader.style.display = 'block';
 
   try {
-    // 1) Verifica cardiologo esistente (come già fai tu)
     const response = await fetch('https://script.google.com/macros/s/AKfycbz9QNa4VSfp8OVLkQmBB9iKZIXnlHH9KJWHpZrskuEexS9_6kqhKPzIqraW-HGzIkh8xA/exec');
     if (!response.ok) throw new Error(`Errore API (${response.status})`);
     const lista = await response.json();
@@ -33,14 +35,14 @@ export async function verificaNome() {
     const nomeNorm = normalizza(nome);
     const cognomeNorm = normalizza(cognome);
 
-    const trovato = lista.some(riga => {
-      if (riga.length < 2) return false;
+    const cardiologo = lista.find(riga => {
+      if (riga.length < 3) return false;
       const cognomeLista = normalizza(riga[0]);
       const nomeLista = normalizza(riga[1]);
       return nomeLista === nomeNorm && cognomeLista === cognomeNorm;
     });
 
-    if (!trovato) {
+    if (!cardiologo) {
       verificaMsg.textContent = '❌ Cardiologo non trovato';
       verificaMsg.style.color = 'red';
       container.style.display = 'none';
@@ -51,62 +53,56 @@ export async function verificaNome() {
       return;
     }
 
-    // 2) Verifica se ha già disponibilità (chiamata al tuo endpoint Cloudflare)
-    const checkDispResponse = await fetch(`https://verificadisponibilita.testmedeatelemedicina.workers.dev/?action=checkDisponibilita&nome=${encodeURIComponent(nome)}&cognome=${encodeURIComponent(cognome)}`);
-    if (!checkDispResponse.ok) throw new Error(`Errore API Disponibilità (${checkDispResponse.status})`);
-    const checkDispData = await checkDispResponse.json();
-
-    if (checkDispData.exists) {
-      verificaMsg.textContent = '⚠️ Disponibilità già inviate. Per modifiche contattare l\'assistenza.';
-      verificaMsg.style.color = 'orange';
-
-      container.style.display = 'none';
-      submitBtn.style.display = 'none';
-      disponibilitaSettimana.style.display = 'none';
-      inviaBtn.style.display = 'none';
-      inviaBtnFerie.style.display = 'none';
-
-      document.getElementById('nome').disabled = true;
-      document.getElementById('cognome').disabled = true;
-
-      loader.style.display = 'none';
-      return;
-    }
-
-    // 3) Se non ha disponibilità, procedi come prima (mostra form ecc)
-    verificaMsg.textContent = '✅ Cardiologo verificato!';
-    verificaMsg.style.color = 'green';
+    const tipologia = cardiologo[2];
+    console.log(`Cardiologo trovato. Tipologia: ${tipologia}`);  // SOLO LOG
 
     document.getElementById('nome').disabled = true;
     document.getElementById('cognome').disabled = true;
+
+    window.tipologiaCorrente = tipologia;
 
     disponibilitaSettimana.style.display = 'block';
 
     container.style.display = 'none';
     submitBtn.style.display = 'none';
-    inviaBtn.style.display = 'none'; // 🔒 Nascondi all'inizio
+    inviaBtn.style.display = 'none';
     inviaBtnFerie.style.display = 'none';
 
-    // Nascondi la scritta istruzioni qui
     document.getElementById('istruzioni').style.display = 'none';
 
     const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
     const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
 
-    radioDisponibile.addEventListener('change', () => {
-      creaFasceDynamic();
+    radioDisponibile.checked = false;
+    radioFerie.checked = false;
+
+    radioDisponibile.addEventListener('change', async () => {
+      if (!verificaDisponibilitaPerTipologia) {
+        console.warn('verificaDisponibilitaPerTipologia non definita');
+        return;
+      }
+      await verificaDisponibilitaPerTipologia(nome, cognome, tipologia, 'disponibile');
+      creaFasceDynamic(tipologia);
       container.style.display = 'block';
       submitBtn.style.display = 'inline-block';
       inviaBtn.style.display = 'none';
       inviaBtnFerie.style.display = 'none';
     });
 
-    radioFerie.addEventListener('change', () => {
+    radioFerie.addEventListener('change', async () => {
+      if (!verificaDisponibilitaPerTipologia) {
+        console.warn('verificaDisponibilitaPerTipologia non definita');
+        return;
+      }
+      await verificaDisponibilitaPerTipologia(nome, cognome, tipologia, 'ferie');
       container.style.display = 'none';
       submitBtn.style.display = 'none';
       inviaBtn.style.display = 'none';
-      inviaBtnFerie.style.display = 'inline-block'; // ✅ MOSTRA QUI
+      inviaBtnFerie.style.display = 'inline-block';
     });
+
+    verificaMsg.textContent = '✅ Cardiologo verificato!';
+    verificaMsg.style.color = 'green';
 
   } catch (err) {
     console.error('Errore:', err);
