@@ -1,4 +1,5 @@
 import { creaFasceDynamic } from './utils.js';
+import { mappaTipologie } from './tipologie.js';
 
 // Funzione di utilità per normalizzare testi (nomi, cognomi)
 function normalizza(str) {
@@ -9,20 +10,7 @@ function normalizza(str) {
     .trim();
 }
 
-// Mappa tipologie -> checkbox da mostrare
-const checkboxMap = {
-  "completo": ["ECG", "HC", "HP"],
-  "solo ecg": ["ECG"],
-  "ecg 100": ["ECG 100"],
-  "ecg 75": ["ECG 75"],
-  "turno hc": ["HC"],
-  "turno holter": ["HOLTER"],
-  "hc consuntivo": ["HC CONSUNTIVO"],
-  "hp consuntivo": ["HP CONSUNTIVO"],
-  "spirometria consuntivo": ["SPIROMETRIA CONSUNTIVO"],
-  "polisonnografia consuntivo": ["POLISONNOGRAFIA CONSUNTIVO"],
-};
-
+// Funzione per mostrare checkbox tipologie dinamicamente
 function mostraCheckboxTipologie(tipologie) {
   const container = document.getElementById('tipologieContainer');
   container.innerHTML = ''; // Pulisce contenuto precedente
@@ -34,18 +22,25 @@ function mostraCheckboxTipologie(tipologie) {
 
   container.style.display = 'block';
 
-  // Testo sopra le checkbox
-  const descrizione = document.createElement('div');
-  descrizione.textContent = `Inserire le disponibilità per il turno: ${tipologie.join(', ').toUpperCase()}`;
-  descrizione.style.fontWeight = 'bold';
-  descrizione.style.marginBottom = '8px';
-  container.appendChild(descrizione);
-
   tipologie.forEach(tip => {
-    const lowerTip = tip.toLowerCase();
-    const voci = checkboxMap[lowerTip] || [];
+    const key = tip.toLowerCase();
 
-    voci.forEach(labelText => {
+    if (!(key in mappaTipologie)) {
+      console.warn(`Tipologia sconosciuta: ${tip}`);
+      return;
+    }
+
+    const info = mappaTipologie[key];
+
+    // Testo descrittivo sopra le checkbox
+    const descrizione = document.createElement('p');
+    descrizione.textContent = info.testo;
+    descrizione.style.fontWeight = 'bold';
+    descrizione.style.marginBottom = '8px';
+    container.appendChild(descrizione);
+
+    // Checkbox corrispondenti
+    info.checkbox.forEach(labelText => {
       const label = document.createElement('label');
       label.style.display = 'block';
       label.style.marginBottom = '6px';
