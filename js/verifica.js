@@ -1,5 +1,14 @@
 import { creaFasceDynamic } from './utils.js';
 
+// Funzione di utilità per normalizzare testi (nomi, cognomi)
+function normalizza(str) {
+  return str.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export async function verificaNome() {
   const nome = document.getElementById('nome').value.trim();
   const cognome = document.getElementById('cognome').value.trim();
@@ -26,9 +35,6 @@ export async function verificaNome() {
     const response = await fetch('https://script.google.com/macros/s/AKfycbz9QNa4VSfp8OVLkQmBB9iKZIXnlHH9KJWHpZrskuEexS9_6kqhKPzIqraW-HGzIkh8xA/exec');
     if (!response.ok) throw new Error(`Errore API (${response.status})`);
     const lista = await response.json();
-
-    const normalizza = str =>
-      str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
 
     const nomeNorm = normalizza(nome);
     const cognomeNorm = normalizza(cognome);
