@@ -24,6 +24,8 @@ body {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* Animazione colore logo (commentata) */
 /*
 @keyframes colorize {
   0% { filter: grayscale(100%); } 
@@ -38,13 +40,12 @@ body {
   width: 200px;
   opacity: 0.9; 
   transition: all 0.5s ease-in-out;
-}*/
-
+}
+*/
 
 .color-animation {
   animation: colorize 2s linear infinite alternate; /* 👈 Effetto che si ripete */
 }
-
 
 h1, h2 {
   color: #2c3e50;
@@ -114,7 +115,6 @@ button:hover {
   width: 100%; /* Assicura che occupi l'intero spazio */
   margin-top: 10px;
 }
-
 
 /* 🔹 DISABILITAZIONE DEL BOTTONE VERIFICA */
 button:disabled {
@@ -193,6 +193,21 @@ button:disabled {
 
 #submitBtn {
   margin-top: 1.5rem;
+}
+
+/* 🔹 CONTENITORE TIPLOGIE - CHECKBOX DINAMICHE */
+#tipologieContainer {
+  display: none;
+  margin-top: 1em;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}
+
+#tipologieContainer > div {
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 /* 🔽 SCHERMATA FINALE */
