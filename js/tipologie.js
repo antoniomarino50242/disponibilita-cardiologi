@@ -8,11 +8,11 @@ export const mappaTipologie = {
     checkbox: ["ECG"]
   },
   "ECG 100": {
-    testo: "Inserire le disponibilità per il turno ECG 100",
+    testo: "Inserire le disponibilità per il turno ECG, max 100",
     checkbox: ["ECG 100"]
   },
   "ECG 75": {
-    testo: "Inserire le disponibilità per il turno ECG 75",
+    testo: "Inserire le disponibilità per il turno ECG, max 75",
     checkbox: ["ECG 75"]
   },
   "turno HC": {
@@ -20,23 +20,23 @@ export const mappaTipologie = {
     checkbox: ["HC"]
   },
   "turno HOLTER": {
-    testo: "Inserire le disponibilità per il turno HOLTER",
+    testo: "Inserire le disponibilità per il turno SOLO HOLTERS",
     checkbox: ["HOLTER"]
   },
   "HC CONSUNTIVO": {
-    testo: "Inserire le disponibilità per il turno HC CONSUNTIVO",
+    testo: "Indicare le disponibilità e specificare il limite massimo giornaliero per HC a consuntivo.",
     checkbox: ["HC CONSUNTIVO"]
   },
   "HP CONSUNTIVO": {
-    testo: "Inserire le disponibilità per il turno HP CONSUNTIVO",
+    testo: "Indicare le disponibilità e specificare il limite massimo giornaliero per HP a consuntivo.",
     checkbox: ["HP CONSUNTIVO"]
   },
   "SPIROMETRIA CONSUNTIVO": {
-    testo: "Inserire le disponibilità per il turno SPIROMETRIA CONSUNTIVO",
+    testo: "Inserire le disponibilità per il turno SPIROMETRIA a consuntivo",
     checkbox: ["SPIROMETRIA CONSUNTIVO"]
   },
   "POLISONNOGRAFIA CONSUNTIVO": {
-    testo: "Inserire le disponibilità per il turno POLISONNOGRAFIA CONSUNTIVO",
+    testo: "Inserire le disponibilità per il turno POLISONNOGRAFIA a consuntivo",
     checkbox: ["POLISONNOGRAFIA CONSUNTIVO"]
   }
 };
