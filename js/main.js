@@ -10,6 +10,10 @@ const inviaBtnFerie = document.getElementById('inviaBtnFerie');  // nuovo pulsan
 const eliminaBtn = document.getElementById('eliminaBtn');
 const nomeInput = document.getElementById('nome');
 const cognomeInput = document.getElementById('cognome');
+const tipologieContainer = document.getElementById('tipologieContainer');
+const giorniContainer = document.getElementById('giorniContainer');
+const submitBtn = document.getElementById('submitBtn');
+const disponibilitaSettimana = document.getElementById('disponibilitaSettimana');
 
 function controllaCampi() {
   console.log("🔍 Controllo campi avviato...");
@@ -19,6 +23,34 @@ function controllaCampi() {
   verificaBtn.disabled = !(nomeVal && cognomeVal);
 }
 
+// Gestione visibilità form in base a radio "settimana"
+function setupRadioDisponibilita() {
+  const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
+  const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
+
+  function nascondiTutto() {
+    giorniContainer.style.display = 'none';
+    submitBtn.style.display = 'none';
+    inviaBtnFerie.style.display = 'none';
+    tipologieContainer.style.display = 'none';
+  }
+
+  nascondiTutto(); // Nascondi tutto all'inizio
+
+  radioDisponibile.addEventListener('change', () => {
+    giorniContainer.style.display = 'block';
+    submitBtn.style.display = 'inline-block';
+    inviaBtnFerie.style.display = 'none';
+    tipologieContainer.style.display = 'block';
+  });
+
+  radioFerie.addEventListener('change', () => {
+    giorniContainer.style.display = 'none';
+    submitBtn.style.display = 'none';
+    inviaBtnFerie.style.display = 'inline-block';
+    tipologieContainer.style.display = 'none';
+  });
+}
 
 // Eventi input per abilitare/disabilitare verifica
 nomeInput.addEventListener('input', controllaCampi);
@@ -32,3 +64,6 @@ eliminaBtn.addEventListener('click', resetDisponibilita);
 
 // Setup listener per invia ferie (pulsante che appare solo quando ferie selezionate)
 setupInviaBtnFerie();
+
+// Setup radio disponibilità / ferie gestione visibilità form
+setupRadioDisponibilita();
