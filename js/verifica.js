@@ -9,6 +9,59 @@ function normalizza(str) {
     .trim();
 }
 
+// Mappa tipologie -> checkbox da mostrare
+const checkboxMap = {
+  "completo": ["ECG", "HC", "HP"],
+  "solo ecg": ["ECG"],
+  "ecg 100": ["ECG 100"],
+  "ecg 75": ["ECG 75"],
+  "turno hc": ["HC"],
+  "turno holter": ["HOLTER"],
+  "hc consuntivo": ["HC CONSUNTIVO"],
+  "hp consuntivo": ["HP CONSUNTIVO"],
+  "spirometria consuntivo": ["SPIROMETRIA CONSUNTIVO"],
+  "polisonnografia consuntivo": ["POLISONNOGRAFIA CONSUNTIVO"],
+};
+
+function mostraCheckboxTipologie(tipologie) {
+  const container = document.getElementById('tipologieContainer');
+  container.innerHTML = ''; // Pulisce contenuto precedente
+
+  if (!tipologie || tipologie.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'block';
+
+  // Testo sopra le checkbox
+  const descrizione = document.createElement('div');
+  descrizione.textContent = `Inserire le disponibilità per il turno: ${tipologie.join(', ').toUpperCase()}`;
+  descrizione.style.fontWeight = 'bold';
+  descrizione.style.marginBottom = '8px';
+  container.appendChild(descrizione);
+
+  tipologie.forEach(tip => {
+    const lowerTip = tip.toLowerCase();
+    const voci = checkboxMap[lowerTip] || [];
+
+    voci.forEach(labelText => {
+      const label = document.createElement('label');
+      label.style.display = 'block';
+      label.style.marginBottom = '6px';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.name = 'tipologiaCheckbox';
+      checkbox.value = labelText;
+
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(' ' + labelText));
+      container.appendChild(label);
+    });
+  });
+}
+
 export async function verificaNome() {
   const nome = document.getElementById('nome').value.trim();
   const cognome = document.getElementById('cognome').value.trim();
@@ -54,6 +107,7 @@ export async function verificaNome() {
       disponibilitaSettimana.style.display = 'none';
       inviaBtn.style.display = 'none';
       inviaBtnFerie.style.display = 'none';
+      document.getElementById('tipologieContainer').style.display = 'none';
       return;
     }
 
@@ -71,6 +125,7 @@ export async function verificaNome() {
       disponibilitaSettimana.style.display = 'none';
       inviaBtn.style.display = 'none';
       inviaBtnFerie.style.display = 'none';
+      document.getElementById('tipologieContainer').style.display = 'none';
 
       document.getElementById('nome').disabled = true;
       document.getElementById('cognome').disabled = true;
@@ -80,11 +135,10 @@ export async function verificaNome() {
     }
 
     // 3) Verifica tipologia tramite Worker
+    let tipologie = [];
     try {
       const tipologiaRes = await fetch(`https://tipologiaturni.testmedeatelemedicina.workers.dev/?nome=${encodeURIComponent(nome)}&cognome=${encodeURIComponent(cognome)}`);
       const tipologiaData = await tipologiaRes.json();
-
-      let tipologie = [];
 
       if (Array.isArray(tipologiaData.tipologie) && tipologiaData.tipologie.length > 0) {
         tipologie = tipologiaData.tipologie;
@@ -94,12 +148,14 @@ export async function verificaNome() {
 
       if (tipologie.length > 0) {
         console.log(`✅ Tipologie trovate per ${nome} ${cognome}:`, tipologie);
-        // eventualmente salva o usa tipologie come ti serve
+        mostraCheckboxTipologie(tipologie);
       } else {
         console.warn(`⚠️ Nessuna tipologia assegnata a ${nome} ${cognome}`);
+        document.getElementById('tipologieContainer').style.display = 'none';
       }
     } catch (tipErr) {
       console.warn('⚠️ Errore nel recupero della tipologia:', tipErr);
+      document.getElementById('tipologieContainer').style.display = 'none';
     }
 
     // 4) Prosegui mostrando il form
@@ -126,6 +182,8 @@ export async function verificaNome() {
       submitBtn.style.display = 'inline-block';
       inviaBtn.style.display = 'none';
       inviaBtnFerie.style.display = 'none';
+
+      document.getElementById('tipologieContainer').style.display = 'block';
     });
 
     radioFerie.addEventListener('change', () => {
@@ -133,6 +191,8 @@ export async function verificaNome() {
       submitBtn.style.display = 'none';
       inviaBtn.style.display = 'none';
       inviaBtnFerie.style.display = 'inline-block';
+
+      document.getElementById('tipologieContainer').style.display = 'none';
     });
 
   } catch (err) {
@@ -142,6 +202,7 @@ export async function verificaNome() {
     disponibilitaSettimana.style.display = 'none';
     inviaBtn.style.display = 'none';
     inviaBtnFerie.style.display = 'none';
+    document.getElementById('tipologieContainer').style.display = 'none';
   } finally {
     loader.style.display = 'none';
   }
