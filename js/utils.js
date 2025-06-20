@@ -1,20 +1,12 @@
-// utils.js
-
-export function aggiornaStatoSubmit(container, submitBtn) {
-  const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-  const almenoUnoSelezionato = Array.from(checkboxes).some(cb => cb.checked);
-  submitBtn.disabled = !almenoUnoSelezionato;
-}
-
-export function creaFasceMattinaPomeriggio(wrapper, titoloTurno, submitBtn) {
+export function creaFasceMattinaPomeriggio(wrapper, titolo = '') {
   const fasce = ['Mattina', 'Pomeriggio'];
-  const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+  if (titolo) {
+    const h3 = document.createElement('h3');
+    h3.textContent = titolo;
+    wrapper.appendChild(h3);
+  }
 
-  const titolo = document.createElement('h3');
-  titolo.textContent = titoloTurno;
-  wrapper.appendChild(titolo);
-
-  giorni.forEach(giorno => {
+  giorniLunSab().forEach(giorno => {
     const giornoDiv = document.createElement('div');
     giornoDiv.className = 'giorno';
 
@@ -29,7 +21,7 @@ export function creaFasceMattinaPomeriggio(wrapper, titoloTurno, submitBtn) {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.name = 'fasce';
-      checkbox.value = `${giorno} ${fascia} (${titoloTurno})`;
+      checkbox.value = `${giorno} ${fascia} (${titolo})`;
 
       const label = document.createElement('label');
       label.textContent = fascia;
@@ -44,7 +36,7 @@ export function creaFasceMattinaPomeriggio(wrapper, titoloTurno, submitBtn) {
 
       checkbox.addEventListener('change', () => {
         notaCont.style.display = checkbox.checked ? 'block' : 'none';
-        aggiornaStatoSubmit(wrapper, submitBtn);
+        aggiornaStatoSubmit();
       });
 
       fasciaCont.appendChild(checkbox);
@@ -57,10 +49,12 @@ export function creaFasceMattinaPomeriggio(wrapper, titoloTurno, submitBtn) {
   });
 }
 
-export function creaFasceSoloGiorni(wrapper, giorni, titoloTurno, submitBtn) {
-  const titolo = document.createElement('h3');
-  titolo.textContent = titoloTurno;
-  wrapper.appendChild(titolo);
+export function creaFasceSoloGiorni(wrapper, giorni, titolo = '') {
+  if (titolo) {
+    const h3 = document.createElement('h3');
+    h3.textContent = titolo;
+    wrapper.appendChild(h3);
+  }
 
   giorni.forEach(giorno => {
     const giornoDiv = document.createElement('div');
@@ -69,7 +63,7 @@ export function creaFasceSoloGiorni(wrapper, giorni, titoloTurno, submitBtn) {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.name = 'fasce';
-    checkbox.value = `${giorno} (${titoloTurno})`;
+    checkbox.value = `${giorno} (${titolo})`;
 
     const label = document.createElement('label');
     label.textContent = giorno;
@@ -84,7 +78,7 @@ export function creaFasceSoloGiorni(wrapper, giorni, titoloTurno, submitBtn) {
 
     checkbox.addEventListener('change', () => {
       notaCont.style.display = checkbox.checked ? 'block' : 'none';
-      aggiornaStatoSubmit(wrapper, submitBtn);
+      aggiornaStatoSubmit();
     });
 
     const fasciaCont = document.createElement('div');
@@ -98,10 +92,12 @@ export function creaFasceSoloGiorni(wrapper, giorni, titoloTurno, submitBtn) {
   });
 }
 
-export function creaFasceConMaxEsami(wrapper, giorni, titoloTurno, submitBtn) {
-  const titolo = document.createElement('h3');
-  titolo.textContent = titoloTurno;
-  wrapper.appendChild(titolo);
+export function creaFasceConMaxEsami(wrapper, giorni, titolo = '') {
+  if (titolo) {
+    const h3 = document.createElement('h3');
+    h3.textContent = titolo;
+    wrapper.appendChild(h3);
+  }
 
   giorni.forEach(giorno => {
     const giornoDiv = document.createElement('div');
@@ -110,7 +106,7 @@ export function creaFasceConMaxEsami(wrapper, giorni, titoloTurno, submitBtn) {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.name = 'fasce';
-    checkbox.value = `${giorno} (${titoloTurno})`;
+    checkbox.value = `${giorno} (${titolo})`;
 
     const label = document.createElement('label');
     label.textContent = giorno;
@@ -139,7 +135,7 @@ export function creaFasceConMaxEsami(wrapper, giorni, titoloTurno, submitBtn) {
 
     checkbox.addEventListener('change', () => {
       notaCont.style.display = checkbox.checked ? 'block' : 'none';
-      aggiornaStatoSubmit(wrapper, submitBtn);
+      aggiornaStatoSubmit();
     });
 
     const fasciaCont = document.createElement('div');
@@ -153,95 +149,20 @@ export function creaFasceConMaxEsami(wrapper, giorni, titoloTurno, submitBtn) {
   });
 }
 
-export function creaFasceDynamic() {
-  const container = document.getElementById('giorniContainer');
+function aggiornaStatoSubmit() {
   const submitBtn = document.getElementById('submitBtn');
-  const tipologieElementi = Array.from(document.querySelectorAll('#tipologieContainer p'));
+  const container = document.getElementById('giorniContainer');
+  if (!submitBtn || !container) return;
 
-  container.innerHTML = '';
-
-  const tipologieSelezionate = tipologieElementi.map(p => {
-    const testo = p.textContent.toUpperCase();
-    if (testo.includes('SOLO ECG')) return 'solo ecg';
-    if (testo.includes('ECG 100')) return 'ecg 100';
-    if (testo.includes('ECG 75')) return 'ecg 75';
-    if (testo.includes('COMPLETO')) return 'completo';
-    if (testo.includes('TURNI HOLTER') || testo.includes('SOLO HOLTER')) return 'holter';
-    if (testo.includes('HC CONSUNTIVO')) return 'hc consuntivo';
-    if (testo.includes('HP CONSUNTIVO')) return 'hp consuntivo';
-    if (testo.includes('SPIROMETRIA')) return 'spirometria consuntivo';
-    if (testo.includes('POLISONNOGRAFIA')) return 'polisonnografia consuntivo';
-    return '';
-  }).filter(t => t !== '');
-
-  if (tipologieSelezionate.length === 0) {
-    container.style.display = 'none';
-    submitBtn.disabled = true;
-    return;
-  }
-
-  container.style.display = 'block';
-
-  tipologieSelezionate.forEach(tipologia => {
-    const wrapper = document.createElement('div');
-    wrapper.classList.add('fascia-sezione');
-
-    switch (tipologia) {
-      case 'completo':
-      case 'solo ecg':
-      case 'ecg 100':
-      case 'ecg 75':
-        creaFasceMattinaPomeriggio(wrapper, `Turno: ${tipologia.toUpperCase()}`, submitBtn);
-        break;
-
-      case 'holter':
-        creaFasceSoloGiorni(wrapper, giorniCompleti(), `Turno: ${tipologia.toUpperCase()}`, submitBtn);
-        break;
-
-      case 'spirometria consuntivo':
-      case 'polisonnografia consuntivo':
-        creaFasceSoloGiorni(wrapper, giorniLunSab(), `Turno: ${tipologia.toUpperCase()}`, submitBtn);
-        break;
-
-      case 'hc consuntivo':
-      case 'hp consuntivo':
-        creaFasceConMaxEsami(wrapper, giorniLunSab(), `Turno: ${tipologia.toUpperCase()}`, submitBtn);
-        break;
-
-      default:
-        const msg = document.createElement('p');
-        msg.textContent = 'Tipologia non ancora supportata.';
-        wrapper.appendChild(msg);
-    }
-
-    container.appendChild(wrapper);
-  });
-
-  submitBtn.disabled = true;
-
-  function giorniLunSab() {
-    return ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
-  }
-
-  function giorniCompleti() {
-    return ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
-  }
+  const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+  const almenoUnoSelezionato = Array.from(checkboxes).some(cb => cb.checked);
+  submitBtn.disabled = !almenoUnoSelezionato;
 }
 
-/**
- * Funzione per copiare fasce selezionate negli appunti
- */
-export function copiaFasceSelezionate() {
-  const checkboxes = document.querySelectorAll('#giorniContainer input[type="checkbox"]:checked');
-  if (checkboxes.length === 0) {
-    alert('Nessuna fascia selezionata da copiare.');
-    return;
-  }
+function giorniLunSab() {
+  return ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+}
 
-  const valori = Array.from(checkboxes).map(cb => cb.value);
-  const testoDaCopiare = valori.join('\n');
-
-  navigator.clipboard.writeText(testoDaCopiare)
-    .then(() => alert('Fasce selezionate copiate negli appunti!'))
-    .catch(() => alert('Errore nella copia negli appunti.'));
+function giorniCompleti() {
+  return ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
 }
