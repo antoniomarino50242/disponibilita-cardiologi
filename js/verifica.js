@@ -18,10 +18,11 @@ function normalizza(str) {
 function mostraFasceConMessaggi(tipologie) {
   const tipologieContainer = document.getElementById('tipologieContainer');
   const giorniContainer = document.getElementById('giorniContainer');
-  const submitBtn = document.getElementById('submitBtn');
-
-  tipologieContainer.innerHTML = '';
+  tipologieContainer.innerHTML = '';  // Lo svuoti, ma non ci metti più i messaggi generali
   giorniContainer.innerHTML = '';
+
+  // Nascondi il container messaggi, useremo solo i blocchi in giorniContainer
+  tipologieContainer.style.display = 'none';
 
   tipologie.forEach(tip => {
     const key = tip.toLowerCase().trim();
@@ -31,44 +32,46 @@ function mostraFasceConMessaggi(tipologie) {
       return;
     }
 
-    // Messaggio descrittivo
+    // Creo un blocco per tipologia
+    const blocco = document.createElement('div');
+    blocco.className = 'blocco-tipologia';
+
+    // Metto il messaggio descrittivo qui, dentro il blocco, sopra le fasce
     const descrizione = document.createElement('p');
     descrizione.textContent = info.testo;
     descrizione.style.fontWeight = 'bold';
     descrizione.style.marginBottom = '8px';
-    tipologieContainer.appendChild(descrizione);
+    blocco.appendChild(descrizione);
 
-    // Fasce relative
-    const blocco = document.createElement('div');
-    blocco.className = 'blocco-tipologia';
-
+    // Ora aggiungo fasce o giorni per la tipologia
     switch (key) {
       case 'completo':
       case 'solo ecg':
       case 'ecg 100':
       case 'ecg 75':
-        creaFasceMattinaPomeriggio(blocco, `Turno: ${tip}`, submitBtn);
+        creaFasceMattinaPomeriggio(blocco, `Turno: ${tip}`);
         break;
       case 'turno holter':
       case 'holter':
-        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'], `Turno: ${tip}`, submitBtn);
+        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'], `Turno: ${tip}`);
         break;
       case 'spirometria consuntivo':
       case 'polisonnografia consuntivo':
-        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`, submitBtn);
+        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`);
         break;
       case 'hc consuntivo':
       case 'hp consuntivo':
-        creaFasceConMaxEsami(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`, submitBtn);
+        creaFasceConMaxEsami(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`);
         break;
       default:
-        blocco.innerHTML = `<p>Tipologia non supportata: ${tip}</p>`;
+        const msg = document.createElement('p');
+        msg.textContent = `Tipologia non supportata: ${tip}`;
+        blocco.appendChild(msg);
     }
 
     giorniContainer.appendChild(blocco);
   });
 
-  tipologieContainer.style.display = 'block';
   giorniContainer.style.display = 'block';
 }
 
