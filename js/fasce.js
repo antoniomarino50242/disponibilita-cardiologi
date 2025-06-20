@@ -1,3 +1,5 @@
+import { creaFasceDynamic } from './utils.js';
+
 export function creaFasce(event) {
   event.preventDefault();
 
