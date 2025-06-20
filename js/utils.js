@@ -1,14 +1,24 @@
 export function creaFasceDynamic() {
   const container = document.getElementById('giorniContainer');
-  const submitBtn = document.getElementById('submitBtn');  // bottone aggiungi disponibilità
-
-  // Prendi le tipologie selezionate dalle checkbox visibili
-  const tipologieCheckbox = Array.from(document.querySelectorAll('input[name="tipologiaCheckbox"]:checked'));
-  const tipologieSelezionate = tipologieCheckbox.map(cb => cb.value.toLowerCase().trim());
-
-  console.log("Tipologie selezionate in creaFasceDynamic:", tipologieSelezionate);
+  const submitBtn = document.getElementById('submitBtn');
 
   container.innerHTML = '';
+
+  // Legge i titoli presenti nel contenitore dei messaggi tipologia
+  const tipologieElementi = Array.from(document.querySelectorAll('#tipologieContainer p'));
+  const tipologieSelezionate = tipologieElementi.map(p => {
+    const testo = p.textContent.toUpperCase();
+    if (testo.includes('SOLO ECG')) return 'solo ecg';
+    if (testo.includes('ECG 100')) return 'ecg 100';
+    if (testo.includes('ECG 75')) return 'ecg 75';
+    if (testo.includes('COMPLETO')) return 'completo';
+    if (testo.includes('TURNI HOLTER') || testo.includes('SOLO HOLTER')) return 'holter';
+    if (testo.includes('HC CONSUNTIVO')) return 'hc consuntivo';
+    if (testo.includes('HP CONSUNTIVO')) return 'hp consuntivo';
+    if (testo.includes('SPIROMETRIA')) return 'spirometria consuntivo';
+    if (testo.includes('POLISONNOGRAFIA')) return 'polisonnografia consuntivo';
+    return '';
+  }).filter(t => t !== '');
 
   if (tipologieSelezionate.length === 0) {
     container.style.display = 'none';
@@ -18,7 +28,6 @@ export function creaFasceDynamic() {
 
   container.style.display = 'block';
 
-  // Per ogni tipologia selezionata creiamo una sezione separata
   tipologieSelezionate.forEach(tipologia => {
     const wrapper = document.createElement('div');
     wrapper.classList.add('fascia-sezione');
@@ -29,57 +38,43 @@ export function creaFasceDynamic() {
 
     container.appendChild(wrapper);
 
-    // Switch in base alla tipologia
-    switch(tipologia) {
+    switch (tipologia) {
       case 'completo':
-      case 'soloecg':
-      case 'ecg100':
-      case 'ecg75':
+      case 'solo ecg':
+      case 'ecg 100':
+      case 'ecg 75':
         creaFasceMattinaPomeriggio(wrapper);
         break;
 
-      case 'turnohc':
-      case 'turnoholter':
       case 'holter':
-        creaFasceSoloGiorni(wrapper, ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']);
+        creaFasceSoloGiorni(wrapper, giorniCompleti());
         break;
 
-      case 'spirometriaconsuntivo':
-      case 'polisonnografiaconsuntivo':
-        creaFasceSoloGiorni(wrapper, ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato']);
+      case 'spirometria consuntivo':
+      case 'polisonnografia consuntivo':
+        creaFasceSoloGiorni(wrapper, giorniLunSab());
         break;
 
-      case 'hcconsuntivo':
-      case 'hpconsuntivo':
-        creaFasceConMaxEsami(wrapper, ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato']);
+      case 'hc consuntivo':
+      case 'hp consuntivo':
+        creaFasceConMaxEsami(wrapper, giorniLunSab());
         break;
 
       default:
         const msg = document.createElement('p');
-        msg.textContent = `⚠️ Tipologia non ancora supportata: "${tipologia}"`;
-        msg.style.color = 'orange';
+        msg.textContent = 'Tipologia non ancora supportata.';
         wrapper.appendChild(msg);
     }
   });
 
-  // Aggiorna stato submit in base a tutte le checkbox/fasce create
-  function aggiornaStatoSubmit() {
-    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-    const almenoUnoSelezionato = Array.from(checkboxes).some(cb => cb.checked);
-    submitBtn.disabled = !almenoUnoSelezionato;
-  }
-
   // All’inizio bottone disabilitato
   submitBtn.disabled = true;
 
-  // === FUNZIONI per le varie tipologie ===
+  // === FUNZIONI PER CREARE LE FASCE ===
 
-  // Turno completo, solo ECG, ecc: giorni + mattina/pomeriggio con annotazioni
   function creaFasceMattinaPomeriggio(wrapper) {
-    const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
     const fasce = ['Mattina', 'Pomeriggio'];
-
-    giorni.forEach(giorno => {
+    giorniLunSab().forEach(giorno => {
       const giornoDiv = document.createElement('div');
       giornoDiv.className = 'giorno';
 
@@ -93,13 +88,11 @@ export function creaFasceDynamic() {
 
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.id = `${giorno}-${fascia}-${wrapper.textContent}`;
         checkbox.name = 'fasce';
         checkbox.value = `${giorno} ${fascia} (${wrapper.textContent})`;
 
         const label = document.createElement('label');
         label.textContent = fascia;
-        label.htmlFor = checkbox.id;
 
         const notaCont = document.createElement('div');
         notaCont.className = 'annotazione';
@@ -124,7 +117,6 @@ export function creaFasceDynamic() {
     });
   }
 
-  // Solo giorni, senza mattina/pomeriggio, con annotazioni
   function creaFasceSoloGiorni(wrapper, giorni) {
     giorni.forEach(giorno => {
       const giornoDiv = document.createElement('div');
@@ -132,13 +124,11 @@ export function creaFasceDynamic() {
 
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
-      checkbox.id = `${giorno}-${wrapper.textContent}`;
       checkbox.name = 'fasce';
       checkbox.value = `${giorno} (${wrapper.textContent})`;
 
       const label = document.createElement('label');
       label.textContent = giorno;
-      label.htmlFor = checkbox.id;
 
       const notaCont = document.createElement('div');
       notaCont.className = 'annotazione';
@@ -164,7 +154,6 @@ export function creaFasceDynamic() {
     });
   }
 
-  // Giorni con campo obbligatorio "numero max esami"
   function creaFasceConMaxEsami(wrapper, giorni) {
     giorni.forEach(giorno => {
       const giornoDiv = document.createElement('div');
@@ -172,15 +161,12 @@ export function creaFasceDynamic() {
 
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
-      checkbox.id = `${giorno}-${wrapper.textContent}`;
       checkbox.name = 'fasce';
       checkbox.value = `${giorno} (${wrapper.textContent})`;
 
       const label = document.createElement('label');
       label.textContent = giorno;
-      label.htmlFor = checkbox.id;
 
-      // Contenitore annotazioni + max esami
       const notaCont = document.createElement('div');
       notaCont.className = 'annotazione';
       notaCont.style.display = 'none';
@@ -189,7 +175,6 @@ export function creaFasceDynamic() {
       textarea.placeholder = 'Annotazioni per questo turno';
       notaCont.appendChild(textarea);
 
-      // Campo numero max esami
       const maxLabel = document.createElement('label');
       maxLabel.textContent = 'Numero max esami inviabili: ';
       maxLabel.style.marginLeft = '1.5rem';
@@ -218,5 +203,19 @@ export function creaFasceDynamic() {
       giornoDiv.appendChild(fasciaCont);
       wrapper.appendChild(giornoDiv);
     });
+  }
+
+  function aggiornaStatoSubmit() {
+    const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+    const almenoUnoSelezionato = Array.from(checkboxes).some(cb => cb.checked);
+    submitBtn.disabled = !almenoUnoSelezionato;
+  }
+
+  function giorniLunSab() {
+    return ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
+  }
+
+  function giorniCompleti() {
+    return ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'];
   }
 }
