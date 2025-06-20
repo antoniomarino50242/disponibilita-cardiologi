@@ -1,4 +1,8 @@
-import { creaFasceDynamic } from './utils.js';
+import {
+  creaFasceMattinaPomeriggio,
+  creaFasceSoloGiorni,
+  creaFasceConMaxEsami
+} from './utils.js';
 import { mappaTipologie } from './tipologie.js';
 
 function normalizza(str) {
@@ -9,31 +13,59 @@ function normalizza(str) {
     .trim();
 }
 
-// Mostra i messaggi delle tipologie assegnate
-function mostraMessaggiTipologie(tipologie) {
-  const container = document.getElementById('tipologieContainer');
-  container.innerHTML = '';
-  if (!tipologie || tipologie.length === 0) {
-    container.style.display = 'none';
-    return;
-  }
+function mostraFasceConMessaggi(tipologie) {
+  const tipologieContainer = document.getElementById('tipologieContainer');
+  const giorniContainer = document.getElementById('giorniContainer');
+  tipologieContainer.innerHTML = '';
+  giorniContainer.innerHTML = '';
 
-  container.style.display = 'block';
   tipologie.forEach(tip => {
     const key = tip.toLowerCase().trim();
-    if (!(key in mappaTipologie)) {
+    const info = mappaTipologie[key];
+    if (!info) {
       console.warn(`Tipologia sconosciuta: ${tip}`);
       return;
     }
 
-    const info = mappaTipologie[key];
-
+    // Messaggio descrittivo
     const descrizione = document.createElement('p');
     descrizione.textContent = info.testo;
     descrizione.style.fontWeight = 'bold';
-    descrizione.style.marginBottom = '12px';
-    container.appendChild(descrizione);
+    descrizione.style.marginBottom = '8px';
+    tipologieContainer.appendChild(descrizione);
+
+    // Fasce relative
+    const blocco = document.createElement('div');
+    blocco.className = 'blocco-tipologia';
+
+    switch (key) {
+      case 'completo':
+      case 'solo ecg':
+      case 'ecg 100':
+      case 'ecg 75':
+        creaFasceMattinaPomeriggio(blocco, `Turno: ${tip}`);
+        break;
+      case 'turno holter':
+      case 'holter':
+        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'], `Turno: ${tip}`);
+        break;
+      case 'spirometria consuntivo':
+      case 'polisonnografia consuntivo':
+        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`);
+        break;
+      case 'hc consuntivo':
+      case 'hp consuntivo':
+        creaFasceConMaxEsami(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`);
+        break;
+      default:
+        blocco.innerHTML = `<p>Tipologia non supportata: ${tip}</p>`;
+    }
+
+    giorniContainer.appendChild(blocco);
   });
+
+  tipologieContainer.style.display = 'block';
+  giorniContainer.style.display = 'block';
 }
 
 export async function verificaNome() {
@@ -65,10 +97,11 @@ export async function verificaNome() {
 
     const nomeNorm = normalizza(nome);
     const cognomeNorm = normalizza(cognome);
-    const trovato = lista.some(riga => {
-      if (riga.length < 2) return false;
-      return normalizza(riga[1]) === nomeNorm && normalizza(riga[0]) === cognomeNorm;
-    });
+    const trovato = lista.some(riga =>
+      riga.length >= 2 &&
+      normalizza(riga[1]) === nomeNorm &&
+      normalizza(riga[0]) === cognomeNorm
+    );
 
     if (!trovato) {
       verificaMsg.textContent = '❌ Cardiologo non trovato';
@@ -100,7 +133,7 @@ export async function verificaNome() {
       return;
     }
 
-    // Recupera le tipologie associate
+    // Recupero tipologie
     let tipologie = [];
     try {
       const tipologiaRes = await fetch(`https://tipologiaturni.testmedeatelemedicina.workers.dev/?nome=${encodeURIComponent(nome)}&cognome=${encodeURIComponent(cognome)}`);
@@ -117,21 +150,19 @@ export async function verificaNome() {
       console.warn('⚠️ Errore nel recupero della tipologia:', err);
     }
 
-    // ✅ Mostra radio disponibile/ferie
-    disponibilitaSettimana.style.display = 'block';
+    verificaMsg.textContent = '✅ Cardiologo verificato!';
+    verificaMsg.style.color = 'green';
     document.getElementById('nome').disabled = true;
     document.getElementById('cognome').disabled = true;
+    disponibilitaSettimana.style.display = 'block';
 
-    // Listener dei radio
+    // Radio
     const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
     const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
 
     radioDisponibile.addEventListener('change', () => {
       if (radioDisponibile.checked) {
-        mostraMessaggiTipologie(tipologie);
-        tipologieContainer.style.display = 'block';
-        creaFasceDynamic(); // crea direttamente tutte le fasce
-        container.style.display = 'block';
+        mostraFasceConMessaggi(tipologie);
         submitBtn.style.display = 'inline-block';
         inviaBtn.style.display = 'none';
         inviaBtnFerie.style.display = 'none';
@@ -146,12 +177,8 @@ export async function verificaNome() {
       inviaBtnFerie.style.display = 'inline-block';
     });
 
-    // Imposta default su "disponibile"
     radioDisponibile.checked = true;
     radioDisponibile.dispatchEvent(new Event('change'));
-
-    verificaMsg.textContent = '✅ Cardiologo verificato!';
-    verificaMsg.style.color = 'green';
 
   } catch (err) {
     console.error('❌ Errore generale nella verifica:', err);
