@@ -1,10 +1,9 @@
 import {
   creaFasceMattinaPomeriggio,
   creaFasceSoloGiorni,
-  creaFasceConMaxEsami,
-  aggiornaStatoSubmit,
-  copiaFasceSelezionate
+  creaFasceConMaxEsami
 } from './utils.js';
+
 import { mappaTipologie } from './tipologie.js';
 
 function normalizza(str) {
