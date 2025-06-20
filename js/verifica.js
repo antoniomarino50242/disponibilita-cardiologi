@@ -17,10 +17,9 @@ function normalizza(str) {
 function mostraFasceConMessaggi(tipologie) {
   const tipologieContainer = document.getElementById('tipologieContainer');
   const giorniContainer = document.getElementById('giorniContainer');
-  tipologieContainer.innerHTML = '';  // Lo svuoti, ma non ci metti più i messaggi generali
+  tipologieContainer.innerHTML = '';
   giorniContainer.innerHTML = '';
 
-  // Nascondi il container messaggi, useremo solo i blocchi in giorniContainer
   tipologieContainer.style.display = 'none';
 
   tipologie.forEach(tip => {
@@ -31,18 +30,15 @@ function mostraFasceConMessaggi(tipologie) {
       return;
     }
 
-    // Creo un blocco per tipologia
     const blocco = document.createElement('div');
     blocco.className = 'blocco-tipologia';
 
-    // Metto il messaggio descrittivo qui, dentro il blocco, sopra le fasce
     const descrizione = document.createElement('p');
     descrizione.textContent = info.testo;
     descrizione.style.fontWeight = 'bold';
     descrizione.style.marginBottom = '8px';
     blocco.appendChild(descrizione);
 
-    // Ora aggiungo fasce o giorni per la tipologia
     switch (key) {
       case 'completo':
       case 'solo ecg':
@@ -139,7 +135,6 @@ export async function verificaNome() {
       return;
     }
 
-    // Recupero tipologie
     let tipologie = [];
     try {
       const tipologiaRes = await fetch(`https://tipologiaturni.testmedeatelemedicina.workers.dev/?nome=${encodeURIComponent(nome)}&cognome=${encodeURIComponent(cognome)}`);
@@ -162,7 +157,6 @@ export async function verificaNome() {
     document.getElementById('cognome').disabled = true;
     disponibilitaSettimana.style.display = 'block';
 
-    // Radio
     const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
     const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
 
