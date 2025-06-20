@@ -171,7 +171,11 @@ export async function verificaNome() {
     const radioDisponibile = document.querySelector('input[name="settimana"][value="disponibile"]');
     const radioFerie = document.querySelector('input[name="settimana"][value="ferie"]');
 
-    radioDisponibile.addEventListener('change', () => {
+    // Seleziona automaticamente "disponibile"
+    radioDisponibile.checked = true;
+
+    // Funzione per attivare modalità disponibile
+    function attivaDisponibile() {
       creaFasceDynamic();
       container.style.display = 'block';
       submitBtn.style.display = 'inline-block';
@@ -179,16 +183,35 @@ export async function verificaNome() {
       inviaBtnFerie.style.display = 'none';
 
       document.getElementById('tipologieContainer').style.display = 'block';
-    });
 
-    radioFerie.addEventListener('change', () => {
+      // Aggiorna listener sulle checkbox tipologie per rigenerare fasce
+      document.querySelectorAll('input[name="tipologiaCheckbox"]').forEach(cb => {
+        cb.addEventListener('change', () => {
+          creaFasceDynamic();
+        });
+      });
+    }
+
+    // Funzione per attivare modalità ferie
+    function attivaFerie() {
       container.style.display = 'none';
       submitBtn.style.display = 'none';
       inviaBtn.style.display = 'none';
       inviaBtnFerie.style.display = 'inline-block';
 
       document.getElementById('tipologieContainer').style.display = 'none';
+    }
+
+    // Imposta i listener per radio
+    radioDisponibile.addEventListener('change', () => {
+      if (radioDisponibile.checked) attivaDisponibile();
     });
+    radioFerie.addEventListener('change', () => {
+      if (radioFerie.checked) attivaFerie();
+    });
+
+    // Avvia subito la modalità disponibile
+    attivaDisponibile();
 
   } catch (err) {
     console.error('❌ Errore generale nella verifica:', err);
