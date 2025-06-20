@@ -23,7 +23,7 @@ function mostraCheckboxTipologie(tipologie) {
   container.style.display = 'block';
 
   tipologie.forEach(tip => {
-    const key = tip.toLowerCase();
+    const key = tip.toLowerCase().trim();
 
     if (!(key in mappaTipologie)) {
       console.warn(`Tipologia sconosciuta: ${tip}`);
