@@ -1,10 +1,10 @@
 export function creaFasceMattinaPomeriggio(wrapper, titolo = '') {
   const fasce = ['Mattina', 'Pomeriggio'];
-  if (titolo) {
+  /*if (titolo) {
     const h3 = document.createElement('h3');
     h3.textContent = titolo;
     wrapper.appendChild(h3);
-  }
+  }*/
 
   giorniLunSab().forEach(giorno => {
     const giornoDiv = document.createElement('div');
@@ -50,11 +50,11 @@ export function creaFasceMattinaPomeriggio(wrapper, titolo = '') {
 }
 
 export function creaFasceSoloGiorni(wrapper, giorni, titolo = '') {
-  if (titolo) {
+  /*if (titolo) {
     const h3 = document.createElement('h3');
     h3.textContent = titolo;
     wrapper.appendChild(h3);
-  }
+  }*/
 
   giorni.forEach(giorno => {
     const giornoDiv = document.createElement('div');
@@ -93,11 +93,11 @@ export function creaFasceSoloGiorni(wrapper, giorni, titolo = '') {
 }
 
 export function creaFasceConMaxEsami(wrapper, giorni, titolo = '') {
-  if (titolo) {
+  /*if (titolo) {
     const h3 = document.createElement('h3');
     h3.textContent = titolo;
     wrapper.appendChild(h3);
-  }
+  }*/
 
   giorni.forEach(giorno => {
     const giornoDiv = document.createElement('div');
