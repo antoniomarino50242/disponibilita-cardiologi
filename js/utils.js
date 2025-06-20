@@ -1,6 +1,12 @@
 // utils.js
 
-export function creaFasceMattinaPomeriggio(wrapper, titoloTurno) {
+export function aggiornaStatoSubmit(container, submitBtn) {
+  const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+  const almenoUnoSelezionato = Array.from(checkboxes).some(cb => cb.checked);
+  submitBtn.disabled = !almenoUnoSelezionato;
+}
+
+export function creaFasceMattinaPomeriggio(wrapper, titoloTurno, submitBtn) {
   const fasce = ['Mattina', 'Pomeriggio'];
   const giorni = ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
 
@@ -38,7 +44,7 @@ export function creaFasceMattinaPomeriggio(wrapper, titoloTurno) {
 
       checkbox.addEventListener('change', () => {
         notaCont.style.display = checkbox.checked ? 'block' : 'none';
-        aggiornaStatoSubmit(wrapper);
+        aggiornaStatoSubmit(wrapper, submitBtn);
       });
 
       fasciaCont.appendChild(checkbox);
@@ -51,7 +57,7 @@ export function creaFasceMattinaPomeriggio(wrapper, titoloTurno) {
   });
 }
 
-export function creaFasceSoloGiorni(wrapper, giorni, titoloTurno) {
+export function creaFasceSoloGiorni(wrapper, giorni, titoloTurno, submitBtn) {
   const titolo = document.createElement('h3');
   titolo.textContent = titoloTurno;
   wrapper.appendChild(titolo);
@@ -78,7 +84,7 @@ export function creaFasceSoloGiorni(wrapper, giorni, titoloTurno) {
 
     checkbox.addEventListener('change', () => {
       notaCont.style.display = checkbox.checked ? 'block' : 'none';
-      aggiornaStatoSubmit(wrapper);
+      aggiornaStatoSubmit(wrapper, submitBtn);
     });
 
     const fasciaCont = document.createElement('div');
@@ -92,7 +98,7 @@ export function creaFasceSoloGiorni(wrapper, giorni, titoloTurno) {
   });
 }
 
-export function creaFasceConMaxEsami(wrapper, giorni, titoloTurno) {
+export function creaFasceConMaxEsami(wrapper, giorni, titoloTurno, submitBtn) {
   const titolo = document.createElement('h3');
   titolo.textContent = titoloTurno;
   wrapper.appendChild(titolo);
@@ -133,7 +139,7 @@ export function creaFasceConMaxEsami(wrapper, giorni, titoloTurno) {
 
     checkbox.addEventListener('change', () => {
       notaCont.style.display = checkbox.checked ? 'block' : 'none';
-      aggiornaStatoSubmit(wrapper);
+      aggiornaStatoSubmit(wrapper, submitBtn);
     });
 
     const fasciaCont = document.createElement('div');
@@ -185,21 +191,21 @@ export function creaFasceDynamic() {
       case 'solo ecg':
       case 'ecg 100':
       case 'ecg 75':
-        creaFasceMattinaPomeriggio(wrapper, `Turno: ${tipologia.toUpperCase()}`);
+        creaFasceMattinaPomeriggio(wrapper, `Turno: ${tipologia.toUpperCase()}`, submitBtn);
         break;
 
       case 'holter':
-        creaFasceSoloGiorni(wrapper, giorniCompleti(), `Turno: ${tipologia.toUpperCase()}`);
+        creaFasceSoloGiorni(wrapper, giorniCompleti(), `Turno: ${tipologia.toUpperCase()}`, submitBtn);
         break;
 
       case 'spirometria consuntivo':
       case 'polisonnografia consuntivo':
-        creaFasceSoloGiorni(wrapper, giorniLunSab(), `Turno: ${tipologia.toUpperCase()}`);
+        creaFasceSoloGiorni(wrapper, giorniLunSab(), `Turno: ${tipologia.toUpperCase()}`, submitBtn);
         break;
 
       case 'hc consuntivo':
       case 'hp consuntivo':
-        creaFasceConMaxEsami(wrapper, giorniLunSab(), `Turno: ${tipologia.toUpperCase()}`);
+        creaFasceConMaxEsami(wrapper, giorniLunSab(), `Turno: ${tipologia.toUpperCase()}`, submitBtn);
         break;
 
       default:
@@ -213,12 +219,6 @@ export function creaFasceDynamic() {
 
   submitBtn.disabled = true;
 
-  function aggiornaStatoSubmit(wrapper) {
-    const checkboxes = wrapper.querySelectorAll('input[type="checkbox"]');
-    const almenoUnoSelezionato = Array.from(checkboxes).some(cb => cb.checked);
-    submitBtn.disabled = !almenoUnoSelezionato;
-  }
-
   function giorniLunSab() {
     return ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato'];
   }
@@ -229,7 +229,7 @@ export function creaFasceDynamic() {
 }
 
 /**
- * Funzione esempio per copiare in clipboard le fasce selezionate
+ * Funzione per copiare fasce selezionate negli appunti
  */
 export function copiaFasceSelezionate() {
   const checkboxes = document.querySelectorAll('#giorniContainer input[type="checkbox"]:checked');
