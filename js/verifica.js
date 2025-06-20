@@ -1,7 +1,9 @@
 import {
   creaFasceMattinaPomeriggio,
   creaFasceSoloGiorni,
-  creaFasceConMaxEsami
+  creaFasceConMaxEsami,
+  creaFasceDynamic,
+  copiaFasceSelezionate
 } from './utils.js';
 import { mappaTipologie } from './tipologie.js';
 
