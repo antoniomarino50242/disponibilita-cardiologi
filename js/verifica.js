@@ -10,6 +10,11 @@ function normalizza(str) {
     .trim();
 }
 
+// Funzione per normalizzare la chiave tipologia: minuscolo, senza spazi
+function normalizzaKey(str) {
+  return str.toLowerCase().replace(/\s+/g, '');
+}
+
 // Funzione per mostrare checkbox tipologie dinamicamente
 function mostraCheckboxTipologie(tipologie) {
   const container = document.getElementById('tipologieContainer');
@@ -23,7 +28,7 @@ function mostraCheckboxTipologie(tipologie) {
   container.style.display = 'block';
 
   tipologie.forEach(tip => {
-    const key = tip.toLowerCase().trim();
+    const key = normalizzaKey(tip);
 
     if (!(key in mappaTipologie)) {
       console.warn(`Tipologia sconosciuta: ${tip}`);
@@ -39,7 +44,7 @@ function mostraCheckboxTipologie(tipologie) {
     descrizione.style.marginBottom = '8px';
     container.appendChild(descrizione);
 
-    // Checkbox corrispondenti
+    // Checkbox corrispondenti, con value = key per coerenza
     info.checkbox.forEach(labelText => {
       const label = document.createElement('label');
       label.style.display = 'block';
@@ -48,7 +53,8 @@ function mostraCheckboxTipologie(tipologie) {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.name = 'tipologiaCheckbox';
-      checkbox.value = labelText;
+      // Qui assegno value = key così creaFasceDynamic funziona con lo switch
+      checkbox.value = key;
 
       label.appendChild(checkbox);
       label.appendChild(document.createTextNode(' ' + labelText));
