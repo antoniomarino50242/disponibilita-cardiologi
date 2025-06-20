@@ -1,4 +1,4 @@
-import { creaFasce } from './fasce.js';
+import { creaFasce, creaFasceDynamic } from './fasce.js';
 import { verificaNome } from './verifica.js';
 import { gestisciInvio, setupInviaBtnFerie } from './riepilogo.js';
 import { resetDisponibilita } from './reset.js';
@@ -42,6 +42,16 @@ function setupRadioDisponibilita() {
     submitBtn.style.display = 'inline-block';
     inviaBtnFerie.style.display = 'none';
     tipologieContainer.style.display = 'block';
+
+    // Quando seleziono disponibile, creo le fasce dinamicamente
+    creaFasceDynamic();
+
+    // Aggiungo listener a checkbox tipologie per rigenerare fasce al cambio selezione
+    document.querySelectorAll('input[name="tipologiaCheckbox"]').forEach(cb => {
+      cb.addEventListener('change', () => {
+        creaFasceDynamic();
+      });
+    });
   });
 
   radioFerie.addEventListener('change', () => {
