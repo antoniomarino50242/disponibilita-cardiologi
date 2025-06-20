@@ -32,25 +32,25 @@ export function creaFasceDynamic() {
     // Switch in base alla tipologia
     switch(tipologia) {
       case 'completo':
-      case 'solo ecg':
-      case 'ecg 100':
-      case 'ecg 75':
+      case 'soloecg':
+      case 'ecg100':
+      case 'ecg75':
         creaFasceMattinaPomeriggio(wrapper);
         break;
 
-      case 'turno hc':
-      case 'turno holter':
+      case 'turnohc':
+      case 'turnoholter':
       case 'holter':
         creaFasceSoloGiorni(wrapper, ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']);
         break;
 
-      case 'spirometria consuntivo':
-      case 'polisonnografia consuntivo':
+      case 'spirometriaconsuntivo':
+      case 'polisonnografiaconsuntivo':
         creaFasceSoloGiorni(wrapper, ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato']);
         break;
 
-      case 'hc consuntivo':
-      case 'hp consuntivo':
+      case 'hcconsuntivo':
+      case 'hpconsuntivo':
         creaFasceConMaxEsami(wrapper, ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato']);
         break;
 
