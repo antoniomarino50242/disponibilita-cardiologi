@@ -99,6 +99,7 @@ export function creaFasceDynamic() {
 
         const notaCont = document.createElement('div');
         notaCont.className = 'annotazione';
+        notaCont.style.display = 'none';
 
         const textarea = document.createElement('textarea');
         textarea.placeholder = 'Annotazioni per questo turno';
@@ -137,6 +138,7 @@ export function creaFasceDynamic() {
 
       const notaCont = document.createElement('div');
       notaCont.className = 'annotazione';
+      notaCont.style.display = 'none';
 
       const textarea = document.createElement('textarea');
       textarea.placeholder = 'Annotazioni per questo turno';
@@ -177,6 +179,7 @@ export function creaFasceDynamic() {
       // Contenitore annotazioni + max esami
       const notaCont = document.createElement('div');
       notaCont.className = 'annotazione';
+      notaCont.style.display = 'none';
 
       const textarea = document.createElement('textarea');
       textarea.placeholder = 'Annotazioni per questo turno';
