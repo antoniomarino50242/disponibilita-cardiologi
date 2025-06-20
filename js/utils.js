@@ -8,6 +8,7 @@ export function creaFasceDynamic() {
   const tipologieElementi = Array.from(document.querySelectorAll('#tipologieContainer p'));
   const tipologieSelezionate = tipologieElementi.map(p => {
     const testo = p.textContent.toUpperCase();
+
     if (testo.includes('SOLO ECG')) return 'solo ecg';
     if (testo.includes('ECG 100')) return 'ecg 100';
     if (testo.includes('ECG 75')) return 'ecg 75';
@@ -17,6 +18,7 @@ export function creaFasceDynamic() {
     if (testo.includes('HP CONSUNTIVO')) return 'hp consuntivo';
     if (testo.includes('SPIROMETRIA')) return 'spirometria consuntivo';
     if (testo.includes('POLISONNOGRAFIA')) return 'polisonnografia consuntivo';
+
     return '';
   }).filter(t => t !== '');
 
@@ -43,21 +45,21 @@ export function creaFasceDynamic() {
       case 'solo ecg':
       case 'ecg 100':
       case 'ecg 75':
-        creaFasceMattinaPomeriggio(wrapper);
+        creaFasceMattinaPomeriggio(wrapper, tipologia.toUpperCase());
         break;
 
       case 'holter':
-        creaFasceSoloGiorni(wrapper, giorniCompleti());
+        creaFasceSoloGiorni(wrapper, giorniCompleti(), tipologia.toUpperCase());
         break;
 
       case 'spirometria consuntivo':
       case 'polisonnografia consuntivo':
-        creaFasceSoloGiorni(wrapper, giorniLunSab());
+        creaFasceSoloGiorni(wrapper, giorniLunSab(), tipologia.toUpperCase());
         break;
 
       case 'hc consuntivo':
       case 'hp consuntivo':
-        creaFasceConMaxEsami(wrapper, giorniLunSab());
+        creaFasceConMaxEsami(wrapper, giorniLunSab(), tipologia.toUpperCase());
         break;
 
       default:
@@ -72,7 +74,7 @@ export function creaFasceDynamic() {
 
   // === FUNZIONI PER CREARE LE FASCE ===
 
-  function creaFasceMattinaPomeriggio(wrapper) {
+  function creaFasceMattinaPomeriggio(wrapper, titolo) {
     const fasce = ['Mattina', 'Pomeriggio'];
     giorniLunSab().forEach(giorno => {
       const giornoDiv = document.createElement('div');
@@ -89,7 +91,7 @@ export function creaFasceDynamic() {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = 'fasce';
-        checkbox.value = `${giorno} ${fascia} (${wrapper.textContent})`;
+        checkbox.value = `${giorno} ${fascia} (${titolo})`;
 
         const label = document.createElement('label');
         label.textContent = fascia;
@@ -117,7 +119,7 @@ export function creaFasceDynamic() {
     });
   }
 
-  function creaFasceSoloGiorni(wrapper, giorni) {
+  function creaFasceSoloGiorni(wrapper, giorni, titolo) {
     giorni.forEach(giorno => {
       const giornoDiv = document.createElement('div');
       giornoDiv.className = 'giorno';
@@ -125,7 +127,7 @@ export function creaFasceDynamic() {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.name = 'fasce';
-      checkbox.value = `${giorno} (${wrapper.textContent})`;
+      checkbox.value = `${giorno} (${titolo})`;
 
       const label = document.createElement('label');
       label.textContent = giorno;
@@ -154,7 +156,7 @@ export function creaFasceDynamic() {
     });
   }
 
-  function creaFasceConMaxEsami(wrapper, giorni) {
+  function creaFasceConMaxEsami(wrapper, giorni, titolo) {
     giorni.forEach(giorno => {
       const giornoDiv = document.createElement('div');
       giornoDiv.className = 'giorno';
@@ -162,7 +164,7 @@ export function creaFasceDynamic() {
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.name = 'fasce';
-      checkbox.value = `${giorno} (${wrapper.textContent})`;
+      checkbox.value = `${giorno} (${titolo})`;
 
       const label = document.createElement('label');
       label.textContent = giorno;
