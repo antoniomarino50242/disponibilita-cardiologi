@@ -2,7 +2,7 @@ import {
   creaFasceMattinaPomeriggio,
   creaFasceSoloGiorni,
   creaFasceConMaxEsami,
-  creaFasceDynamic,
+  aggiornaStatoSubmit,
   copiaFasceSelezionate
 } from './utils.js';
 import { mappaTipologie } from './tipologie.js';
@@ -18,6 +18,8 @@ function normalizza(str) {
 function mostraFasceConMessaggi(tipologie) {
   const tipologieContainer = document.getElementById('tipologieContainer');
   const giorniContainer = document.getElementById('giorniContainer');
+  const submitBtn = document.getElementById('submitBtn');
+
   tipologieContainer.innerHTML = '';
   giorniContainer.innerHTML = '';
 
@@ -45,19 +47,19 @@ function mostraFasceConMessaggi(tipologie) {
       case 'solo ecg':
       case 'ecg 100':
       case 'ecg 75':
-        creaFasceMattinaPomeriggio(blocco, `Turno: ${tip}`);
+        creaFasceMattinaPomeriggio(blocco, `Turno: ${tip}`, submitBtn);
         break;
       case 'turno holter':
       case 'holter':
-        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'], `Turno: ${tip}`);
+        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'], `Turno: ${tip}`, submitBtn);
         break;
       case 'spirometria consuntivo':
       case 'polisonnografia consuntivo':
-        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`);
+        creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`, submitBtn);
         break;
       case 'hc consuntivo':
       case 'hp consuntivo':
-        creaFasceConMaxEsami(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`);
+        creaFasceConMaxEsami(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'], `Turno: ${tip}`, submitBtn);
         break;
       default:
         blocco.innerHTML = `<p>Tipologia non supportata: ${tip}</p>`;
