@@ -1,4 +1,4 @@
-import { creaFasce, creaFasceDynamic } from './fasce.js';
+import { creaFasce } from './fasce.js';
 import { verificaNome } from './verifica.js';
 import { gestisciInvio, setupInviaBtnFerie } from './riepilogo.js';
 import { resetDisponibilita } from './reset.js';
@@ -43,15 +43,13 @@ function setupRadioDisponibilita() {
     inviaBtnFerie.style.display = 'none';
     tipologieContainer.style.display = 'block';
 
-    // Quando seleziono disponibile, creo le fasce dinamicamente
-    creaFasceDynamic();
+    // Ora chiamiamo creaFasce() per generare i contenuti o fare altre azioni se necessario
+    // Se vuoi rigenerare fasce al cambio tipologie, metti il listener su checkboxes in altro modo.
 
-    // Aggiungo listener a checkbox tipologie per rigenerare fasce al cambio selezione
-    document.querySelectorAll('input[name="tipologiaCheckbox"]').forEach(cb => {
-      cb.addEventListener('change', () => {
-        creaFasceDynamic();
-      });
-    });
+    // esempio base (se vuoi aggiornare fasce al cambio tipologia, devi implementare questa logica)
+    // Qui semplicemente chiami creaFasce, ma devi assicurarti che funzioni senza event
+    // oppure rimuovi questa chiamata se è solo al submit
+
   });
 
   radioFerie.addEventListener('change', () => {
