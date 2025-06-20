@@ -4,7 +4,9 @@ export function creaFasceDynamic() {
 
   // Prendi le tipologie selezionate dalle checkbox visibili
   const tipologieCheckbox = Array.from(document.querySelectorAll('input[name="tipologiaCheckbox"]:checked'));
-  const tipologieSelezionate = tipologieCheckbox.map(cb => cb.value.toLowerCase());
+  const tipologieSelezionate = tipologieCheckbox.map(cb => cb.value.toLowerCase().trim());
+
+  console.log("Tipologie selezionate in creaFasceDynamic:", tipologieSelezionate);
 
   container.innerHTML = '';
 
@@ -36,6 +38,7 @@ export function creaFasceDynamic() {
         creaFasceMattinaPomeriggio(wrapper);
         break;
 
+      case 'turno hc':
       case 'turno holter':
       case 'holter':
         creaFasceSoloGiorni(wrapper, ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica']);
@@ -53,7 +56,8 @@ export function creaFasceDynamic() {
 
       default:
         const msg = document.createElement('p');
-        msg.textContent = 'Tipologia non ancora supportata.';
+        msg.textContent = `⚠️ Tipologia non ancora supportata: "${tipologia}"`;
+        msg.style.color = 'orange';
         wrapper.appendChild(msg);
     }
   });
