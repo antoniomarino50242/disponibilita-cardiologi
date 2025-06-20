@@ -1,5 +1,3 @@
-import { creaFasceDynamic } from './utils.js';
-
 export function creaFasce(event) {
   event.preventDefault();
 
@@ -65,6 +63,3 @@ export function creaFasce(event) {
   document.getElementById('submitBtn').style.display = 'none';
   document.getElementById('verifica-msg').textContent = '';
 }
-
-// eventualmente puoi esportare creaFasceDynamic anche da qui per coerenza
-export { creaFasceDynamic };
