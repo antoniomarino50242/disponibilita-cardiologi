@@ -47,7 +47,6 @@ function mostraFasceConMessaggi(tipologie) {
         creaFasceMattinaPomeriggio(blocco, `Turno: ${tip}`);
         break;
       case 'turno holter':
-      case 'solo hc':
         creaFasceSoloGiorni(blocco, ['Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'], `Turno: ${tip}`);
         break;
       case 'spirometria consuntivo':
