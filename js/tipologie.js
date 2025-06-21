@@ -15,13 +15,9 @@ export const mappaTipologie = {
     testo: "Inserire le disponibilità per il turno ECG, max 75",
     checkbox: ["ECG 75"]
   },
-  "turno hc": {
-    testo: "Inserire le disponibilità per il turno HC",
-    checkbox: ["HC"]
-  },
   "turno holter": {
     testo: "Inserire le disponibilità per il turno SOLO HOLTERS",
-    checkbox: ["HOLTER"]
+    checkbox: ["TURNO HOLTER"]
   },
   "hc consuntivo": {
     testo: "Indicare le disponibilità e specificare il limite massimo giornaliero per HC a consuntivo.",
