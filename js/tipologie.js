@@ -16,7 +16,7 @@ export const mappaTipologie = {
     checkbox: ["ECG 75"]
   },
   "turno holter": {
-    testo: "Inserire le disponibilità per il turno SOLO HOLTERS",
+    testo: "Inserire le disponibilità per il turno solo HOLTER",
     checkbox: ["TURNO HOLTER"]
   },
   "hc consuntivo": {
