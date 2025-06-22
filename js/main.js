@@ -18,6 +18,9 @@ const giorniContainer = document.getElementById('giorniContainer');
 const submitBtn = document.getElementById('submitBtn');
 const disponibilitaSettimana = document.getElementById('disponibilitaSettimana');
 
+// Nascondi subito tipologieContainer all’avvio per non mostrare checkbox inutili
+tipologieContainer.style.display = 'none';
+
 function controllaCampi() {
   console.log("🔍 Controllo campi avviato...");
   const nomeVal = nomeInput.value.trim();
@@ -44,7 +47,7 @@ function setupRadioDisponibilita() {
     giorniContainer.style.display = 'block';
     submitBtn.style.display = 'inline-block';
     inviaBtnFerie.style.display = 'none';
-    tipologieContainer.style.display = 'block';
+    tipologieContainer.style.display = 'none'; // Mantieni nascosto il container checkbox
   });
 
   radioFerie.addEventListener('change', () => {
