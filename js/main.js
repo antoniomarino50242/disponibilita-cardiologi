@@ -55,6 +55,7 @@ function setupRadioDisponibilita() {
 
 // Funzione per mostrare le tipologie recuperate dopo verifica
 function mostraTipologie(tipologieAttive) {
+  console.log("Chiamata a mostraTipologie con:", tipologieAttive);
   if (tipologieAttive && Array.isArray(tipologieAttive) && tipologieAttive.length > 0) {
     mostraTipologiePerSpecialista(tipologieAttive);
     disponibilitaSettimana.style.display = 'block';
@@ -63,6 +64,7 @@ function mostraTipologie(tipologieAttive) {
     disponibilitaSettimana.style.display = 'none';
   }
 }
+
 
 // Eventi input per abilitare/disabilitare verifica
 nomeInput.addEventListener('input', controllaCampi);
