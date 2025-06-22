@@ -58,6 +58,7 @@ function setupRadioDisponibilita() {
 // Funzione per mostrare le tipologie recuperate dopo verifica
 function mostraTipologie(tipologieAttive) {
   console.log("Chiamata a mostraTipologie con:", tipologieAttive);
+  tipologieUtente = tipologieAttive; // <- SALVA le tipologie
   if (tipologieAttive && Array.isArray(tipologieAttive) && tipologieAttive.length > 0) {
     mostraTipologiePerSpecialista(tipologieAttive);
     disponibilitaSettimana.style.display = 'block';
