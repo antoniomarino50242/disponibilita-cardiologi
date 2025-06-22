@@ -93,14 +93,29 @@ async function inviaDati(isSoloFerie = false) {
     });
   }
 
-  // Invio a server
-  await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: {
-      'Content-Type': 'application/json'
+  console.log('Payload da inviare:', payload);
+
+  try {
+    const response = await fetch('https://withered-grass-db6d.testmedeatelemedicina.workers.dev/', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      console.error('Errore invio dati:', response.statusText);
+      alert('Errore durante l\'invio dei dati. Riprova più tardi.');
+      return;
     }
-  });
+
+    console.log('Dati inviati correttamente.');
+  } catch (err) {
+    console.error('Errore nella fetch:', err);
+    alert('Errore di rete durante l\'invio dei dati.');
+    return;
+  }
 
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
