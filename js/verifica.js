@@ -17,11 +17,15 @@ function normalizza(str) {
 function mostraFasceConMessaggi(tipologie) {
   const tipologieContainer = document.getElementById('tipologieContainer');
   const giorniContainer = document.getElementById('giorniContainer');
+
+  // Pulisco entrambi i container
   tipologieContainer.innerHTML = '';
   giorniContainer.innerHTML = '';
 
+  // Nascondo il container tipologie (non vogliamo mostrarlo)
   tipologieContainer.style.display = 'none';
 
+  // Creo i blocchi solo dentro giorniContainer
   tipologie.forEach(tip => {
     const key = tip.toLowerCase().trim();
     const info = mappaTipologie[key];
@@ -66,6 +70,7 @@ function mostraFasceConMessaggi(tipologie) {
     giorniContainer.appendChild(blocco);
   });
 
+  // Mostro solo giorniContainer con i blocchi
   giorniContainer.style.display = 'block';
 }
 
