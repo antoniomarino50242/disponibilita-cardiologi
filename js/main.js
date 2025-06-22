@@ -2,11 +2,12 @@ import { creaFasce } from './fasce.js';
 import { verificaNome } from './verifica.js';
 import { gestisciInvio, setupInviaBtnFerie } from './riepilogo.js';
 import { resetDisponibilita } from './reset.js';
+import { mostraTipologiePerSpecialista } from './tipologie.js';  // nuova import
 
 const verificaBtn = document.getElementById('verificaBtn');
 const modulo = document.getElementById('moduloDisponibilita');
 const inviaBtn = document.getElementById('inviaBtn');
-const inviaBtnFerie = document.getElementById('inviaBtnFerie');  // nuovo pulsante ferie
+const inviaBtnFerie = document.getElementById('inviaBtnFerie');
 const eliminaBtn = document.getElementById('eliminaBtn');
 const nomeInput = document.getElementById('nome');
 const cognomeInput = document.getElementById('cognome');
@@ -42,14 +43,6 @@ function setupRadioDisponibilita() {
     submitBtn.style.display = 'inline-block';
     inviaBtnFerie.style.display = 'none';
     tipologieContainer.style.display = 'block';
-
-    // Ora chiamiamo creaFasce() per generare i contenuti o fare altre azioni se necessario
-    // Se vuoi rigenerare fasce al cambio tipologie, metti il listener su checkboxes in altro modo.
-
-    // esempio base (se vuoi aggiornare fasce al cambio tipologia, devi implementare questa logica)
-    // Qui semplicemente chiami creaFasce, ma devi assicurarti che funzioni senza event
-    // oppure rimuovi questa chiamata se è solo al submit
-
   });
 
   radioFerie.addEventListener('change', () => {
@@ -60,12 +53,28 @@ function setupRadioDisponibilita() {
   });
 }
 
+// Funzione per mostrare le tipologie recuperate dopo verifica
+function mostraTipologie(tipologieAttive) {
+  mostraTipologiePerSpecialista(tipologieAttive);
+  disponibilitaSettimana.style.display = 'block';
+}
+
 // Eventi input per abilitare/disabilitare verifica
 nomeInput.addEventListener('input', controllaCampi);
 cognomeInput.addEventListener('input', controllaCampi);
 
-// Eventi click
-verificaBtn.addEventListener('click', verificaNome);
+// Evento click verificaBtn, ora con Promise per tipologie attive
+verificaBtn.addEventListener('click', () => {
+  verificaNome()
+    .then(tipologieAttive => {
+      mostraTipologie(tipologieAttive);
+    })
+    .catch(err => {
+      console.error('Errore verificaNome:', err);
+      // Eventuale gestione errore UI
+    });
+});
+
 modulo.addEventListener('submit', creaFasce);
 inviaBtn.addEventListener('click', gestisciInvio);
 eliminaBtn.addEventListener('click', resetDisponibilita);
