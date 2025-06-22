@@ -33,12 +33,6 @@ function mostraFasceConMessaggi(tipologie) {
     const blocco = document.createElement('div');
     blocco.className = 'blocco-tipologia';
 
-    const descrizione = document.createElement('p');
-    descrizione.textContent = info.testo;
-    descrizione.style.fontWeight = 'bold';
-    descrizione.style.marginBottom = '8px';
-    blocco.appendChild(descrizione);
-
     switch (key) {
       case 'completo':
       case 'solo ecg':
