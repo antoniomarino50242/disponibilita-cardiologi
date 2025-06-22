@@ -6,7 +6,16 @@ export function aggiornaRiepilogo(listaTurni) {
   listaTurni.forEach(turno => {
     const li = document.createElement('li');
     li.className = 'turno';
-    li.innerHTML = `<span>${turno.cognome} ${turno.nome}: ${turno.turno} – ${turno.annotazione || ''}</span>`;
+
+    // Costruiamo testo base
+    const testo = `${turno.cognome} ${turno.nome}: ${turno.turno} – ${turno.annotazione || ''}`;
+
+    li.innerHTML = `<span>${testo}</span>`;
+
+    // Salviamo tipologia e numeroMax nel dataset
+    li.dataset.tipologia = turno.tipologia || '';
+    li.dataset.numeroMax = turno.numeroMax || '';
+
     container.appendChild(li);
   });
 }
@@ -27,6 +36,8 @@ async function inviaDati(isSoloFerie = false) {
       nome,
       turno: '',
       annotazione: '',
+      tipologia: '',
+      numeroMax: '',
       ferie: true,
       timestamp: new Date().toISOString()
     });
@@ -39,11 +50,17 @@ async function inviaDati(isSoloFerie = false) {
       const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
       const [cognomeParsed, nomeParsed] = nomeCompleto.trim().split(' ');
 
+      // Recupero tipologia e numeroMax dal dataset
+      const tipologia = li.dataset.tipologia || '';
+      const numeroMax = li.dataset.numeroMax || '';
+
       payload.push({
         cognome: cognomeParsed.trim(),
         nome: nomeParsed.trim(),
         turno: turno.trim(),
         annotazione,
+        tipologia,
+        numeroMax,
         ferie: '',
         timestamp: new Date().toISOString()
       });
