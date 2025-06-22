@@ -178,6 +178,7 @@ export async function verificaNome() {
 
     radioDisponibile.checked = true;
     radioDisponibile.dispatchEvent(new Event('change'));
+    return tipologie;
 
   } catch (err) {
     console.error('❌ Errore generale nella verifica:', err);
