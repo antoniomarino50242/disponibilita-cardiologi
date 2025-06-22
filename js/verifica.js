@@ -30,6 +30,12 @@ function mostraFasceConMessaggi(tipologie) {
       return;
     }
 
+    const descrizione = document.createElement('p');
+    descrizione.textContent = info.testo;
+    descrizione.style.fontWeight = 'bold';
+    descrizione.style.marginBottom = '8px';
+    blocco.appendChild(descrizione);
+
     const blocco = document.createElement('div');
     blocco.className = 'blocco-tipologia';
 
