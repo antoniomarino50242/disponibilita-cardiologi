@@ -35,13 +35,12 @@ async function inviaDati(isSoloFerie = false) {
   const payload = [];
 
   if (isSoloFerie) {
-    // Recupera tutte le tipologie attive dallo specialista
+    // Recupera tutte le tipologie attive dallo specialista (checkbox con name tipologiaCheckbox)
     const tipologieContainer = document.getElementById('tipologieContainer');
-    // Supponendo che i checkbox tipologia abbiano name="tipologiaCheckbox"
     const tipologieCheckbox = tipologieContainer.querySelectorAll('input[name="tipologiaCheckbox"]:checked');
 
     if (tipologieCheckbox.length === 0) {
-      // Se non trovi tipologie selezionate, fallback a una riga ferie generica senza tipologia
+      // Nessuna tipologia selezionata, invia una riga ferie senza tipologia
       payload.push({
         cognome,
         nome,
@@ -53,6 +52,7 @@ async function inviaDati(isSoloFerie = false) {
         timestamp: new Date().toISOString()
       });
     } else {
+      // Per ogni tipologia, crea una riga ferie distinta
       tipologieCheckbox.forEach(cb => {
         const tipologia = cb.value || '';
         payload.push({
