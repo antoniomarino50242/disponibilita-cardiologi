@@ -1,3 +1,5 @@
+let tipologieUtente = []; // <- salva le tipologie trovate alla verifica
+
 import { creaFasce } from './fasce.js';
 import { verificaNome } from './verifica.js';
 import { gestisciInvio, setupInviaBtnFerie } from './riepilogo.js';
