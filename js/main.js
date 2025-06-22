@@ -4,7 +4,7 @@ import { creaFasce } from './fasce.js';
 import { verificaNome } from './verifica.js';
 import { gestisciInvio, setupInviaBtnFerie } from './riepilogo.js';
 import { resetDisponibilita } from './reset.js';
-import { mostraTipologiePerSpecialista } from './tipologie.js';  // nuova import
+// import { mostraTipologiePerSpecialista } from './tipologie.js';  // **NON importare più** per non mostrare checkbox
 
 const verificaBtn = document.getElementById('verificaBtn');
 const modulo = document.getElementById('moduloDisponibilita');
@@ -63,7 +63,8 @@ function mostraTipologie(tipologieAttive) {
   console.log("Chiamata a mostraTipologie con:", tipologieAttive);
   tipologieUtente = tipologieAttive; // <- SALVA le tipologie
   if (tipologieAttive && Array.isArray(tipologieAttive) && tipologieAttive.length > 0) {
-    mostraTipologiePerSpecialista(tipologieAttive);
+    // Non chiamiamo mostraTipologiePerSpecialista per NON mostrare checkbox e testi indesiderati
+    // Mostriamo solo il contenuto giorniContainer (che probabilmente sarà popolato da creaFasce o altro)
     disponibilitaSettimana.style.display = 'block';
   } else {
     console.warn("Attenzione: tipologieAttive non valide o vuote:", tipologieAttive);
