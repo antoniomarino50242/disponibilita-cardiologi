@@ -36,3 +36,40 @@ export const mappaTipologie = {
     checkbox: ["POLISONNOGRAFIA CONSUNTIVO"]
   }
 };
+
+export function mostraTipologiePerSpecialista(tipologieAttive) {
+  const container = document.getElementById('tipologieContainer');
+  container.innerHTML = '';
+
+  tipologieAttive.forEach(key => {
+    const tipologiaInfo = mappaTipologie[key.toLowerCase()];
+    if (!tipologiaInfo) return;
+
+    const divSezione = document.createElement('div');
+    divSezione.style.marginBottom = '1rem';
+
+    const descrizione = document.createElement('p');
+    descrizione.textContent = tipologiaInfo.testo;
+    descrizione.style.fontWeight = '600';
+    divSezione.appendChild(descrizione);
+
+    tipologiaInfo.checkbox.forEach(val => {
+      const label = document.createElement('label');
+      label.style.marginRight = '15px';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.name = 'tipologiaCheckbox';
+      checkbox.value = val;
+
+      label.appendChild(checkbox);
+      label.appendChild(document.createTextNode(' ' + val));
+
+      divSezione.appendChild(label);
+    });
+
+    container.appendChild(divSezione);
+  });
+
+  container.style.display = 'block';
+}
