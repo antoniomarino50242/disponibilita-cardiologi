@@ -68,7 +68,6 @@ function mostraTipologie(tipologieAttive) {
   }
 }
 
-
 // Eventi input per abilitare/disabilitare verifica
 nomeInput.addEventListener('input', controllaCampi);
 cognomeInput.addEventListener('input', controllaCampi);
@@ -81,7 +80,6 @@ verificaBtn.addEventListener('click', () => {
     })
     .catch(err => {
       console.error('Errore verificaNome:', err);
-      // Eventuale gestione errore UI (es. messaggio all’utente)
       disponibilitaSettimana.style.display = 'none';
     });
 });
@@ -95,3 +93,6 @@ setupInviaBtnFerie();
 
 // Setup radio disponibilità / ferie gestione visibilità form
 setupRadioDisponibilita();
+
+// ✅ Esporta la variabile per riepilogo.js
+export { tipologieUtente };
