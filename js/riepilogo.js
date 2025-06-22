@@ -30,17 +30,38 @@ async function inviaDati(isSoloFerie = false) {
   const payload = [];
 
   if (isSoloFerie) {
-    // Solo ferie
-    payload.push({
-      cognome,
-      nome,
-      turno: '',
-      annotazione: '',
-      tipologia: '',
-      numeroMax: '',
-      ferie: true,
-      timestamp: new Date().toISOString()
-    });
+    // Recupera tutte le tipologie attive dallo specialista
+    const tipologieContainer = document.getElementById('tipologieContainer');
+    // Supponendo che i checkbox tipologia abbiano name="tipologiaCheckbox"
+    const tipologieCheckbox = tipologieContainer.querySelectorAll('input[name="tipologiaCheckbox"]:checked');
+
+    if (tipologieCheckbox.length === 0) {
+      // Se non trovi tipologie selezionate, fallback a una riga ferie generica senza tipologia
+      payload.push({
+        cognome,
+        nome,
+        turno: '',
+        annotazione: '',
+        tipologia: '',
+        numeroMax: '',
+        ferie: true,
+        timestamp: new Date().toISOString()
+      });
+    } else {
+      tipologieCheckbox.forEach(cb => {
+        const tipologia = cb.value || '';
+        payload.push({
+          cognome,
+          nome,
+          turno: '',
+          annotazione: '',
+          tipologia,
+          numeroMax: '',
+          ferie: true,
+          timestamp: new Date().toISOString()
+        });
+      });
+    }
   } else {
     // Modalità normale: leggi dal riepilogo
     document.querySelectorAll('#riepilogoLista .turno').forEach(li => {
@@ -79,9 +100,9 @@ async function inviaDati(isSoloFerie = false) {
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
   document.getElementById('disponibilitaSettimana').style.display = 'none';
-  
-  // Qui nascondi la scritta "Inserire i propri dati per procedere"
-  document.getElementById('istruzioni').style.display = 'none'; 
+
+  // Nascondi la scritta "Inserire i propri dati per procedere"
+  document.getElementById('istruzioni').style.display = 'none';
 }
 
 // 🔘 Listener per pulsante INVIA normale
