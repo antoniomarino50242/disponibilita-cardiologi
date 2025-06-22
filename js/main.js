@@ -55,8 +55,13 @@ function setupRadioDisponibilita() {
 
 // Funzione per mostrare le tipologie recuperate dopo verifica
 function mostraTipologie(tipologieAttive) {
-  mostraTipologiePerSpecialista(tipologieAttive);
-  disponibilitaSettimana.style.display = 'block';
+  if (tipologieAttive && Array.isArray(tipologieAttive) && tipologieAttive.length > 0) {
+    mostraTipologiePerSpecialista(tipologieAttive);
+    disponibilitaSettimana.style.display = 'block';
+  } else {
+    console.warn("Attenzione: tipologieAttive non valide o vuote:", tipologieAttive);
+    disponibilitaSettimana.style.display = 'none';
+  }
 }
 
 // Eventi input per abilitare/disabilitare verifica
@@ -71,7 +76,8 @@ verificaBtn.addEventListener('click', () => {
     })
     .catch(err => {
       console.error('Errore verificaNome:', err);
-      // Eventuale gestione errore UI
+      // Eventuale gestione errore UI (es. messaggio all’utente)
+      disponibilitaSettimana.style.display = 'none';
     });
 });
 
