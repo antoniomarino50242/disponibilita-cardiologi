@@ -9,12 +9,17 @@ export function aggiornaRiepilogo(listaTurni) {
 
     // Costruiamo testo base
     const testo = `${turno.cognome} ${turno.nome}: ${turno.turno} – ${turno.annotazione || ''}`;
-
     li.innerHTML = `<span>${testo}</span>`;
 
-    // Salviamo tipologia e numeroMax nel dataset
+    // Salviamo tipologia nel dataset
     li.dataset.tipologia = turno.tipologia || '';
-    li.dataset.numeroMax = turno.numeroMax || '';
+
+    // Salviamo numeroMax solo per CONSUNTIVO HC o CONSUNTIVO HP
+    if (turno.tipologia === 'CONSUNTIVO HC' || turno.tipologia === 'CONSUNTIVO HP') {
+      li.dataset.numeroMax = turno.numeroMax || '';
+    } else {
+      li.dataset.numeroMax = '';
+    }
 
     container.appendChild(li);
   });
