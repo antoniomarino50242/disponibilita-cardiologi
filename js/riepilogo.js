@@ -1,3 +1,5 @@
+import { tipologieUtente } from './main.js';
+
 // Funzione per aggiornare il riepilogo con lista turni e aggiungere un solo pulsante
 export function aggiornaRiepilogo(listaTurni) {
   const container = document.getElementById('riepilogoLista');
@@ -35,26 +37,9 @@ async function inviaDati(isSoloFerie = false) {
   const payload = [];
 
   if (isSoloFerie) {
-    // Recupera tutte le tipologie attive dallo specialista (checkbox con name tipologiaCheckbox)
-    const tipologieContainer = document.getElementById('tipologieContainer');
-    const tipologieCheckbox = tipologieContainer.querySelectorAll('input[name="tipologiaCheckbox"]:checked');
-
-    if (tipologieCheckbox.length === 0) {
-      // Nessuna tipologia selezionata, invia una riga ferie senza tipologia
-      payload.push({
-        cognome,
-        nome,
-        turno: '',
-        annotazione: '',
-        tipologia: '',
-        numeroMax: '',
-        ferie: true,
-        timestamp: new Date().toISOString()
-      });
-    } else {
-      // Per ogni tipologia, crea una riga ferie distinta
-      tipologieCheckbox.forEach(cb => {
-        const tipologia = cb.value || '';
+    // ✅ Usa le tipologie trovate in verificaNome
+    if (Array.isArray(tipologieUtente) && tipologieUtente.length > 0) {
+      tipologieUtente.forEach(tipologia => {
         payload.push({
           cognome,
           nome,
@@ -66,6 +51,18 @@ async function inviaDati(isSoloFerie = false) {
           timestamp: new Date().toISOString()
         });
       });
+    } else {
+      // fallback in caso di errore
+      payload.push({
+        cognome,
+        nome,
+        turno: '',
+        annotazione: '',
+        tipologia: '',
+        numeroMax: '',
+        ferie: true,
+        timestamp: new Date().toISOString()
+      });
     }
   } else {
     // Modalità normale: leggi dal riepilogo
@@ -76,7 +73,6 @@ async function inviaDati(isSoloFerie = false) {
       const annotazione = notaHtml ? notaHtml.replace(/<\/?em>/g, '').trim() : '';
       const [cognomeParsed, nomeParsed] = nomeCompleto.trim().split(' ');
 
-      // Recupero tipologia e numeroMax dal dataset
       const tipologia = li.dataset.tipologia || '';
       const numeroMax = li.dataset.numeroMax || '';
 
@@ -120,8 +116,6 @@ async function inviaDati(isSoloFerie = false) {
   mainContainer.style.display = 'none';
   grazieScreen.style.display = 'block';
   document.getElementById('disponibilitaSettimana').style.display = 'none';
-
-  // Nascondi la scritta "Inserire i propri dati per procedere"
   document.getElementById('istruzioni').style.display = 'none';
 }
 
